@@ -2,8 +2,8 @@ package kelvin.fiveminsurvival.entity;
 
 import java.util.List;
 
+import kelvin.fiveminsurvival.init.EntityRegistry;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.MoverType;
 import net.minecraft.entity.passive.SquidEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.EffectInstance;
@@ -26,7 +26,7 @@ public class EntityAttackSquid extends SquidEntity {
 	}
 	
 	public EntityAttackSquid(World worldIn) {
-		super(EntityRegistry.ATTACK_SQUID, worldIn);
+		super(EntityRegistry.ATTACK_SQUID.get(), worldIn);
 	}
 
 	public void livingTick() {
@@ -35,11 +35,11 @@ public class EntityAttackSquid extends SquidEntity {
 		List<? extends PlayerEntity> players = world.getPlayers();
 		PlayerEntity target = null;
 		double dist = 25;
-		for (int i = 0; i < players.size(); i++) {
-			double d1 = players.get(i).getPositionVec().distanceTo(getPositionVec());
+		for (PlayerEntity player : players) {
+			double d1 = player.getPositionVec().distanceTo(getPositionVec());
 			if (d1 <= dist) {
 				dist = d1;
-				target = players.get(i);
+				target = player;
 			}
 		}
 		int dirX = 0;
@@ -130,7 +130,7 @@ public class EntityAttackSquid extends SquidEntity {
 
 	         if (!this.world.isRemote) {
 	        	 if (move)
-	            this.setMotion((double)(this.randomMotionVecX * this.randomMotionSpeed), (double)(this.randomMotionVecY * this.randomMotionSpeed), (double)(this.randomMotionVecZ * this.randomMotionSpeed));
+	            this.setMotion(this.randomMotionVecX * this.randomMotionSpeed, this.randomMotionVecY * this.randomMotionSpeed, this.randomMotionVecZ * this.randomMotionSpeed);
 	         }
 
 	         Vec3d vec3d = this.getMotion();
@@ -138,7 +138,7 @@ public class EntityAttackSquid extends SquidEntity {
 	         this.renderYawOffset += (-((float)MathHelper.atan2(vec3d.x, vec3d.z)) * (180F / (float)Math.PI) - this.renderYawOffset) * 0.1F;
 	         this.rotationYaw = this.renderYawOffset;
 	         this.squidYaw = (float)((double)this.squidYaw + Math.PI * (double)this.rotateSpeed * 1.5D);
-	         this.squidPitch += (-((float)MathHelper.atan2((double)f1, vec3d.y)) * (180F / (float)Math.PI) - this.squidPitch) * 0.1F;
+	         this.squidPitch += (-((float)MathHelper.atan2(f1, vec3d.y)) * (180F / (float)Math.PI) - this.squidPitch) * 0.1F;
 	      } else {
 	         this.tentacleAngle = MathHelper.abs(MathHelper.sin(this.squidRotation)) * (float)Math.PI * 0.25F;
 	         if (!this.world.isRemote) {

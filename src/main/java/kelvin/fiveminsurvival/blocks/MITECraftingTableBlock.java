@@ -22,7 +22,7 @@ public class MITECraftingTableBlock extends Block {
 	private static final ITextComponent field_220271_a = new TranslationTextComponent("container.crafting");
 
 	private int table = CraftingIngredient.FLINT_CRAFTING_TABLE;
-	   protected MITECraftingTableBlock(Block.Properties properties, int table) {
+	   public MITECraftingTableBlock(Block.Properties properties, int table) {
 	      super(properties);
 	      this.table = table;
 	   }
@@ -38,8 +38,6 @@ public class MITECraftingTableBlock extends Block {
 	   }
 
 	   public INamedContainerProvider getContainer(BlockState state, World worldIn, BlockPos pos) {
-	      return new SimpleNamedContainerProvider((p_220270_2_, p_220270_3_, p_220270_4_) -> {
-	         return new MITEWorkbenchContainer(p_220270_2_, p_220270_3_, IWorldPosCallable.of(worldIn, pos), table);
-	      }, field_220271_a);
+	      return new SimpleNamedContainerProvider((p_220270_2_, p_220270_3_, p_220270_4_) -> new MITEWorkbenchContainer(p_220270_2_, p_220270_3_, IWorldPosCallable.of(worldIn, pos), table), field_220271_a);
 	   }
 }

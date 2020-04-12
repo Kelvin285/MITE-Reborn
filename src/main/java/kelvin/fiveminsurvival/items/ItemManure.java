@@ -2,7 +2,6 @@ package kelvin.fiveminsurvival.items;
 
 import kelvin.fiveminsurvival.survival.world.PlantState;
 import kelvin.fiveminsurvival.survival.world.WorldStateHolder;
-import net.minecraft.block.BlockState;
 import net.minecraft.block.CropsBlock;
 import net.minecraft.block.MushroomBlock;
 import net.minecraft.item.BoneMealItem;
@@ -39,7 +38,7 @@ public class ItemManure extends Item {
 				WorldStateHolder stateHolder = WorldStateHolder.get(world);
 				for (int i = 0; i < stateHolder.crops.size(); i++) {
 					PlantState state = stateHolder.crops.get(i);
-					if (state.pos.equals(pos) && state.fertilized == false) {
+					if (state.pos.equals(pos) && !state.fertilized) {
 						state.fertilized = true;
 						context.getItem().shrink(1);
 						return ActionResultType.SUCCESS;

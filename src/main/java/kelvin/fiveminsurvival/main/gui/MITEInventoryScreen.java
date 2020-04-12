@@ -1,17 +1,11 @@
 package kelvin.fiveminsurvival.main.gui;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-
-import kelvin.fiveminsurvival.items.ItemRegistry;
-import kelvin.fiveminsurvival.main.FiveMinSurvival;
+import kelvin.fiveminsurvival.init.ItemRegistry;
 import kelvin.fiveminsurvival.main.crafting.CraftingIngredient;
 import kelvin.fiveminsurvival.main.crafting.CraftingIngredients;
-import kelvin.fiveminsurvival.main.resources.Resources;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
@@ -38,6 +32,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 
 @OnlyIn(Dist.CLIENT)
 public class MITEInventoryScreen extends DisplayEffectsScreen<PlayerContainer> implements IRecipeShownListener {
@@ -56,18 +54,16 @@ public class MITEInventoryScreen extends DisplayEffectsScreen<PlayerContainer> i
 
    public MITEInventoryScreen(PlayerEntity player) {
       super(player.container, player.inventory, new TranslationTextComponent("container.crafting"));
-      if (player.isCreative() == false) {
+      if (!player.isCreative()) {
 	      try {
-		      Field container = PlayerEntity.class.getDeclaredField(FiveMinSurvival.DEBUG ? "container" : "field_71069_bz"); //container
-		      Resources.makeFieldAccessible(container);
+		      Field container = ObfuscationReflectionHelper.findField(PlayerEntity.class, "field_71069_bz"); //container
 		      container.set(player, new MITEPlayerContainer(player.inventory, player.getEntityWorld().isRemote, player));
 	      }catch (Exception e) {
 	    	  e.printStackTrace();
 	      }
       } else {
     	  try {
-		      Field container = PlayerEntity.class.getDeclaredField(FiveMinSurvival.DEBUG ? "container" : "field_71069_bz"); //container
-		      Resources.makeFieldAccessible(container);
+		      Field container = ObfuscationReflectionHelper.findField(PlayerEntity.class, "field_71069_bz"); //container
 		      container.set(player, new PlayerContainer(player.inventory, player.getEntityWorld().isRemote, player));
 	      }catch (Exception e) {
 	    	  e.printStackTrace();
@@ -133,23 +129,23 @@ public class MITEInventoryScreen extends DisplayEffectsScreen<PlayerContainer> i
       
       this.minecraft.getTextureManager().bindTexture(INVENTORY_EXTRAS);
       //18x17
-      if (this.craftTimer > 0 && this.maxCraftTimer > 0 && this.crafting == true)
-      this.blit(this.guiLeft + this.arrow_position[0], this.guiTop + this.arrow_position[1], this.arrow_location[0], this.arrow_location[1], (int)(18.0 * (this.craftTimer) / (this.maxCraftTimer)), 17);
+      if (this.craftTimer > 0 && this.maxCraftTimer > 0 && this.crafting)
+      this.blit(this.guiLeft + arrow_position[0], this.guiTop + arrow_position[1], arrow_location[0], arrow_location[1], (int)(18.0 * (this.craftTimer) / (this.maxCraftTimer)), 17);
       GlStateManager.disableDepthTest();
-      if (this.canCraft == false) {
-    	  if (this.crafting == true ) {
-              this.blit(this.guiLeft + this.lock_position[0] + 4, this.guiTop + this.lock_position[1], this.lock_location[0] + 4, this.lock_location[1], 8 - (int)(8.0 * (this.craftTimer) / (this.maxCraftTimer)), 17);
+      if (!this.canCraft) {
+    	  if (this.crafting) {
+              this.blit(this.guiLeft + lock_position[0] + 4, this.guiTop + lock_position[1], lock_location[0] + 4, lock_location[1], 8 - (int)(8.0 * (this.craftTimer) / (this.maxCraftTimer)), 17);
     	  } else {
-              this.blit(this.guiLeft + this.lock_position[0], this.guiTop + this.lock_position[1], this.lock_location[0], this.lock_location[1], 18, 17);
+              this.blit(this.guiLeft + lock_position[0], this.guiTop + lock_position[1], lock_location[0], lock_location[1], 18, 17);
     	  }
           if (this.getSlotUnderMouse() instanceof CraftingResultSlot) {
-        	  if (crafting == true) {
-        		  ArrayList<String> str = new ArrayList<String>();
+        	  if (crafting) {
+        		  ArrayList<String> str = new ArrayList<>();
             	  str.add(((int)(this.maxCraftTimer) - (int)(this.craftTimer)) / 20 + " seconds left");
             	  str.add("Wait until the item is finished crafting!");
             	  renderTooltip(str, (int)this.oldMouseX, (int)this.oldMouseY, Minecraft.getInstance().fontRenderer);
         	  } else {
-        		  ArrayList<String> str = new ArrayList<String>();
+        		  ArrayList<String> str = new ArrayList<>();
             	  str.add("LOCKED!");
             	  str.add("Higher tier table required!");
             	  renderTooltip(str, (int)this.oldMouseX, (int)this.oldMouseY, Minecraft.getInstance().fontRenderer);
@@ -178,8 +174,8 @@ public class MITEInventoryScreen extends DisplayEffectsScreen<PlayerContainer> i
     * Draws an entity on the screen looking toward the cursor.
     */
    public static void drawEntityOnScreen(int p_228187_0_, int p_228187_1_, int p_228187_2_, float p_228187_3_, float p_228187_4_, LivingEntity p_228187_5_) {
-	      float f = (float)Math.atan((double)(p_228187_3_ / 40.0F));
-	      float f1 = (float)Math.atan((double)(p_228187_4_ / 40.0F));
+	      float f = (float)Math.atan(p_228187_3_ / 40.0F);
+	      float f1 = (float)Math.atan(p_228187_4_ / 40.0F);
 	      RenderSystem.pushMatrix();
 	      RenderSystem.translatef((float)p_228187_0_, (float)p_228187_1_, 1050.0F);
 	      RenderSystem.scalef(1.0F, 1.0F, -1.0F);
@@ -225,7 +221,7 @@ public class MITEInventoryScreen extends DisplayEffectsScreen<PlayerContainer> i
       if (this.recipeBookGui.mouseClicked(p_mouseClicked_1_, p_mouseClicked_3_, p_mouseClicked_5_)) {
          return true;
       } else {
-         return this.widthTooNarrow && this.recipeBookGui.isVisible() ? false : super.mouseClicked(p_mouseClicked_1_, p_mouseClicked_3_, p_mouseClicked_5_);
+         return (!this.widthTooNarrow || !this.recipeBookGui.isVisible()) && super.mouseClicked(p_mouseClicked_1_, p_mouseClicked_3_, p_mouseClicked_5_);
       }
    }
 
@@ -269,7 +265,7 @@ public class MITEInventoryScreen extends DisplayEffectsScreen<PlayerContainer> i
 					   difficulty2 += ingredient.craftingTime;
 					   hasDifficulty = true;
 				   }
-				   if (hasDifficulty == false)
+				   if (!hasDifficulty)
 				   if (item instanceof BlockItem) {
 					   Material mat = ((BlockItem)item).getBlock().getDefaultState().getMaterial();
 					   if (CraftingIngredients.block_ingredients.containsKey(mat)) {
@@ -283,15 +279,15 @@ public class MITEInventoryScreen extends DisplayEffectsScreen<PlayerContainer> i
 	   Slot slot = this.container.inventorySlots.get(0);
 	   if (slot.getHasStack()) {
 		   Item item = slot.getStack().getItem();
-		   if (item == ItemRegistry.COPPER_CRAFTING_TABLE ||
-				   item == ItemRegistry.SILVER_CRAFTING_TABLE ||
-				   item == ItemRegistry.GOLD_CRAFTING_TABLE || 
-				   item == ItemRegistry.IRON_CRAFTING_TABLE ||
-				   item == ItemRegistry.MITHRIL_CRAFTING_TABLE ||
-				   item == ItemRegistry.ANCIENT_METAL_CRAFTING_TABLE ||
-				   item == ItemRegistry.ADAMANTIUM_CRAFTING_TABLE)
+		   if (item == ItemRegistry.COPPER_CRAFTING_TABLE.get() ||
+				   item == ItemRegistry.SILVER_CRAFTING_TABLE.get() ||
+				   item == ItemRegistry.GOLD_CRAFTING_TABLE.get() || 
+				   item == ItemRegistry.IRON_CRAFTING_TABLE.get() ||
+				   item == ItemRegistry.MITHRIL_CRAFTING_TABLE.get() ||
+				   item == ItemRegistry.ANCIENT_METAL_CRAFTING_TABLE.get() ||
+				   item == ItemRegistry.ADAMANTIUM_CRAFTING_TABLE.get())
 			   difficulty2 --;
-		   if (item == ItemRegistry.OBSIDIAN_CRAFTING_TABLE) difficulty2 = 0;
+		   if (item == ItemRegistry.OBSIDIAN_CRAFTING_TABLE.get()) difficulty2 = 0;
 	   }
 	   
 	   if (difficulty2 > 0) return difficulty2;
@@ -336,7 +332,7 @@ public class MITEInventoryScreen extends DisplayEffectsScreen<PlayerContainer> i
 					   }
 					   
 				   }
-				   if (hasDifficulty == false)
+				   if (!hasDifficulty)
 				   if (item instanceof BlockItem) {
 					   Material mat = ((BlockItem)item).getBlock().getDefaultState().getMaterial();
 					   if (CraftingIngredients.block_ingredients.containsKey(mat)) {
@@ -355,7 +351,7 @@ public class MITEInventoryScreen extends DisplayEffectsScreen<PlayerContainer> i
    protected void craftingTick() {
 	   this.canCraft = this.canCraft();
 	   if (Minecraft.getInstance().world.getGameTime() > lastTick) {
-		   if (this.crafting == true) {
+		   if (this.crafting) {
 
 			   if (this.craftTimer < maxCraftTimer) {
 				   this.craftTimer += 1 + Minecraft.getInstance().player.experienceLevel * 0.01f;
@@ -380,10 +376,10 @@ public class MITEInventoryScreen extends DisplayEffectsScreen<PlayerContainer> i
 	   if (slotId == 0) {
 		   if (type == ClickType.QUICK_MOVE) return;
 		   this.craftSlot = slotIn;
-		   if (canCraft == false) {
+		   if (!canCraft) {
 			   return;
 		   }
-		   if (crafting == false) {
+		   if (!crafting) {
 			   this.craftSlot = slotIn;
 			   this.craftSlotId = slotId;
 			   this.clickButton = mouseButton;

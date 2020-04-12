@@ -22,7 +22,6 @@ import net.minecraft.client.gui.IngameGui;
 import net.minecraft.client.gui.screen.inventory.CraftingScreen;
 import net.minecraft.client.gui.screen.inventory.FurnaceScreen;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -42,6 +41,7 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
 
 @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.FORGE,value=Dist.CLIENT)
@@ -90,24 +90,25 @@ public class OverlayEvents {
 		
 		lastMouseX = mx;
 		lastMouseY = my;
+
 //		if (Minecraft.getInstance().player.isCreative() == false)
 //		try {
 //			float lerpSpeed = 0.001f;
 //			float moveMul = (float)(100 - Resources.clientNutrients.phytonutrients + Resources.clientNutrients.sugars) * 0.05f;
-//			
+//
 //			if (mvx != 0)
 //			mouseVelX = MathHelper.lerp(mouseVelX, mvx * moveMul, 0.5f);
 //			if (mvy != 0)
 //			mouseVelY = MathHelper.lerp(mouseVelY, mvy * moveMul, 0.5f);
-//			
+//
 //			mouseVelX = MathHelper.lerp(mouseVelX, mouseVelX + (float)Math.cos(Math.toRadians(System.nanoTime() / 10.0f)) * moveMul * 5, lerpSpeed);
 //			mouseVelY = MathHelper.lerp(mouseVelY, mouseVelY + (float)Math.sin(Math.toRadians(System.nanoTime() / 10.0f)) * moveMul * 5, lerpSpeed);
 //
-//			
+//
 //			mouseVelX = MathHelper.lerp(mouseVelX, 0, lerpSpeed);
 //			mouseVelY = MathHelper.lerp(mouseVelY, 0, lerpSpeed);
-//			
-//			
+//
+//
 //			float MVX = (float) (double) Minecraft.getInstance().mouseHelper.xVelocity;
 //			float MVY = (float) (double) Minecraft.getInstance().mouseHelper.yVelocity;
 //			Minecraft.getInstance().mouseHelper.xVelocity = MathHelper.lerp(Minecraft.getInstance().mouseHelper.xVelocity, mouseVelX, 0.01);
@@ -115,19 +116,18 @@ public class OverlayEvents {
 //		}catch (Exception e) {
 //			e.printStackTrace();
 //		}
-		
+
 		if (Minecraft.getInstance().player != null) {
 			PlayerEntity player = Minecraft.getInstance().player;
 			World world = player.getEntityWorld();
 			
-			if ((player.isSwimming() && player.isSprinting()) == false)
+			if (!(player.isSwimming() && player.isSprinting()))
 			{
 			IAttributeInstance iattributeinstance = player.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED);
 		    player.setSprinting(false);
 			
 			try {
-		    	  Field SPRINTING_SPEED_BOOST = LivingEntity.class.getDeclaredField("SPRINTING_SPEED_BOOST");
-		    	  SPRINTING_SPEED_BOOST.setAccessible(true);
+		    	  Field SPRINTING_SPEED_BOOST = ObfuscationReflectionHelper.findField(LivingEntity.class, "SPRINTING_SPEED_BOOST");
 		    	  
 		    	  if (Minecraft.getInstance().gameSettings.keyBindSprint.isKeyDown())
 		    		  iattributeinstance.applyModifier((AttributeModifier) SPRINTING_SPEED_BOOST.get(null));
@@ -305,7 +305,7 @@ public class OverlayEvents {
 			
 			int FPS = 0;
 			try {
-				Field f = Minecraft.class.getDeclaredField("debugFPS");
+				Field f = ObfuscationReflectionHelper.findField(Minecraft.class, "debugFPS");
 				Resources.makeFieldAccessible(f);
 				FPS = f.getInt(null);
 			}catch (Exception e) {
@@ -314,8 +314,8 @@ public class OverlayEvents {
 			Vec3d pos = Minecraft.getInstance().player.getPositionVec();
 			Minecraft.getInstance().fontRenderer.drawStringWithShadow("FPS: " + FPS, 10, 10, Color.WHITE.getRGB());
 			Minecraft.getInstance().fontRenderer.drawStringWithShadow("X: " + roundHundreth(pos.getX()) + ", Y: " + roundHundreth(pos.getY()) + ", Z: " + roundHundreth(pos.getZ()), 10, 20, Color.WHITE.getRGB());
-			boolean b = false;
-			if (FiveMinSurvival.DEBUG && b) {
+
+			if (FiveMinSurvival.DEBUG) {
 				Minecraft.getInstance().fontRenderer.drawStringWithShadow("Carbohydrates: " + roundHundreth(Resources.clientNutrients.carbs) + "%", 10, 30, Color.WHITE.getRGB());
 				Minecraft.getInstance().fontRenderer.drawStringWithShadow("Fatty Acids: " + roundHundreth(Resources.clientNutrients.fatty_acids) + "%", 10, 40, Color.WHITE.getRGB());
 				Minecraft.getInstance().fontRenderer.drawStringWithShadow("Phytonutrients: " + roundHundreth(Resources.clientNutrients.phytonutrients) + "%", 10, 50, Color.WHITE.getRGB());
@@ -324,8 +324,8 @@ public class OverlayEvents {
 				Minecraft.getInstance().fontRenderer.drawStringWithShadow("Insulin Resistance: " + roundHundreth(Resources.clientNutrients.insulin_resistance) + "%", 10, 80, Color.WHITE.getRGB());
 				Minecraft.getInstance().fontRenderer.drawStringWithShadow("Happiness: " + roundHundreth(Resources.clientNutrients.happiness) + "%", 10, 90, Color.WHITE.getRGB());
 			} else {
-				ArrayList<String> lowValues = new ArrayList<String>();
-				ArrayList<Color> valColors = new ArrayList<Color>();
+				ArrayList<String> lowValues = new ArrayList<>();
+				ArrayList<Color> valColors = new ArrayList<>();
 				
 				
 				
@@ -528,16 +528,16 @@ public class OverlayEvents {
 					text = new MovingWord(newDayText, 0, -10, 0, 2, 0.5f);
 				}
 				else {
-					if (text.in == true) {
+					if (text.in) {
 						text.tick(false);
-						if (text.out == true)
+						if (text.out)
 						{
 							text = null;
 						}
 					}
 					else {
 						text.tick(true);
-						if (text.in == true) {
+						if (text.in) {
 							dayText = newDayText;
 							text.I = 0;
 						}
@@ -553,16 +553,16 @@ public class OverlayEvents {
 					text2 = new MovingWord(newSeasonText, 0, -10, 0, 16, 0.5f);
 				}
 				else {
-					if (text2.in == true) {
+					if (text2.in) {
 						text2.tick(false);
-						if (text2.out == true)
+						if (text2.out)
 						{
 							text2 = null;
 						}
 					}
 					else {
 						text2.tick(true);
-						if (text2.in == true) {
+						if (text2.in) {
 							seasonText = newSeasonText;
 							text2.I = 0;
 						}
@@ -573,18 +573,18 @@ public class OverlayEvents {
 			
 			if (text != null) {
 				for (MovingText t : text.mtext) {
-					Minecraft.getInstance().fontRenderer.drawStringWithShadow(t.text, t.x + Minecraft.getInstance().getMainWindow().getScaledWidth() / 2, t.y, Color.WHITE.getRGB());
+					Minecraft.getInstance().fontRenderer.drawStringWithShadow(t.text, t.x + Minecraft.getInstance().getMainWindow().getScaledWidth() / 2.0F, t.y, Color.WHITE.getRGB());
 				}
 			}
 			
 			if (text2 != null) {
 				for (MovingText t : text2.mtext) {
 					
-					Minecraft.getInstance().fontRenderer.drawStringWithShadow(t.text, t.x + Minecraft.getInstance().getMainWindow().getScaledWidth() / 2, t.y, Color.WHITE.getRGB());
+					Minecraft.getInstance().fontRenderer.drawStringWithShadow(t.text, t.x + Minecraft.getInstance().getMainWindow().getScaledWidth() / 2.0F, t.y, Color.WHITE.getRGB());
 				}
 			}
 			
-			Minecraft.getInstance().fontRenderer.drawStringWithShadow("--------", Minecraft.getInstance().getMainWindow().getScaledWidth() / 2 - Minecraft.getInstance().fontRenderer.getStringWidth("--------") / 2, 9, Color.WHITE.getRGB());
+			Minecraft.getInstance().fontRenderer.drawStringWithShadow("--------", Minecraft.getInstance().getMainWindow().getScaledWidth() / 2.0F - Minecraft.getInstance().fontRenderer.getStringWidth("--------") / 2.0F, 9, Color.WHITE.getRGB());
 
 		}
 		if (event.getType() == ElementType.FOOD) {
@@ -643,3 +643,4 @@ public class OverlayEvents {
 	
 	
 }
+

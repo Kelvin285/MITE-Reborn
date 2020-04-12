@@ -2,22 +2,22 @@ package kelvin.fiveminsurvival.main.crafting;
 
 import java.util.HashMap;
 
-import kelvin.fiveminsurvival.items.ItemRegistry;
+import kelvin.fiveminsurvival.init.ItemRegistry;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 
 public class CraftingIngredients {
 	
-	public static HashMap<Item, CraftingIngredient> ingredients = new HashMap<Item, CraftingIngredient>();
-	public static HashMap<Material, CraftingIngredient> block_ingredients = new HashMap<Material, CraftingIngredient>();
+	public static HashMap<Item, CraftingIngredient> ingredients = new HashMap<>();
+	public static HashMap<Material, CraftingIngredient> block_ingredients = new HashMap<>();
 
 	public static void init() {
-		register(ItemRegistry.FLAX, CraftingIngredient.NO_WORKBENCH, 20 * 5);
-		register(ItemRegistry.SINEW, CraftingIngredient.NO_WORKBENCH, 5);
-		register(ItemRegistry.FLINT_SHARD, CraftingIngredient.NO_WORKBENCH, 5);
-		register(ItemRegistry.SMOOTH_STONE, CraftingIngredient.NO_WORKBENCH, 10);
-		register(ItemRegistry.STRIPPED_BARK, CraftingIngredient.NO_WORKBENCH, 10);
+		register(ItemRegistry.FLAX.get(), CraftingIngredient.NO_WORKBENCH, 20 * 5);
+		register(ItemRegistry.SINEW.get(), CraftingIngredient.NO_WORKBENCH, 5);
+		register(ItemRegistry.FLINT_SHARD.get(), CraftingIngredient.NO_WORKBENCH, 5);
+		register(ItemRegistry.SMOOTH_STONE.get(), CraftingIngredient.NO_WORKBENCH, 10);
+		register(ItemRegistry.STRIPPED_BARK.get(), CraftingIngredient.NO_WORKBENCH, 10);
 		register(Items.STRIPPED_OAK_LOG, CraftingIngredient.NO_WORKBENCH, 60);
 		register(Items.STRIPPED_ACACIA_LOG, CraftingIngredient.NO_WORKBENCH, 60);
 		register(Items.STRIPPED_BIRCH_LOG, CraftingIngredient.NO_WORKBENCH, 60);
@@ -47,8 +47,8 @@ public class CraftingIngredients {
 		register(Items.ARROW, CraftingIngredient.NO_WORKBENCH, 20);
 		register(Items.BOW, CraftingIngredient.NO_WORKBENCH, 40);
 		register(Items.REDSTONE, CraftingIngredient.NO_WORKBENCH, 10);
-		register(ItemRegistry.COPPER_INGOT, CraftingIngredient.COPPER_CRAFTING_TABLE, 20 * 2);
-		register(ItemRegistry.SILVER_INGOT, CraftingIngredient.COPPER_CRAFTING_TABLE, 20 * 2);
+		register(ItemRegistry.COPPER_INGOT.get(), CraftingIngredient.COPPER_CRAFTING_TABLE, 20 * 2);
+		register(ItemRegistry.SILVER_INGOT.get(), CraftingIngredient.COPPER_CRAFTING_TABLE, 20 * 2);
 		register(Items.IRON_INGOT, CraftingIngredient.COPPER_CRAFTING_TABLE, 20 * 3);
 		register(Items.GOLD_INGOT, CraftingIngredient.COPPER_CRAFTING_TABLE, 20 * 3);
 		register(Items.COAL, CraftingIngredient.NO_WORKBENCH, 10);
@@ -61,8 +61,8 @@ public class CraftingIngredients {
 		register(Items.POTATO, CraftingIngredient.NO_WORKBENCH, 20);
 		register(Items.CHARCOAL, CraftingIngredient.NO_WORKBENCH, 10);
 		register(Items.INK_SAC, CraftingIngredient.NO_WORKBENCH, 40);
-		register(ItemRegistry.COPPER_NUGGET, CraftingIngredient.NO_WORKBENCH, (int)((20 * 2) / 9.0));
-		register(ItemRegistry.SILVER_NUGGET, CraftingIngredient.NO_WORKBENCH, (int)((20 * 2) / 9.0));
+		register(ItemRegistry.COPPER_NUGGET.get(), CraftingIngredient.NO_WORKBENCH, (int)((20 * 2) / 9.0));
+		register(ItemRegistry.SILVER_NUGGET.get(), CraftingIngredient.NO_WORKBENCH, (int)((20 * 2) / 9.0));
 
 		register(Items.IRON_NUGGET, CraftingIngredient.NO_WORKBENCH, (int)((20 * 3) / 9.0));
 		register(Items.GOLD_NUGGET, CraftingIngredient.NO_WORKBENCH, (int)((15 * 3) / 9.0));

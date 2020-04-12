@@ -1,16 +1,12 @@
 package kelvin.fiveminsurvival.entity.model.render;
 
-import java.util.function.Function;
-
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.model.TridentModel;
 import net.minecraft.client.renderer.model.Model;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.ResourceLocation;
 
 /**
  * NewProject - Undefined

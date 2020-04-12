@@ -38,9 +38,6 @@ public class RunFromPlayerGoal extends PanicGoal {
      	  }
        }
       if (super.shouldExecute()) {
-		   
-
-    	  
           this.findRandomPosition();
           return true;
       }

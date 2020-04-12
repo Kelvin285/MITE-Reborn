@@ -1,7 +1,5 @@
 package kelvin.fiveminsurvival.survival.world;
 
-import net.minecraft.world.World;
-
 public class Seasons {
 	public static final int SPRING = 0, SUMMER = 1, WINTER = 2, FALL = 3;
 	
@@ -33,25 +31,21 @@ public class Seasons {
 	
 	public static boolean isBloodMoon(long day) {
 		int DAY = (int)day % (int)year;
-		if (DAY == monthSize * 11 - 5) return true; // end of fall
-		return false;
-	}
+        return DAY == monthSize * 11 - 5; // end of fall
+    }
 	
 	public static boolean isHarvestMoon(long day) {
 		int DAY = (int)day % (int)year;
-		if (DAY == monthSize * 8 - 5) return true; // end of summer
-		return false;
-	}
+        return DAY == monthSize * 8 - 5; // end of summer
+    }
 	
 	public static boolean isBlueMoon(long day) {
 		int DAY = (int)day % (int)year;
-		if (DAY == monthSize * 5 - 5) return true; // end of spring
-		return false;
-	}
+        return DAY == monthSize * 5 - 5; // end of spring
+    }
 	
 	public static boolean isDeathMoon(long day) {
 		int DAY = (int)day % (int)year;
-		if (DAY == monthSize * 2 - 5) return true; // end of winter
-		return false;
-	}
+        return DAY == monthSize * 2 - 5; // end of winter
+    }
 }

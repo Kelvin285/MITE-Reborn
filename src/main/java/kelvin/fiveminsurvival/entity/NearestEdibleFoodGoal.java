@@ -8,12 +8,10 @@ import javax.annotation.Nullable;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityPredicate;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathPoint;
@@ -34,7 +32,7 @@ public class NearestEdibleFoodGoal extends Goal {
    protected ItemEntity target;
    protected int unseenMemoryTicks = 60;
 
-   protected final Class targetClass = ItemEntity.class;
+   protected final Class<ItemEntity> targetClass = ItemEntity.class;
    protected final int targetChance;
    protected ItemEntity nearestTarget;
    /** This filter is applied to the Entity search. Only matching entities will be targeted. */
@@ -112,7 +110,7 @@ public class NearestEdibleFoodGoal extends Goal {
     * Reset the task's internal state. Called when this task is interrupted by another one
     */
    public void resetTask() {
-      this.goalOwner.setAttackTarget((LivingEntity)null);
+      this.goalOwner.setAttackTarget(null);
       this.target = null;
    }
 
@@ -136,9 +134,7 @@ public class NearestEdibleFoodGoal extends Goal {
                this.targetSearchStatus = this.canEasilyReach(p_220777_1_) ? 1 : 2;
             }
 
-            if (this.targetSearchStatus == 2) {
-               return false;
-            }
+            return this.targetSearchStatus != 2;
          }
 
          return true;

@@ -99,7 +99,7 @@ public class CustomFoodStats extends FoodStats implements Serializable {
 		   double metabolismRate = 4.0;
 		   float healRate = 1.0f;
 		   if (nutrients != null) {
-			   if (player.isAlive() == false) {
+			   if (!player.isAlive()) {
 				   nutrients = new Nutrients(this);
 			   }
 			   nutrients.tick(player, this);

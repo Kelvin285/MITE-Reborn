@@ -14,7 +14,7 @@ import net.minecraft.world.biome.Biome;
 
 public class CropTypes {
 	
-	public static HashMap<Block, CropType> cropTypes = new HashMap<Block, CropType>();
+	public static HashMap<Block, CropType> cropTypes = new HashMap<>();
 	
 	public static final long WHEAT_TIME = 3; //7 growth stages.  Takes 24 days to grow without fertilization.
 	
@@ -28,14 +28,14 @@ public class CropTypes {
 		int season = Seasons.getSeason(day);
 		if (type != null) {
 			long growthTime = type.growthTime;
-			if (type.handlesCold == false) {
+			if (!type.handlesCold) {
 				growthTime = (long)(growthTime + (2.0 - temp));
 			}
-			if (type.handlesHeat == false) {
+			if (!type.handlesHeat) {
 				growthTime = (long)(growthTime + (temp));
 			}
-			if (type.handlesCold == false && type.handlesHeat == false) {
-				growthTime = (long)(growthTime + 1);
+			if (!type.handlesCold && !type.handlesHeat) {
+				growthTime = growthTime + 1;
 			}
 			
 			if (p.fertilized && growthTime > 1) {

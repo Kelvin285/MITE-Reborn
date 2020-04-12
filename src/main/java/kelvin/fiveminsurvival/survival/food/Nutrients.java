@@ -1,14 +1,14 @@
 package kelvin.fiveminsurvival.survival.food;
 
-import java.io.Serializable;
-import java.lang.reflect.Field;
-
-import kelvin.fiveminsurvival.main.FiveMinSurvival;
 import kelvin.fiveminsurvival.main.resources.Resources;
 import kelvin.fiveminsurvival.survival.world.WorldStateHolder;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+
+import java.io.Serializable;
+import java.lang.reflect.Field;
 
 public class Nutrients implements Serializable {
 	
@@ -146,7 +146,7 @@ public class Nutrients implements Serializable {
 		if (player.isSleeping()) {
 			WorldStateHolder.get(player.getEntityWorld()).worldState.time+=2;
 			try {
-			Field sleepTimer = PlayerEntity.class.getDeclaredField(FiveMinSurvival.DEBUG ? "sleepTimer" : "field_71076_b");
+			Field sleepTimer = ObfuscationReflectionHelper.findField(PlayerEntity.class, "field_71076_b");
 			Resources.makeFieldAccessible(sleepTimer);
 			sleepTimer.set(player, 1);
 			foodStats.foodTimer+=2;
