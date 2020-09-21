@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+	"#",
+	"S"
+  ],
+  "key": {
+    "#": {
+      "tag": "minecraft:wooden_slabs"
+    },
+	"S": {
+	  "item": "minecraft:stick"
+	}
+  },
+  "result": {
+    "item": "minecraft:sign",
+	"count": 1
+  }
+}

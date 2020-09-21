@@ -1,0 +1,8 @@
+{
+    "parent": "block/orientable",
+    "textures": {
+        "top": "fiveminsurvival:block/furnace/hardened_clay/top",
+        "front": "fiveminsurvival:block/furnace/hardened_clay/front",
+        "side": "fiveminsurvival:block/furnace/hardened_clay/side"
+    }
+}

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "WoW",
+    "WWW",
+    " W "
+  ],
+  "key": {
+    "W": {
+      "item": "fiveminsurvival:stripped_bark"
+    },
+    "o": {
+      "tag": "minecraft:planks"
+    }
+  },
+  "result": {
+    "item": "fiveminsurvival:wooden_shield"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:campfire_cooking",
+  "ingredient": {
+    "item": "fiveminsurvival:cooked_bacon"
+  },
+  "result": "fiveminsurvival:charred_food",
+  "experience": 0.0,
+  "cookingtime": 6000
+}

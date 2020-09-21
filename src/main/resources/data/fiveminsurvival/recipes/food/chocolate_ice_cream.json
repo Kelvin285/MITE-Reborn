@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "fiveminsurvival:ice_cream"
+    },
+	{
+	  "item": "fiveminsurvival:chocolate"
+	}
+  ],
+  "result": {
+    "item": "fiveminsurvival:chocolate_ice_cream"
+  }
+}

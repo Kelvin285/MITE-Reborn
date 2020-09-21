@@ -1,0 +1,8 @@
+{
+    "parent": "block/orientable",
+    "textures": {
+        "top": "fiveminsurvival:block/furnace/netherrack/top",
+        "front": "fiveminsurvival:block/furnace/netherrack/front",
+        "side": "fiveminsurvival:block/furnace/netherrack/side"
+    }
+}

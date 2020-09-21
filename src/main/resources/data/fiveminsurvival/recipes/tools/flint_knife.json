@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "XS",
+    "# "
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:stick"
+    },
+    "X": {
+      "item": "minecraft:flint"
+    },
+    "S": {
+      "item": "fiveminsurvival:sinew"
+    }
+  },
+  "result": {
+    "item": "fiveminsurvival:flint_knife"
+  }
+}

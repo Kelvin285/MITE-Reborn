@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+	"  S",
+	" S#",
+	"SI#"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:string"
+    },
+	"S": {
+	  "item": "minecraft:stick"
+	},
+	"I": {
+	  "item": "minecraft:iron_nugget"
+	}
+  },
+  "result": {
+    "item": "minecraft:fishing_rod",
+	"count": 1
+  }
+}

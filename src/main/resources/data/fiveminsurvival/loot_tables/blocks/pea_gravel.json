@@ -1,0 +1,178 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "condition": "minecraft:match_tool",
+                  "predicate": {
+                    "enchantments": [
+                      {
+                        "enchantment": "minecraft:silk_touch",
+                        "levels": {
+                          "min": 1
+                        }
+                      }
+                    ]
+                  }
+                }
+              ],
+              "name": "minecraft:gravel"
+            },
+			
+            {
+              "type": "minecraft:alternatives",
+              "conditions": [
+                {
+                  "condition": "minecraft:survives_explosion"
+                }
+              ],
+              "children": [
+                {
+                  "type": "minecraft:item",
+                  "conditions": [
+                    {
+                      "condition": "minecraft:table_bonus",
+                      "enchantment": "minecraft:fortune",
+                      "chances": [
+                        0.08,
+                        0.11428572,
+                        0.2,
+                        0.8
+                      ]
+                    }
+                  ],
+                  "name": "minecraft:flint"
+                },
+				{
+                  "type": "minecraft:item",
+                  "conditions": [
+                    {
+                      "condition": "minecraft:table_bonus",
+                      "enchantment": "minecraft:fortune",
+                      "chances": [
+                        0.15,
+                        0.214285725,
+                        0.375,
+                        1.5
+                      ]
+                    }
+                  ],
+                  "name": "fiveminsurvival:copper_nugget"
+                },
+				{
+                  "type": "minecraft:item",
+                  "conditions": [
+                    {
+                      "condition": "minecraft:table_bonus",
+                      "enchantment": "minecraft:fortune",
+                      "chances": [
+                        0.08,
+                        0.11428572,
+                        0.2,
+                        0.8
+                      ]
+                    }
+                  ],
+                  "name": "fiveminsurvival:silver_nugget"
+                },
+				{
+                  "type": "minecraft:item",
+                  "conditions": [
+                    {
+                      "condition": "minecraft:table_bonus",
+                      "enchantment": "minecraft:fortune",
+                      "chances": [
+                        0.15,
+                        0.214285725,
+                        0.375,
+                        1.5
+                      ]
+                    }
+                  ],
+                  "name": "minecraft:gold_nugget"
+                },
+				{
+                  "type": "minecraft:item",
+                  "conditions": [
+                    {
+                      "condition": "minecraft:table_bonus",
+                      "enchantment": "minecraft:fortune",
+                      "chances": [
+                        0.2,
+                        0.314285725,
+                        0.475,
+                        1.6
+                      ]
+                    }
+                  ],
+                  "name": "fiveminsurvival:flint_shard"
+                },
+				{
+                  "type": "minecraft:item",
+                  "conditions": [
+                    {
+                      "condition": "minecraft:table_bonus",
+                      "enchantment": "minecraft:fortune",
+                      "chances": [
+                        0.30,
+                        0.428571450,
+                        0.750,
+                        3.0
+                      ]
+                    }
+                  ],
+                  "name": "minecraft:sea_crystal"
+                },
+				{
+                  "type": "minecraft:item",
+                  "conditions": [
+                    {
+                      "condition": "minecraft:table_bonus",
+                      "enchantment": "minecraft:fortune",
+                      "chances": [
+                        0.15,
+                        0.214285725,
+                        0.375,
+                        1.5
+                      ]
+                    }
+                  ],
+                  "name": "minecraft:prismarine_shard"
+                },
+				{
+                  "type": "minecraft:item",
+                  "conditions": [
+                    {
+                      "condition": "minecraft:table_bonus",
+                      "enchantment": "minecraft:fortune",
+                      "chances": [
+                        0.15,
+                        0.214285725,
+                        0.375,
+                        1.5
+                      ]
+                    }
+                  ],
+                  "name": "fiveminsurvival:smooth_stone"
+                },
+                {
+                  "type": "minecraft:item",
+                  "name": "fiveminsurvival:pea_gravel"
+                }
+              ]
+            }
+			
+          ]
+        }
+      ]
+    }
+  ]
+}

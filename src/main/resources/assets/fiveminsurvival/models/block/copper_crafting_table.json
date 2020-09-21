@@ -1,0 +1,12 @@
+{
+    "parent": "block/cube",
+    "textures": {
+        "particle": "fiveminsurvival:block/crafting_table/copper/front",
+        "down": "block/oak_planks",
+        "up": "block/crafting_table_top",
+        "north": "fiveminsurvival:block/crafting_table/copper/front",
+        "east": "fiveminsurvival:block/crafting_table/copper/side",
+        "south": "fiveminsurvival:block/crafting_table/copper/side",
+        "west": "fiveminsurvival:block/crafting_table/copper/front"
+    }
+}

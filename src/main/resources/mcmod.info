@@ -1,0 +1,16 @@
+[
+{
+  "modid": "fiveminsurvival",
+  "name": "MITE 1.14",
+  "description": "The continuation of the original 1.6.4 MITE mod, which was by Avernite.  The original mod can be found here: https://www.minecraftforum.net/forums/mapping-and-modding-java-edition/minecraft-mods/1294284-minecraft-is-too-easy-mite-mod",
+  "version": "${1.0}",
+  "mcversion": "${1.14.4}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Kelvin"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
