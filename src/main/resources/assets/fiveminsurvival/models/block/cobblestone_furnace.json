@@ -1,8 +1,0 @@
-{
-    "parent": "block/orientable",
-    "textures": {
-        "top": "fiveminsurvival:block/furnace/cobblestone/top",
-        "front": "fiveminsurvival:block/furnace/cobblestone/front",
-        "side": "fiveminsurvival:block/furnace/cobblestone/side"
-    }
-}
