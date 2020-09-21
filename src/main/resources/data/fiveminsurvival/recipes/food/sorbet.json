@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "fiveminsurvival:bowl_water"
+    },
+	{
+	  "item": "minecraft:sugar"
+	},
+	{
+	  "item": "minecraft:snowball"
+	},
+	{
+	  "item": "fiveminsurvival:orange"
+	}
+  ],
+  "result": {
+    "item": "fiveminsurvival:sorbet"
+  }
+}

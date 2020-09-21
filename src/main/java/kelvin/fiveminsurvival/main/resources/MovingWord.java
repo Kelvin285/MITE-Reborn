@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import net.minecraft.client.Minecraft;
 
 public class MovingWord {
-	public ArrayList<MovingText> mtext = new ArrayList<MovingText>();
+	public ArrayList<MovingText> mtext = new ArrayList<>();
 	
 	public float startX, startY;
 	public float x, y;
@@ -34,7 +34,7 @@ public class MovingWord {
 			width += Minecraft.getInstance().fontRenderer.getCharWidth(c);
 		}
 		for (char c : text.toCharArray()) {
-			mtext.add(new MovingText(""+c, startX, startY, endX + posX - (width / 2), endY, lerp));
+			mtext.add(new MovingText(""+c, startX, startY, endX + posX - (width / 2.0F), endY, lerp));
 			posX += Minecraft.getInstance().fontRenderer.getCharWidth(c);
 			i++;
 		}

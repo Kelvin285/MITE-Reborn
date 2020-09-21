@@ -2,6 +2,6 @@
 	"parent": "item/generated",
 	"textures":
 	{
-		"layer0": "fiveminsurvival:item/charred_food"
+		"layer0": "fiveminsurvival:item/food/charred_food"
 	}
 }

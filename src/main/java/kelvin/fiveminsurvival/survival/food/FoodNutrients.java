@@ -3,12 +3,12 @@ package kelvin.fiveminsurvival.survival.food;
 import java.io.Serializable;
 import java.util.HashMap;
 
-import kelvin.fiveminsurvival.items.ItemRegistry;
+import kelvin.fiveminsurvival.init.ItemRegistry;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 
 public class FoodNutrients implements Serializable {
-	public static HashMap<Item, FoodNutrients> list = new HashMap<Item, FoodNutrients>();
+	public static HashMap<Item, FoodNutrients> list = new HashMap<>();
 	
 	public double protein = 0.0;
 	public double phytonutrients = 0.0;
@@ -72,9 +72,48 @@ public class FoodNutrients implements Serializable {
 		register(Items.GOLDEN_APPLE, new FoodNutrients().setHappiness(40).setProtein(4).setFattyAcids(15).setPhytonutrients(15).setSugars(15));
 		register(Items.ENCHANTED_GOLDEN_APPLE, new FoodNutrients().setHappiness(40).setProtein(4).setFattyAcids(15).setPhytonutrients(15).setSugars(15));
 		register(Items.SUGAR, new FoodNutrients().setHappiness(3).setSugars(1));
-		register(ItemRegistry.FLAX_SEEDS, new FoodNutrients().setHappiness(1).setPhytonutrients(3).setFattyAcids(4).setSugars(0.1).setCarbs(2));
-		register(ItemRegistry.BACON, new FoodNutrients().setHappiness(-3).setProtein(8).setSickness(2).setFattyAcids(2));
-		register(ItemRegistry.COOKED_BACON, new FoodNutrients().setHappiness(8).setProtein(8).setFattyAcids(4));
+		register(ItemRegistry.FLAX_SEEDS.get(), new FoodNutrients().setHappiness(1).setPhytonutrients(3).setFattyAcids(4).setSugars(0.1).setCarbs(2));
+		register(ItemRegistry.BACON.get(), new FoodNutrients().setHappiness(-3).setProtein(8).setSickness(2).setFattyAcids(2));
+<<<<<<< HEAD
+		register(ItemRegistry.COOKED_BACON.get(), new FoodNutrients().setHappiness(14).setProtein(8).setFattyAcids(4));
+		register(ItemRegistry.COOKED_EGG.get(), new FoodNutrients().setHappiness(7).setProtein(12).setFattyAcids(5).setSickness(1));
+		register(Items.EGG.asItem(), new FoodNutrients().setHappiness(10).setProtein(12).setFattyAcids(3));
+
+		register(ItemRegistry.BANANA_SPLIT.get(), new FoodNutrients().setHappiness(100).setSugars(10).setPhytonutrients(10).setFattyAcids(5).setSickness(1).setCarbs(10));
+		register(ItemRegistry.MILK_BOWL.get(), new FoodNutrients().setHappiness(10).setProtein(15).setCarbs(10).setPhytonutrients(1));
+		register(ItemRegistry.WATER_BOWL.get(), new FoodNutrients().setSickness(5));
+		register(ItemRegistry.CEREAL.get(), new FoodNutrients().setCarbs(20).setHappiness(40).setPhytonutrients(8).setSugars(3));
+		register(ItemRegistry.CHICKEN_SOUP.get(), new FoodNutrients().setCarbs(5).setHappiness(45).setPhytonutrients(8).setProtein(15).setSugars(1).setFattyAcids(2));
+		register(ItemRegistry.CREAM_OF_MUSHROOM_SOUP.get(), new FoodNutrients().setCarbs(5).setHappiness(30).setPhytonutrients(15).setProtein(15).setSugars(2).setFattyAcids(15));
+		register(ItemRegistry.CREAM_OF_VEGETABLE_SOUP.get(), new FoodNutrients().setProtein(30).setHappiness(45).setPhytonutrients(5).setCarbs(5).setFattyAcids(2));
+		register(ItemRegistry.CREAM_OF_VEGETABLE_SOUP.get(), new FoodNutrients().setHappiness(45).setFattyAcids(15).setPhytonutrients(30).setSugars(2).setCarbs(5));
+		register(ItemRegistry.ICE_CREAM.get(), new FoodNutrients().setHappiness(70).setSugars(8).setCarbs(10).setProtein(2));
+		register(ItemRegistry.CHOCOLATE_ICE_CREAM.get(), new FoodNutrients().setHappiness(80).setSugars(10).setCarbs(10).setProtein(2));
+
+		register(ItemRegistry.MASHED_POTATOES.get(), new FoodNutrients().setHappiness(25).setCarbs(30).setFattyAcids(15).setProtein(20));
+		register(ItemRegistry.PORRIDGE.get(), new FoodNutrients().setCarbs(10).setFattyAcids(5).setPhytonutrients(10).setProtein(2).setSugars(3).setHappiness(35));
+		register(ItemRegistry.PUMPKIN_SOUP.get(), new FoodNutrients().setFattyAcids(20).setPhytonutrients(45).setProtein(15).setSugars(1).setHappiness(30));
+		register(ItemRegistry.SORBET.get(), new FoodNutrients().setSugars(8).setHappiness(100).setPhytonutrients(20));
+		register(ItemRegistry.VEGETABLE_SOUP.get(), new FoodNutrients().setFattyAcids(15).setHappiness(35).setPhytonutrients(25).setCarbs(5).setProtein(10));
+		register(ItemRegistry.BEEF_STEW.get(), new FoodNutrients().setCarbs(10).setProtein(40).setFattyAcids(3).setHappiness(70));
+		register(ItemRegistry.BANANA.get(), new FoodNutrients().setSugars(3).setPhytonutrients(10).setHappiness(15));
+		register(ItemRegistry.BLUEBERRIES.get(), new FoodNutrients().setSugars(1).setPhytonutrients(5).setHappiness(10));
+		register(ItemRegistry.BLUEBERRY_MUFFIN.get(), new FoodNutrients().setSugars(3).setPhytonutrients(15).setFattyAcids(3).setCarbs(15).setHappiness(45));
+		register(ItemRegistry.BROWNIE.get(), new FoodNutrients().setSugars(4).setHappiness(35).setCarbs(8));
+		register(ItemRegistry.CHEESE.get(), new FoodNutrients().setProtein(10).setCarbs(3).setFattyAcids(2).setHappiness(20));
+		register(ItemRegistry.CHERRIES.get(), new FoodNutrients().setSugars(1).setPhytonutrients(5).setHappiness(10));
+		register(ItemRegistry.LEMON.get(), new FoodNutrients().setSugars(1).setPhytonutrients(5).setHappiness(5));
+		register(ItemRegistry.ORANGE.get(), new FoodNutrients().setSugars(1).setPhytonutrients(5).setHappiness(10));
+		register(ItemRegistry.DOUGH.get(), new FoodNutrients().setPhytonutrients(10).setCarbs(20).setHappiness(15));
+		register(ItemRegistry.FLOUR.get(), new FoodNutrients().setPhytonutrients(3).setCarbs(8).setHappiness(2).setSickness(1));
+		register(ItemRegistry.COOKIE_DOUGH.get(), new FoodNutrients().setPhytonutrients(8).setCarbs(15).setSugars(8).setHappiness(40).setSickness(1).setFattyAcids(3));
+		register(ItemRegistry.ONION.get(), new FoodNutrients().setPhytonutrients(10).setFattyAcids(5));
+		register(ItemRegistry.RAW_WORM.get(), new FoodNutrients().setProtein(30).setSickness(5));
+		register(ItemRegistry.COOKED_WORM.get(), new FoodNutrients().setProtein(15));
+
+=======
+		register(ItemRegistry.COOKED_BACON.get(), new FoodNutrients().setHappiness(8).setProtein(8).setFattyAcids(4));
+>>>>>>> 2eba99c0d696ed96f3b32c8e0a922901b317922d
 	}
 	
 	public static void register(Item item, FoodNutrients nutrients) {

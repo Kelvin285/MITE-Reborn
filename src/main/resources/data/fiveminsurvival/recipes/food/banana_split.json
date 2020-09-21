@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "fiveminsurvival:ice_cream"
+    },
+	{
+	  "item": "fiveminsurvival:chocolate"
+	},
+	{
+	  "item": "fiveminsurvival:cherries"
+	},
+	{
+	  "item": "fiveminsurvival:banana"
+	}
+  ],
+  "result": {
+    "item": "fiveminsurvival:banana_split"
+  }
+}

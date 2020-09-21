@@ -42,7 +42,10 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceContext;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
@@ -59,7 +62,6 @@ public class AnimalWatcherEntity extends ZombieEntity {
     
     public int RECENTLY_HIT;
     public Random RAND;
-    private EntityType t;
     
     public AnimalWatcherEntity(EntityType<? extends ZombieEntity> type, World worldIn) {
         super(type, worldIn);
@@ -68,7 +70,7 @@ public class AnimalWatcherEntity extends ZombieEntity {
 		this.RAND = rand;
      }
     
-	protected AnimalWatcherEntity(World worldIn) {
+	public AnimalWatcherEntity(World worldIn) {
 		super(worldIn);
 		this.goalSelector.addGoal(1, new EntityAIWatchAnimal(this));
 		this.worldObj = worldIn;
@@ -153,13 +155,10 @@ public class AnimalWatcherEntity extends ZombieEntity {
 		            	getNavigator().tryMoveToEntityLiving(getAttackTarget(), 1.0);
 	                if (this.blockWillFall(x, y + 1, z))
 	                {
-	                    List item_stack = world.getEntitiesWithinAABB(LivingEntity.class, this.getBoundingBox().expand(3.0D, 1.0D, 3.0D));
-	                    Iterator block_above = item_stack.iterator();
+	                    List<LivingEntity> item_stack = world.getEntitiesWithinAABB(LivingEntity.class, this.getBoundingBox().expand(3.0D, 1.0D, 3.0D));
 
-	                    while (block_above.hasNext())
-	                    {
-	                        LivingEntity entity_living = (LivingEntity)block_above.next();
-//	                        EntityAIAttackOnCollide ai = (EntityAIAttackOnCollide)entity_living.getEntityAITask(EntityAIAttackOnCollide.class);
+						for (LivingEntity entity_living : item_stack) {
+							//	                        EntityAIAttackOnCollide ai = (EntityAIAttackOnCollide)entity_living.getEntityAITask(EntityAIAttackOnCollide.class);
 //
 //	                        if (ai != null)
 //	                        {
@@ -173,7 +172,7 @@ public class AnimalWatcherEntity extends ZombieEntity {
 //	                                ai.attackTick = 10;
 //	                            }
 //	                        }
-	                    }
+						}
 	                }
 
 	                ItemStack var11 = this.getHeldItemMainhand();
@@ -223,7 +222,7 @@ public class AnimalWatcherEntity extends ZombieEntity {
 
 	            if (block.getDefaultState().getMaterial() == Material.GLASS)
 	            {
-	                world.playSound((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), Blocks.GLASS.getDefaultState().getSoundType().getPlaceSound(), SoundCategory.BLOCKS, Blocks.GLASS.getDefaultState().getSoundType().getVolume() + 2.0F, Blocks.GLASS.getDefaultState().getSoundType().getPitch() * 1.0F, false);
+	                world.playSound((float)x + 0.5F, (float)y + 0.5F, (float)z + 0.5F, Blocks.GLASS.getDefaultState().getSoundType().getPlaceSound(), SoundCategory.BLOCKS, Blocks.GLASS.getDefaultState().getSoundType().getVolume() + 2.0F, Blocks.GLASS.getDefaultState().getSoundType().getPitch() * 1.0F, false);
 	            }
 	            else
 	            {
@@ -289,23 +288,17 @@ public class AnimalWatcherEntity extends ZombieEntity {
 	    private boolean isBlockClaimedByAnother(int x, int y, int z)
 	    {
 	        AxisAlignedBB bb = new AxisAlignedBB(this.getPosX() - 4.0D, this.getPosY() - 4.0D, this.getPosZ() - 4.0D, this.getPosX() + 4.0D, this.getPosY() + 4.0D, this.getPosZ() + 4.0D);
-	        List entities = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, bb);
-	        Iterator i = entities.iterator();
+	        List<Entity> entities = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, bb);
 
-	        while (i.hasNext())
-	        {
-	            Entity entity = (Entity)i.next();
+			for (Entity entity : entities) {
+				if (entity instanceof AnimalWatcherEntity) {
+					AnimalWatcherEntity digger = (AnimalWatcherEntity) entity;
 
-	            if (entity instanceof AnimalWatcherEntity)
-	            {
-	            	AnimalWatcherEntity digger = (AnimalWatcherEntity)entity;
-
-	                if (digger.is_destroying_block && digger.destroy_block_x == x && digger.destroy_block_y == y && digger.destroy_block_z == z)
-	                {
-	                    return true;
-	                }
-	            }
-	        }
+					if (digger.is_destroying_block && digger.destroy_block_x == x && digger.destroy_block_y == y && digger.destroy_block_z == z) {
+						return true;
+					}
+				}
+			}
 
 	        return false;
 	    }
@@ -322,7 +315,7 @@ public class AnimalWatcherEntity extends ZombieEntity {
 
 	    public static double getDistanceSqFromDeltas(float dx, float dy, float dz)
 	    {
-	        return (double)(dx * dx + dy * dy + dz * dz);
+	        return dx * dx + dy * dy + dz * dz;
 	    }
 
 	    public static double getDistanceSqFromDeltas(double dx, double dz)
@@ -332,10 +325,18 @@ public class AnimalWatcherEntity extends ZombieEntity {
 
 	    public static double getDistanceFromDeltas(double dx, double dz)
 	    {
-	        return (double)MathHelper.sqrt(getDistanceSqFromDeltas(dx, dz));
+	        return MathHelper.sqrt(getDistanceSqFromDeltas(dx, dz));
 	    }
 	    protected boolean canDestroyBlock(int x, int y, int z, boolean check_clipping)
 	    {
+	    	if (isBlockClaimedByAnother(x, y, z)) return false;
+	    	if (this.getAttackTarget() != null) {
+	    		if (canEntityBeSeen(this.getAttackTarget())) {
+		    		this.is_destroying_block = false;
+		    		return false;
+		    	}
+	    	}
+	    	
 	        if (this.isHoldingItemThatPreventsDigging())
 	        {
 	            return false;
@@ -362,20 +363,19 @@ public class AnimalWatcherEntity extends ZombieEntity {
 	                }
 	                else
 	                {
-//	                    if (check_clipping)
-//	                    {
-//	                        RaycastCollision block = world.getBlockCollisionForPhysicalReach(this.getEyePosForBlockDestroying(), world.getBlockCenterPos(x, y, z));
-//
-//	                        if (block != null && (block.isEntity() || block.isBlock() && (block.block_hit_x != x || block.block_hit_y != y || block.block_hit_z != z)))
-//	                        {
-//	                            block = world.getBlockCollisionForPhysicalReach(this.getAttackerLegPosForBlockDestroying(), world.getBlockCenterPos(x, y, z));
-//
-//	                            if (block != null && (block.isEntity() || block.isBlock() && (block.block_hit_x != x || block.block_hit_y != y || block.block_hit_z != z)))
-//	                            {
-//	                                return false;
-//	                            }
-//	                        }
-//	                    }
+	                    if (check_clipping)
+	                    {
+	                        BlockRayTraceResult block = world.rayTraceBlocks(new RayTraceContext(this.getEyePosForBlockDestroying(), this.getLookVec(), RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this));
+	                        if (block != null && (block.getType() == RayTraceResult.Type.ENTITY || block.getType() == RayTraceResult.Type.BLOCK && (block.getPos().getX() != x || block.getPos().getY() != y || block.getPos().getZ() != z)))
+	                        {
+	                            block = world.rayTraceBlocks(new RayTraceContext(this.getAttackerLegPosForBlockDestroying(), this.getLookVec(), RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this));
+
+		                        if (block != null && (block.getType() == RayTraceResult.Type.ENTITY || block.getType() == RayTraceResult.Type.BLOCK && (block.getPos().getX() != x || block.getPos().getY() != y || block.getPos().getZ() != z)))
+	                            {
+	                                return false;
+	                            }
+	                        }
+	                    }
 
 	                    Block block1 = world.getBlockState(new BlockPos(x, y, z)).getBlock();
 
@@ -417,8 +417,7 @@ public class AnimalWatcherEntity extends ZombieEntity {
 	        	                    				return true;
 	        	                    		}
 	        	                    		if (held_item1 instanceof AxeItem) {
-	        	                    			if (block1.getDefaultState().getBlock() instanceof LogBlock)
-	        	                    				return true;
+												return block1.getDefaultState().getBlock() instanceof LogBlock;
 	        	                    		}
 	        	                    	}
 	                    			}
@@ -564,7 +563,7 @@ public class AnimalWatcherEntity extends ZombieEntity {
 	        {
 	            if (this.destroy_pause_ticks == 0)
 	            {
-	                this.getLookController().setLookPosition((double)((float)this.destroy_block_x + 0.5F), (double)((float)this.destroy_block_y + 0.5F), (double)((float)this.destroy_block_z + 0.5F), 10.0F, (float)this.getVerticalFaceSpeed());
+	                this.getLookController().setLookPosition((float)this.destroy_block_x + 0.5F, (float)this.destroy_block_y + 0.5F, (float)this.destroy_block_z + 0.5F, 10.0F, (float)this.getVerticalFaceSpeed());
 
 	                if (!this.canDestroyBlock(this.destroy_block_x, this.destroy_block_y, this.destroy_block_z, true))
 	                {
@@ -641,7 +640,7 @@ public class AnimalWatcherEntity extends ZombieEntity {
 					if (!(i instanceof PickaxeItem)) return false;
 				}
 				if (mat == Material.WOOD) {
-					if (!(i instanceof AxeItem)) return false;
+					return i instanceof AxeItem;
 				}
 			}
 			return true;
@@ -650,12 +649,12 @@ public class AnimalWatcherEntity extends ZombieEntity {
 		public boolean hasLineOfStrike(Vec3d target_pos)
 	    {
 			
-			List target_points = new ArrayList<Vec3d>();
+			List<Vec3d> target_points = new ArrayList<>();
 	        target_points.add(getPositionVec());
 	        target_points.add(new Vec3d(getPositionVec().x, getPositionVec().y + getHeight() * 0.5, getPositionVec().z));
 	        target_points.add(new Vec3d(getPositionVec().x, getPositionVec().y + getHeight() * 0.75, getPositionVec().z));
 	        
-	        Iterator i = target_points.iterator();
+	        Iterator<Vec3d> i = target_points.iterator();
 
 	        do
 	        {
@@ -664,7 +663,7 @@ public class AnimalWatcherEntity extends ZombieEntity {
 	                return false;
 	            }
 	        }
-	        while (!Resources.getBlockCollisionForPhysicalReach((Vec3d)i.next(), target_pos, this.getEntityWorld()).isBlock());
+	        while (!Resources.getBlockCollisionForPhysicalReach(i.next(), target_pos, this.getEntityWorld()).isBlock());
 
 	        return true;
 	    }
@@ -672,24 +671,18 @@ public class AnimalWatcherEntity extends ZombieEntity {
 		
 		public boolean hasLineOfStrike(Entity target)
 	    {
-	        List target_points = new ArrayList<Vec3d>();
+	        List<Vec3d> target_points = new ArrayList<>();
 	        target_points.add(target.getPositionVec());
 	        target_points.add(new Vec3d(target.getPositionVec().x, target.getPositionVec().y + target.getHeight() * 0.5, target.getPositionVec().z));
 	        target_points.add(new Vec3d(target.getPositionVec().x, target.getPositionVec().y + target.getHeight() * 0.75, target.getPositionVec().z));
-	        if (target_points != null)
-	        {
-	            Iterator i = target_points.iterator();
 
-	            while (i.hasNext())
-	            {
-	                if (this.hasLineOfStrike((Vec3d)i.next()))
-	                {
-	                    return true;
-	                }
-	            }
-	        }
+			for (Vec3d target_point : target_points) {
+				if (this.hasLineOfStrike(target_point)) {
+					return true;
+				}
+			}
 
-	        return false;
+			return false;
 	    }
 
 	    public boolean isTargetWithinStrikingDistance(LivingEntity target)
@@ -700,12 +693,12 @@ public class AnimalWatcherEntity extends ZombieEntity {
 	        }
 	        else
 	        {
-	            return this.getPositionVec().distanceTo(new Vec3d(target.getPosX(), target.getBoundingBox().minY, target.getPosZ())) <= (double)1.5;
+	            return this.getPositionVec().distanceTo(new Vec3d(target.getPosX(), target.getBoundingBox().minY, target.getPosZ())) <= 1.5;
 	        }
 	    }
 		
 		public boolean hasLineOfStrikeAndTargetIsWithinStrikingDistance(LivingEntity target)
 	    {
-	        return this.isTargetWithinStrikingDistance(target) && this.hasLineOfStrike((Entity)target);
+	        return this.isTargetWithinStrikingDistance(target) && this.hasLineOfStrike(target);
 	    }
 }

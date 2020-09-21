@@ -1,20 +1,35 @@
 package kelvin.fiveminsurvival.survival;
 
+<<<<<<< HEAD
 import java.lang.reflect.Field;
 import java.util.Map;
 import java.util.Random;
 
-import kelvin.fiveminsurvival.blocks.BlockRegistry;
+=======
+import kelvin.fiveminsurvival.init.BlockRegistry;
+>>>>>>> 2eba99c0d696ed96f3b32c8e0a922901b317922d
 import kelvin.fiveminsurvival.entity.AnimalWatcherEntity;
+import kelvin.fiveminsurvival.entity.BowlItemEntity;
 import kelvin.fiveminsurvival.entity.EntityAttackSquid;
-import kelvin.fiveminsurvival.entity.EntityRegistry;
+<<<<<<< HEAD
+import kelvin.fiveminsurvival.entity.FeatherItemEntity;
+=======
+import kelvin.fiveminsurvival.init.EntityRegistry;
+>>>>>>> 2eba99c0d696ed96f3b32c8e0a922901b317922d
 import kelvin.fiveminsurvival.entity.NewSkeletonEntity;
 import kelvin.fiveminsurvival.entity.goal.EnhancedPanicGoal;
 import kelvin.fiveminsurvival.entity.goal.RunFromPlayerGoal;
+import kelvin.fiveminsurvival.init.BlockRegistry;
+import kelvin.fiveminsurvival.init.EntityRegistry;
+import kelvin.fiveminsurvival.init.ItemRegistry;
+import kelvin.fiveminsurvival.items.CustomBowlItem;
+import kelvin.fiveminsurvival.items.CustomEggItem;
 import kelvin.fiveminsurvival.items.HatchetItem;
-import kelvin.fiveminsurvival.items.ItemRegistry;
+<<<<<<< HEAD
+=======
+import kelvin.fiveminsurvival.init.ItemRegistry;
+>>>>>>> 2eba99c0d696ed96f3b32c8e0a922901b317922d
 import kelvin.fiveminsurvival.items.ShortswordItem;
-import kelvin.fiveminsurvival.main.FiveMinSurvival;
 import kelvin.fiveminsurvival.main.resources.Resources;
 import kelvin.fiveminsurvival.survival.food.CustomFoodStats;
 import kelvin.fiveminsurvival.survival.food.Nutrients;
@@ -26,13 +41,16 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.CakeBlock;
 import net.minecraft.block.CampfireBlock;
 import net.minecraft.block.FallingBlock;
+import net.minecraft.block.LeavesBlock;
 import net.minecraft.block.LogBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.MusicTicker.MusicType;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.boss.WitherEntity;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.item.ItemEntity;
@@ -61,6 +79,7 @@ import net.minecraft.entity.passive.horse.HorseEntity;
 import net.minecraft.entity.passive.horse.SkeletonHorseEntity;
 import net.minecraft.entity.passive.horse.ZombieHorseEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.DyeColor;
@@ -72,6 +91,7 @@ import net.minecraft.item.Items;
 import net.minecraft.item.PickaxeItem;
 import net.minecraft.item.ShearsItem;
 import net.minecraft.item.ShovelItem;
+import net.minecraft.item.SoupItem;
 import net.minecraft.item.SwordItem;
 import net.minecraft.item.TieredItem;
 import net.minecraft.item.ToolItem;
@@ -81,15 +101,18 @@ import net.minecraft.util.FoodStats;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biomes;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.event.entity.item.ItemEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingExperienceDropEvent;
 import net.minecraftforge.event.entity.living.LivingHealEvent;
@@ -98,10 +121,20 @@ import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
+import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.eventbus.api.Event.Result;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.registries.IRegistryDelegate;
+
+<<<<<<< HEAD
+
+=======
+import java.lang.reflect.Field;
+import java.util.Map;
+import java.util.Random;
+>>>>>>> 2eba99c0d696ed96f3b32c8e0a922901b317922d
 
 @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
 public class SurvivalEvents {
@@ -114,28 +147,28 @@ public class SurvivalEvents {
 				DyeColor color = dye.getDyeColor();
 				BlockState state = event.getWorld().getBlockState(event.getPos());
 				Block block = state.getBlock();
-				Block red = BlockRegistry.RED_CAKE;
-				Block green = BlockRegistry.GREEN_CAKE;
-				Block blue = BlockRegistry.BLUE_CAKE;
-				Block cyan = BlockRegistry.CYAN_CAKE;
-				Block brown = BlockRegistry.BROWN_CAKE;
-				Block magenta = BlockRegistry.MAGENTA_CAKE;
-				Block orange = BlockRegistry.ORANGE_CAKE;
-				Block gray = BlockRegistry.GRAY_CAKE;
-				Block light_blue = BlockRegistry.LIGHT_BLUE_CAKE;
-				Block light_gray = BlockRegistry.LIGHT_GRAY_CAKE;
-				Block black = BlockRegistry.BLACK_CAKE;
-				Block lime = BlockRegistry.LIME_CAKE;
-				Block yellow = BlockRegistry.YELLOW_CAKE;
+				Block red = BlockRegistry.RED_CAKE.get();
+				Block green = BlockRegistry.GREEN_CAKE.get();
+				Block blue = BlockRegistry.BLUE_CAKE.get();
+				Block cyan = BlockRegistry.CYAN_CAKE.get();
+				Block brown = BlockRegistry.BROWN_CAKE.get();
+				Block magenta = BlockRegistry.MAGENTA_CAKE.get();
+				Block orange = BlockRegistry.ORANGE_CAKE.get();
+				Block gray = BlockRegistry.GRAY_CAKE.get();
+				Block light_blue = BlockRegistry.LIGHT_BLUE_CAKE.get();
+				Block light_gray = BlockRegistry.LIGHT_GRAY_CAKE.get();
+				Block black = BlockRegistry.BLACK_CAKE.get();
+				Block lime = BlockRegistry.LIME_CAKE.get();
+				Block yellow = BlockRegistry.YELLOW_CAKE.get();
 				Block white = Blocks.CAKE;
-				Block purple = BlockRegistry.PURPLE_CAKE;
-				Block pink = BlockRegistry.PINK_CAKE;
+				Block purple = BlockRegistry.PURPLE_CAKE.get();
+				Block pink = BlockRegistry.PINK_CAKE.get();
 				
 				Block set = white;
-				if (block == Blocks.CAKE || block == BlockRegistry.RED_CAKE || block == BlockRegistry.GREEN_CAKE || block == BlockRegistry.BLUE_CAKE || block == BlockRegistry.YELLOW_CAKE ||
-						block == BlockRegistry.BROWN_CAKE || block == BlockRegistry.CYAN_CAKE || block == BlockRegistry.LIGHT_BLUE_CAKE || block == BlockRegistry.PURPLE_CAKE ||
-						block == BlockRegistry.MAGENTA_CAKE || block == BlockRegistry.BLACK_CAKE || block == BlockRegistry.PINK_CAKE ||
-						block == BlockRegistry.ORANGE_CAKE || block == BlockRegistry.GRAY_CAKE || block == BlockRegistry.LIGHT_GRAY_CAKE || block == BlockRegistry.LIME_CAKE) {
+				if (block == Blocks.CAKE || block == BlockRegistry.RED_CAKE.get() || block == BlockRegistry.GREEN_CAKE.get() || block == BlockRegistry.BLUE_CAKE.get() || block == BlockRegistry.YELLOW_CAKE.get() ||
+						block == BlockRegistry.BROWN_CAKE.get() || block == BlockRegistry.CYAN_CAKE.get() || block == BlockRegistry.LIGHT_BLUE_CAKE.get() || block == BlockRegistry.PURPLE_CAKE.get() ||
+						block == BlockRegistry.MAGENTA_CAKE.get() || block == BlockRegistry.BLACK_CAKE.get() || block == BlockRegistry.PINK_CAKE.get() ||
+						block == BlockRegistry.ORANGE_CAKE.get() || block == BlockRegistry.GRAY_CAKE.get() || block == BlockRegistry.LIGHT_GRAY_CAKE.get() || block == BlockRegistry.LIME_CAKE.get()) {
 					if (color == DyeColor.RED) set = red;
 					if (color == DyeColor.GREEN) set = green;
 					if (color == DyeColor.BLUE) set = blue;
@@ -158,18 +191,67 @@ public class SurvivalEvents {
 	}
 	
 	@SubscribeEvent
+	public static void handleProjectileImpact(ProjectileImpactEvent event) {
+				
+		if (event.getEntity() instanceof ArrowEntity) {
+			if (event.getRayTraceResult() instanceof BlockRayTraceResult) {
+				BlockRayTraceResult result = (BlockRayTraceResult)event.getRayTraceResult();
+				BlockState state = event.getEntity().world.getBlockState(result.getPos());
+				if (state.getBlock() == Blocks.LILY_PAD) {
+					event.getEntity().world.setBlockState(result.getPos(), Blocks.AIR.getDefaultState());
+				}
+			}
+		}
+		if (event.getRayTraceResult() instanceof BlockRayTraceResult) {
+			BlockRayTraceResult result = (BlockRayTraceResult)event.getRayTraceResult();
+			BlockState state = event.getEntity().world.getBlockState(result.getPos());
+			if (state.getBlock() instanceof LeavesBlock) {
+				event.setCanceled(true);
+				event.getEntity().moveForced(event.getEntity().getPosX() + event.getEntity().getMotion().x, event.getEntity().getPosY() + event.getEntity().getMotion().y, event.getEntity().getPosZ() + event.getEntity().getMotion().z);
+			}
+		}
+	}
+	
+	@SubscribeEvent
 	public static void handleItemEvent(ItemEvent event) {
 		Entity entity = event.getEntity();
+		
 		if (entity instanceof ItemEntity) {
 			ItemEntity item = (ItemEntity)entity;
+			
+			if (!(entity instanceof FeatherItemEntity))
 			if (item.getItem().getItem() == Items.FEATHER) {
 				
+				FeatherItemEntity feather = new FeatherItemEntity(EntityType.ITEM, event.getEntity().getEntityWorld());
+				feather.setPosition(item.getPositionVec().x, item.getPositionVec().y, item.getPositionVec().z);
+				feather.setItem(new ItemStack(Items.FEATHER, item.getItem().getCount()));
+				feather.setPickupDelay(15);
+				feather.lifespan = item.lifespan;
+				feather.setMotion(item.getMotion());
+				event.getEntity().getEntityWorld().addEntity(feather);
+				item.remove();
+
+			}
+			
+			if (!(entity instanceof BowlItemEntity))
+			if (item.getItem().getItem() instanceof SoupItem || item.getItem().getItem() instanceof CustomBowlItem) {
+				
+				BowlItemEntity bowl = new BowlItemEntity(EntityType.ITEM, event.getEntity().getEntityWorld());
+				bowl.setPosition(item.getPositionVec().x, item.getPositionVec().y, item.getPositionVec().z);
+				bowl.setItem(new ItemStack(((ItemEntity)entity).getItem().getItem(), item.getItem().getCount()));
+				bowl.setPickupDelay(15);
+				bowl.lifespan = item.lifespan;
+				bowl.setMotion(item.getMotion());
+				event.getEntity().getEntityWorld().addEntity(bowl);
+				item.remove();
+
 			}
 		}
 	}
 	
 	@SubscribeEvent
 	public static void handleExperienceDrop(LivingExperienceDropEvent event) {
+		
 		if (event.getEntity() instanceof PlayerEntity) {
 			PlayerEntity player = (PlayerEntity)event.getEntity();
 			if (player.experienceLevel <= 0) {
@@ -238,6 +320,17 @@ public class SurvivalEvents {
 	}
 	
 	@SubscribeEvent
+	public static void handleItemUse(LivingEntityUseItemEvent event) {
+		if (event.getItem().isFood() || event.getItem().getItem() instanceof CustomEggItem && !event.getEntity().isSneaking()) {
+			if (event.getEntity().isInWaterOrBubbleColumn()) {
+				if (event.isCancelable()) {
+					event.setCanceled(true);
+				}
+			}
+		}
+	}
+	
+	@SubscribeEvent
 	public static void handleDamageEvent(LivingDamageEvent event) {
 		if (event.getEntity() instanceof ZombieEntity || event.getEntity() instanceof WolfEntity ||
 				event.getEntity() instanceof AbstractSkeletonEntity || event.getEntity() instanceof PhantomEntity ||
@@ -247,11 +340,11 @@ public class SurvivalEvents {
 				ItemStack stack = player.getHeldItemMainhand();
 				if (stack != null) {
 					Item item = stack.getItem();
-					if (item == ItemRegistry.SILVER_AXE || item == ItemRegistry.SILVER_BATTLE_AXE ||
-							item == ItemRegistry.SILVER_HATCHET || item == ItemRegistry.SILVER_HOE ||
-							item == ItemRegistry.SILVER_KNIFE || item == ItemRegistry.SILVER_MATTOCK ||
-							item == ItemRegistry.SILVER_PICKAXE || item == ItemRegistry.SILVER_SHEARS ||
-							item == ItemRegistry.SILVER_SWORD || item == ItemRegistry.SILVER_WAR_HAMMER) {
+					if (item == ItemRegistry.SILVER_AXE.get() || //item == ItemRegistry.SILVER_BATTLE_AXE.get() ||
+							item == ItemRegistry.SILVER_HATCHET.get() || item == ItemRegistry.SILVER_HOE.get() ||
+							item == ItemRegistry.SILVER_KNIFE.get() || //item == ItemRegistry.SILVER_MATTOCK.get() ||
+							item == ItemRegistry.SILVER_PICKAXE.get() || //item == ItemRegistry.SILVER_SHEARS.get() ||
+							item == ItemRegistry.SILVER_SWORD.get() /*|| item == ItemRegistry.SILVER_WAR_HAMMER.get()*/) {
 						event.setAmount(event.getAmount() * 2.0f);
 					}
 				}
@@ -273,6 +366,11 @@ public class SurvivalEvents {
 		if (event.getAmount() == 1) {
 			event.setCanceled(true);
 		}
+	}
+	
+	@SubscribeEvent
+	public static void blockBreakEvent(BreakEvent event) {
+		event.setExpToDrop(0);
 	}
 	
 	public static int tick = 0;
@@ -298,7 +396,7 @@ public class SurvivalEvents {
 					if (item != null) {
 						Map<IRegistryDelegate<Item>, Integer> BURNS = null;
 						try {
-							Field VANILLA_BURNS = ForgeHooks.class.getDeclaredField("VANILLA_BURNS");
+							Field VANILLA_BURNS = ObfuscationReflectionHelper.findField(ForgeHooks.class, "VANILLA_BURNS");
 							Resources.makeFieldAccessible(VANILLA_BURNS);
 							BURNS = (Map<IRegistryDelegate<Item>, Integer>) VANILLA_BURNS.get(null);
 						} catch (Exception e) {
@@ -338,7 +436,7 @@ public class SurvivalEvents {
 								fire.fuel = 60 * 20 * 10;
 							}
 							stateHolder.campfires.add(fire);
-							world.setBlockState(pos, state.with(CampfireBlock.LIT, Boolean.valueOf(true)));
+							world.setBlockState(pos, state.with(CampfireBlock.LIT, Boolean.TRUE));
 							
 								player.getCooldownTracker().setCooldown(stack.getItem(), 10);
 							
@@ -381,8 +479,8 @@ public class SurvivalEvents {
 				world.setBlockState(pos, Blocks.STRIPPED_SPRUCE_LOG.getDefaultState().with(LogBlock.AXIS, world.getBlockState(pos).get(LogBlock.AXIS)));
 				cutLog = true;
 			}
-			if (cutLog == true) {
-				world.addEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(ItemRegistry.STRIPPED_BARK, new Random().nextInt(2) + 1)));
+			if (cutLog) {
+				world.addEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(ItemRegistry.STRIPPED_BARK.get(), new Random().nextInt(2) + 1)));
 //				world.playSound(event.getPlayer(), pos, SoundEvents.ITEM_AXE_STRIP, SoundCategory.BLOCKS, 1.0F, 1.0F);
 			}
 		}
@@ -401,28 +499,38 @@ public class SurvivalEvents {
 	
 	@SubscribeEvent
 	public static void livingSpawnEvent(LivingSpawnEvent event) {
-		
+		if (event.getEntity() instanceof AnimalEntity) {
+			if (event instanceof LivingSpawnEvent.CheckSpawn) {
+				if (!(((LivingSpawnEvent.CheckSpawn)event).getSpawnReason() == SpawnReason.CHUNK_GENERATION)) {
+					event.getEntity().remove();
+					event.setResult(Result.DENY);
+				}
+			}
+		}
 		if (!(event.getEntity() instanceof DrownedEntity))
 		if (event.getEntity() instanceof ZombieEntity ||
 				event.getEntity() instanceof SkeletonEntity) {
 			if (event.getWorld().canBlockSeeSky(event.getEntity().getPosition()) ||
 					event.getWorld().getBlockState(event.getEntity().getPosition().down()).getBlock() != Blocks.STONE) {
-				event.getEntity().remove();
-				event.setResult(Result.DENY);
+				if (event.getWorld().getRandom().nextInt(100) >= 15) {
+					event.getEntity().remove();
+					event.setResult(Result.DENY);
+				}
+				
 			}
 				
 		}
 		
 		if (event instanceof LivingSpawnEvent.CheckSpawn) {
-			if (!event.getEntity().removed)
+			if (event.getEntity().isAlive())
 			{
 				if (event.getEntity() instanceof CreeperEntity) {
 					if (event.getWorld().getRandom().nextInt() <= 7) {
 						event.setResult(Result.DENY);
 					}
 				}
-				if (event.getWorld().getWorld().isDaytime() == false) {
-					if (event.getEntity().getType() == EntityRegistry.CREEPER) {
+				if (!event.getWorld().getWorld().isDaytime()) {
+					if (event.getEntity().getType() == EntityRegistry.CREEPER.get()) {
 						if (event.getWorld().getRandom().nextInt() <= 7) {
 							event.setResult(Result.DENY);
 						}
@@ -430,15 +538,15 @@ public class SurvivalEvents {
 				}
 			}
 		} else {
-			if (!event.getEntity().removed) {
+			if (event.getEntity().isAlive()) {
 				if (event.getEntity() instanceof CreeperEntity) {
 					if (event instanceof LivingSpawnEvent.SpecialSpawn) 
 					if (event.getWorld().getRandom().nextInt() <= 7) {
 						event.setResult(Result.DENY);
 					}
 				}
-				if (event.getWorld().getWorld().isDaytime() == false) {
-					if (event.getEntity().getType() == EntityRegistry.CREEPER) {
+				if (!event.getWorld().getWorld().isDaytime()) {
+					if (event.getEntity().getType() == EntityRegistry.CREEPER.get()) {
 						if (event instanceof LivingSpawnEvent.SpecialSpawn) 
 						if (event.getWorld().getRandom().nextInt() <= 7) {
 							event.setResult(Result.DENY);
@@ -463,7 +571,7 @@ public class SurvivalEvents {
 			BlockPos pos = event.getEntity().getPosition();
 			event.getEntity().remove();
 			
-			AnimalWatcherEntity zombie = EntityRegistry.ZOMBIE_ENTITY.create(event.getWorld().getWorld());
+			AnimalWatcherEntity zombie = EntityRegistry.ZOMBIE_ENTITY.get().create(event.getWorld().getWorld());
 			zombie.setPosition(pos.getX(), pos.getY(), pos.getZ());
 			event.getWorld().addEntity(zombie);
 			event.setResult(Result.DENY);
@@ -473,7 +581,7 @@ public class SurvivalEvents {
 			BlockPos pos = event.getEntity().getPosition();
 			event.getEntity().remove();
 			
-			EntityAttackSquid entity = EntityRegistry.ATTACK_SQUID.create(event.getWorld().getWorld());
+			EntityAttackSquid entity = EntityRegistry.ATTACK_SQUID.get().create(event.getWorld().getWorld());
 			entity.setPosition(pos.getX(), pos.getY(), pos.getZ());
 			event.getWorld().addEntity(entity);
 			event.setResult(Result.DENY);
@@ -494,9 +602,9 @@ public class SurvivalEvents {
 					
 					BlockPos pos = s.getPosition();
 					s.remove();
-					NewSkeletonEntity skeleton = EntityRegistry.SKELETON_ENTITY.create(event.getWorld().getWorld());
+					NewSkeletonEntity skeleton = EntityRegistry.SKELETON_ENTITY.get().create(event.getWorld().getWorld());
 					skeleton.setPosition(pos.getX(), pos.getY(), pos.getZ());
-					ItemStack club = new ItemStack(ItemRegistry.WOODEN_CLUB);
+					ItemStack club = new ItemStack(ItemRegistry.WOODEN_CLUB.get());
 					club.setDamage(new Random().nextInt(5));
 					skeleton.setItemStackToSlot(EquipmentSlotType.MAINHAND, club);
 					skeleton.setDropChance(EquipmentSlotType.MAINHAND, 0.5f);
@@ -523,6 +631,8 @@ public class SurvivalEvents {
 		
 
 		Entity entity = event.getEntity();
+
+		
 		
 		if (entity instanceof PlayerEntity) {
 			PlayerEntity player = (PlayerEntity)event.getEntity();
@@ -535,7 +645,7 @@ public class SurvivalEvents {
 			AnimalEntity animal = (AnimalEntity)entity;
 			if (!entity.world.isRemote && entity.isAlive() && !animal.isChild() && rand.nextInt(6000) <= 10) {
 				animal.playSound(SoundEvents.ENTITY_CHICKEN_EGG, 1.0F, (rand.nextFloat() - rand.nextFloat()) * 0.2F + 1.0F);
-		        animal.entityDropItem(ItemRegistry.MANURE);
+		        animal.entityDropItem(ItemRegistry.MANURE.get());
 		    }
 		}
 		
@@ -545,8 +655,10 @@ public class SurvivalEvents {
     public static void livingUpdateEvent(LivingEvent.LivingUpdateEvent event) {
 		Entity entity = event.getEntity();
 		
+		
+		
 		if (entity != null) {
-			if (entity.isSpectator() == false)
+			if (!entity.isSpectator())
 			if (entity.world.getBlockState(entity.getPosition().down()).getBlock() instanceof FallingBlock) {
 				if (entity.world instanceof ServerWorld)
 				entity.world.getBlockState(entity.getPosition().down()).randomTick((ServerWorld)entity.world, entity.getPosition().down(), entity.world.rand);
@@ -585,7 +697,7 @@ public class SurvivalEvents {
 					}
 				}
 			}
-    		if (player.isAlive() == false) {
+    		if (!player.isAlive()) {
     			WorldStateHolder.get(player.getEntityWorld()).nutrients.get(player.getUniqueID().toString()).reset();
     		}
     		if (!(player.getFoodStats() instanceof CustomFoodStats))
@@ -599,11 +711,11 @@ public class SurvivalEvents {
         			
         			customStats.foodLevel = stats.getFoodLevel();
         			customStats.foodSaturationLevel = stats.getSaturationLevel();
-        			Field foodTimer = FoodStats.class.getDeclaredField(FiveMinSurvival.DEBUG ? "foodTimer" : "field_75123_d"); //foodTimer
+        			Field foodTimer = ObfuscationReflectionHelper.findField(FoodStats.class, "field_75123_d"); //foodTimer
         			Resources.makeFieldAccessible(foodTimer);
         			customStats.foodTimer = (int)foodTimer.get(stats);
         			System.out.println(stats.getFoodLevel());
-        			Field foodStats = PlayerEntity.class.getDeclaredField(FiveMinSurvival.DEBUG ? "foodStats" : "field_71100_bB"); //foodStats
+        			Field foodStats = ObfuscationReflectionHelper.findField(PlayerEntity.class, "field_71100_bB"); //foodStats
         			Resources.makeFieldAccessible(foodStats);
         			foodStats.set(player, customStats);
         			
@@ -663,7 +775,7 @@ public class SurvivalEvents {
     			CustomFoodStats foodStats = (CustomFoodStats)player.getFoodStats();
     			
     			if (foodStats.nutrients != null) {
-    				if (player.isAlive() == false) {
+    				if (!player.isAlive()) {
         				foodStats.nutrients = new Nutrients(foodStats);
         				String UUID = player.getUniqueID().toString();
         				WorldStateHolder.get(entity.getEntityWorld()).nutrients.put(UUID, foodStats.nutrients);
@@ -671,7 +783,7 @@ public class SurvivalEvents {
     				nutrients = foodStats.nutrients;
     				nutrients.tick(player, foodStats);
     				
-    				double speed = (double)Math.max(0.05, nutrients.getSpeedModifier());
+    				double speed = Math.max(0.05, nutrients.getSpeedModifier());
     				speed = 0;
 					player.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.11f + speed);
     				
@@ -714,13 +826,13 @@ public class SurvivalEvents {
 //    			if (item instanceof ScytheItem) {
 //    				player.getAttribute(PlayerEntity.REACH_DISTANCE).setBaseValue(baseReach + 1.0);
 //    			}
-    			if (item == ItemRegistry.WOODEN_CUDGEL) {
+    			if (item == ItemRegistry.WOODEN_CUDGEL.get()) {
     				player.getAttribute(PlayerEntity.REACH_DISTANCE).setBaseValue(baseReach + 0.25);
     			}
-    			if (item == ItemRegistry.WOODEN_CLUB) {
+    			if (item == ItemRegistry.WOODEN_CLUB.get()) {
     				player.getAttribute(PlayerEntity.REACH_DISTANCE).setBaseValue(baseReach + 0.5);
     			}
-    			if (item == ItemRegistry.FLINT_KNIFE) {
+    			if (item == ItemRegistry.FLINT_KNIFE.get()) {
     				player.getAttribute(PlayerEntity.REACH_DISTANCE).setBaseValue(baseReach + 0.25);
     			}
     			if (item instanceof HatchetItem) {
@@ -824,14 +936,14 @@ public class SurvivalEvents {
 						event.setNewSpeed(0.5f + event.getPlayer().experienceLevel * 0.01f);
 						set = true;
 					}
-					if (set == false) {
+					if (!set) {
 						event.setNewSpeed(-1);
 						set = true;
 					}
 				}
-				if (set == false)
+				if (!set)
 				if (state.getMaterial() == Material.EARTH || state.getMaterial() == Material.SAND || state.getMaterial() == Material.LEAVES
-						|| state.getMaterial() == Material.ORGANIC || state.getMaterial() == Material.CLAY || state.getBlock() == BlockRegistry.PEA_GRAVEL) {					
+						|| state.getMaterial() == Material.ORGANIC || state.getMaterial() == Material.CLAY || state.getBlock() == BlockRegistry.PEA_GRAVEL.get()) {
 					event.setNewSpeed(event.getOriginalSpeed() * 0.05f + event.getPlayer().experienceLevel * 0.01f);
 					set = true;
 				}
@@ -861,7 +973,7 @@ public class SurvivalEvents {
 						}
 						
 						if (state.getMaterial() == Material.EARTH || state.getMaterial() == Material.SAND || state.getMaterial() == Material.LEAVES
-								|| state.getMaterial() == Material.ORGANIC || state.getMaterial() == Material.CLAY || state.getBlock() == BlockRegistry.PEA_GRAVEL) {					
+								|| state.getMaterial() == Material.ORGANIC || state.getMaterial() == Material.CLAY || state.getBlock() == BlockRegistry.PEA_GRAVEL.get()) {
 							if (item instanceof ShovelItem) {
 								event.setNewSpeed(2.0f * event.getOriginalSpeed() * 0.05f + event.getPlayer().experienceLevel * 0.01f);
 							}
@@ -885,7 +997,7 @@ public class SurvivalEvents {
 					event.setNewSpeed(-1);
 					return;
 				}
-				if (set == false)
+				if (!set)
 				event.setNewSpeed(event.getOriginalSpeed() * 0.15f + event.getPlayer().experienceLevel * 0.01f);
 			}
 			

@@ -24,7 +24,6 @@ public class EnhancedPanicGoal extends PanicGoal {
     * Returns whether the EntityAIBase should begin execution.
     */
    public boolean shouldExecute() {
-	   
 	   CreatureEntity entity = this.creature;
        BlockPos pos = entity.getPosition();
        World world = entity.getEntityWorld();
@@ -42,9 +41,6 @@ public class EnhancedPanicGoal extends PanicGoal {
 	     	  }
 	       }
       if (super.shouldExecute()) {
-		   
-
-    	
           if (!world.isRemote()) {
 //        	  for (PlayerEntity e : world.getEntitiesWithinAABB(PlayerEntity.class, new AxisAlignedBB(entity.getPositionVec().subtract(3, 3, 3), entity.getPositionVec().add(3, 3, 3))))
 //        	  {

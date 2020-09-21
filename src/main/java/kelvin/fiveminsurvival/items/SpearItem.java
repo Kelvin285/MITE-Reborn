@@ -34,9 +34,7 @@ public class SpearItem extends Item {
 	private double attackDamage;
 	   public SpearItem(Item.Properties builder, double attackDamage) {
 		      super(builder);
-		      this.addPropertyOverride(new ResourceLocation("throwing"), (p_210315_0_, p_210315_1_, p_210315_2_) -> {
-		         return p_210315_2_ != null && p_210315_2_.isHandActive() && p_210315_2_.getActiveItemStack() == p_210315_0_ ? 1.0F : 0.0F;
-		      });
+		      this.addPropertyOverride(new ResourceLocation("throwing"), (p_210315_0_, p_210315_1_, p_210315_2_) -> p_210315_2_ != null && p_210315_2_.isHandActive() && p_210315_2_.getActiveItemStack() == p_210315_0_ ? 1.0F : 0.0F);
 		      this.attackDamage = attackDamage;
 		   }
 
@@ -81,9 +79,7 @@ public class SpearItem extends Item {
 		            int j = EnchantmentHelper.getRiptideModifier(stack);
 		            if (j <= 0 || playerentity.isWet()) {
 		               if (!worldIn.isRemote) {
-		                  stack.damageItem(1, playerentity, (p_220047_1_) -> {
-		                     p_220047_1_.sendBreakAnimation(entityLiving.getActiveHand());
-		                  });
+		                  stack.damageItem(1, playerentity, (p_220047_1_) -> p_220047_1_.sendBreakAnimation(entityLiving.getActiveHand()));
 		                  if (j == 0) {
 		                	  
 		                     SpearEntity tridententity = new SpearEntity(worldIn, playerentity, stack);
@@ -93,7 +89,7 @@ public class SpearItem extends Item {
 		                     }
 
 		                     worldIn.addEntity(tridententity);
-		                     worldIn.playMovingSound((PlayerEntity)null, tridententity, SoundEvents.ITEM_TRIDENT_THROW, SoundCategory.PLAYERS, 1.0F, 1.0F);
+		                     worldIn.playMovingSound(null, tridententity, SoundEvents.ITEM_TRIDENT_THROW, SoundCategory.PLAYERS, 1.0F, 1.0F);
 		                     if (!playerentity.abilities.isCreativeMode) {
 		                        playerentity.inventory.deleteStack(stack);
 		                     }
@@ -112,11 +108,11 @@ public class SpearItem extends Item {
 		                  f1 = f1 * (f5 / f4);
 		                  f2 = f2 * (f5 / f4);
 		                  f3 = f3 * (f5 / f4);
-		                  playerentity.addVelocity((double)f1, (double)f2, (double)f3);
+		                  playerentity.addVelocity(f1, f2, f3);
 		                  playerentity.startSpinAttack(20);
 		                  if (playerentity.onGround) {
 		                     float f6 = 1.1999999F;
-		                     playerentity.move(MoverType.SELF, new Vec3d(0.0D, (double)1.1999999F, 0.0D));
+		                     playerentity.move(MoverType.SELF, new Vec3d(0.0D, 1.1999999F, 0.0D));
 		                  }
 
 		                  SoundEvent soundevent;
@@ -128,7 +124,7 @@ public class SpearItem extends Item {
 		                     soundevent = SoundEvents.ITEM_TRIDENT_RIPTIDE_1;
 		                  }
 
-		                  worldIn.playMovingSound((PlayerEntity)null, playerentity, soundevent, SoundCategory.PLAYERS, 1.0F, 1.0F);
+		                  worldIn.playMovingSound(null, playerentity, soundevent, SoundCategory.PLAYERS, 1.0F, 1.0F);
 		               }
 
 		            }
@@ -157,9 +153,7 @@ public class SpearItem extends Item {
 		    * the damage on the stack.
 		    */
 		   public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-		      stack.damageItem(1, attacker, (p_220048_0_) -> {
-		         p_220048_0_.sendBreakAnimation(EquipmentSlotType.MAINHAND);
-		      });
+		      stack.damageItem(1, attacker, (p_220048_0_) -> p_220048_0_.sendBreakAnimation(EquipmentSlotType.MAINHAND));
 		      return true;
 		   }
 
@@ -168,9 +162,7 @@ public class SpearItem extends Item {
 		    */
 		   public boolean onBlockDestroyed(ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
 		      if ((double)state.getBlockHardness(worldIn, pos) != 0.0D) {
-		         stack.damageItem(2, entityLiving, (p_220046_0_) -> {
-		            p_220046_0_.sendBreakAnimation(EquipmentSlotType.MAINHAND);
-		         });
+		         stack.damageItem(2, entityLiving, (p_220046_0_) -> p_220046_0_.sendBreakAnimation(EquipmentSlotType.MAINHAND));
 		      }
 
 		      return true;
@@ -183,7 +175,7 @@ public class SpearItem extends Item {
 		      Multimap<String, AttributeModifier> multimap = super.getAttributeModifiers(equipmentSlot);
 		      if (equipmentSlot == EquipmentSlotType.MAINHAND) {
 		         multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Tool modifier", attackDamage, AttributeModifier.Operation.ADDITION));
-		         multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Tool modifier", (double)-2.9F, AttributeModifier.Operation.ADDITION));
+		         multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Tool modifier", -2.9F, AttributeModifier.Operation.ADDITION));
 		      }
 
 		      return multimap;

@@ -3,16 +3,32 @@ package kelvin.fiveminsurvival.main;
 import java.lang.reflect.Field;
 import java.util.Random;
 
+import kelvin.fiveminsurvival.init.EntityRegistry;
+import kelvin.fiveminsurvival.init.VanillaOverrides;
+import kelvin.fiveminsurvival.main.crafting.CraftingIngredients;
+import kelvin.fiveminsurvival.init.ContainerRegistry;
+import kelvin.fiveminsurvival.survival.food.FoodNutrients;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import kelvin.fiveminsurvival.blocks.BlockRegistry;
+<<<<<<< HEAD
 import kelvin.fiveminsurvival.entity.model.ModelRegistry;
-import kelvin.fiveminsurvival.items.ItemRegistry;
+import kelvin.fiveminsurvival.init.BlockRegistry;
+import kelvin.fiveminsurvival.init.ContainerRegistry;
+import kelvin.fiveminsurvival.init.EntityRegistry;
+import kelvin.fiveminsurvival.init.ItemRegistry;
+import kelvin.fiveminsurvival.init.VanillaOverrides;
+import kelvin.fiveminsurvival.main.crafting.CraftingIngredients;
+=======
+import kelvin.fiveminsurvival.init.BlockRegistry;
+import kelvin.fiveminsurvival.entity.model.ModelRegistry;
+import kelvin.fiveminsurvival.init.ItemRegistry;
+>>>>>>> 2eba99c0d696ed96f3b32c8e0a922901b317922d
 import kelvin.fiveminsurvival.main.network.NetworkHandler;
 import kelvin.fiveminsurvival.survival.OverlayEvents;
 import kelvin.fiveminsurvival.survival.SurvivalEvents;
 import kelvin.fiveminsurvival.survival.crops.CropTypes;
+import kelvin.fiveminsurvival.survival.food.FoodNutrients;
 import kelvin.fiveminsurvival.survival.world.CampfireState;
 import kelvin.fiveminsurvival.survival.world.PlantState;
 import kelvin.fiveminsurvival.survival.world.WorldFeatures;
@@ -23,6 +39,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.CampfireBlock;
 import net.minecraft.block.CropsBlock;
+import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.entity.item.FallingBlockEntity;
@@ -36,7 +53,6 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.world.GrassColors;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeColors;
-import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent.WorldTickEvent;
 import net.minecraftforge.event.world.BlockEvent;
@@ -44,22 +60,23 @@ import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 import net.minecraftforge.event.world.BlockEvent.NeighborNotifyEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
-import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 // The value here should match an entry in the META-INF/mods.toml file
-@Mod("fiveminsurvival")
+@Mod(FiveMinSurvival.MODID)
 public class FiveMinSurvival
 {
     // Directly reference a log4j logger.
     private static final Logger LOGGER = LogManager.getLogger();
     
     public static boolean DEBUG = true;
+
+    public static final String MODID = "fiveminsurvival";
     
     public FiveMinSurvival() {
     	try {
@@ -69,20 +86,26 @@ public class FiveMinSurvival
     	}
         // Register the setup method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
-        // Register the enqueueIMC method for modloading
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueIMC);
-        // Register the processIMC method for modloading
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::processIMC);
-        // Register the doClientStuff method for modloading
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 2eba99c0d696ed96f3b32c8e0a922901b317922d
+    	BlockRegistry.BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
+    	ItemRegistry.ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
+		VanillaOverrides.ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
+		VanillaOverrides.BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
+		ContainerRegistry.CONTAINERS.register(FMLJavaModLoadingContext.get().getModEventBus());
+		ContainerRegistry.TILE_ENTITIES.register(FMLJavaModLoadingContext.get().getModEventBus());
+		EntityRegistry.ENTITIES.register(FMLJavaModLoadingContext.get().getModEventBus());
+
+        // Register the doClientStuff method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
         
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.register(BlockRegistry.class);
         MinecraftForge.EVENT_BUS.register(SurvivalEvents.class);
-//        MinecraftForge.EVENT_BUS.register(ItemRegistry.class);
-//        MinecraftForge.EVENT_BUS.register(EntityRegistry.class);
         
         MinecraftForge.EVENT_BUS.register(WorldFeatures.class);
 
@@ -107,9 +130,108 @@ public class FiveMinSurvival
     
     @SubscribeEvent
 	public static void blockBreak(BreakEvent e) {
+<<<<<<< HEAD
+    	e.setExpToDrop(0);
+//		Block block = e.getState().getBlock();
+//		Random random = e.getWorld().getRandom();
+//		if (block == Blocks.GRAVEL || block == BlockRegistry.PEA_GRAVEL.get() || block == BlockRegistry.SHINING_GRAVEL.get() || block == BlockRegistry.SHINING_PEA_GRAVEL.get()) {
+//			boolean dropsSelf = true;
+//			double stoneRate = 1.0 / 3.0;
+//			double chipRate = 1.0 / 3.0;
+//			double flintRate = 1.0 / 10.0;
+//			double copperRate = 1.0 / 100.0;
+//			double silverRate = 1.0 / 100.0;
+//
+//			double ironRate = 1.0 / 300.0;
+//			double goldRate = 1.0 / 400.0;
+//			double prismarineRate = -1.0;
+//			double scaleRate = -1.0f;
+//			
+//			stoneRate *= 0.25;
+//			chipRate *= 0.25;
+//			flintRate *= 0.25;
+//			ironRate *= 0.25;
+//			goldRate *= 0.25;
+//			copperRate *= 0.25;
+//			silverRate *= 0.25;
+//			//   public ItemEntity(World worldIn, double x, double y, double z, ItemStack stack) {
+//			Item drop = Items.GRAVEL;
+//			if (block == BlockRegistry.PEA_GRAVEL.get() || block == BlockRegistry.SHINING_PEA_GRAVEL.get()) {
+//				stoneRate *= 0.5;
+//				chipRate *= 2.0;
+//				goldRate *= 2.0;
+//				copperRate *= 2.0;
+//				silverRate *= 2.0;
+//				prismarineRate = 1.0 / 1000.0;
+//				scaleRate = 1.0 / 1000.0;
+//				drop = ItemRegistry.PEA_GRAVEL.get();
+//			}
+//			
+//			if (block == BlockRegistry.SHINING_GRAVEL.get() || block == BlockRegistry.SHINING_PEA_GRAVEL.get()) {
+//				drop = ItemRegistry.FLINT_SHARD.get();
+//			}
+//			
+//			boolean dropped = false;
+//			
+//			if (random.nextDouble() <= chipRate) {
+//				drop = ItemRegistry.FLINT_SHARD.get();
+//				dropped = true;
+//			}
+//			
+//			if (!dropped)
+//			if (random.nextDouble() <= stoneRate) {
+//				drop = ItemRegistry.SMOOTH_STONE.get();
+//				dropped = true;
+//			}
+//			
+//			if (!dropped)
+//			if (random.nextDouble() <= prismarineRate) {
+//				drop = Items.PRISMARINE_SHARD;
+//				dropped = true;
+//			}
+//			
+//			if (!dropped)
+//			if (random.nextDouble() <= scaleRate) {
+//				drop = Items.PRISMARINE_CRYSTALS;
+//				dropped = true;
+//			}
+//			if (!dropped)
+//				if (random.nextDouble() <= copperRate) {
+//					drop = ItemRegistry.COPPER_NUGGET.get();
+//					dropped = true;
+//				}
+//			if (!dropped)
+//				if (random.nextDouble() <= silverRate) {
+//					drop = ItemRegistry.SILVER_NUGGET.get();
+//					dropped = true;
+//				}
+//			if (!dropped)
+//			if (random.nextDouble() <= ironRate) {
+//				drop = Items.IRON_NUGGET;
+//				dropped = true;
+//			}
+//			
+//			if (!dropped)
+//			if (random.nextDouble() <= goldRate) {
+//				drop = Items.GOLD_NUGGET;
+//				dropped = true;
+//			}
+//			
+//			if (!dropped)
+//			if (random.nextDouble() <= flintRate) {
+//				drop = Items.FLINT;
+//				dropped = true;
+//			}
+//			
+//			
+//			
+//			ItemEntity item = new ItemEntity(e.getWorld().getWorld(), e.getPos().getX() + 0.5f, e.getPos().getY() + 0.5f, e.getPos().getZ() + 0.5f, new ItemStack(drop));
+//			e.getWorld().addEntity(item);
+//		}
+=======
 		Block block = e.getState().getBlock();
 		Random random = e.getWorld().getRandom();
-		if (block == Blocks.GRAVEL || block == BlockRegistry.PEA_GRAVEL || block == BlockRegistry.SHINING_GRAVEL || block == BlockRegistry.SHINING_PEA_GRAVEL) {
+		if (block == Blocks.GRAVEL || block == BlockRegistry.PEA_GRAVEL.get() || block == BlockRegistry.SHINING_GRAVEL.get() || block == BlockRegistry.SHINING_PEA_GRAVEL.get()) {
 			boolean dropsSelf = true;
 			double stoneRate = 1.0 / 3.0;
 			double chipRate = 1.0 / 3.0;
@@ -131,7 +253,7 @@ public class FiveMinSurvival
 			silverRate *= 0.25;
 			//   public ItemEntity(World worldIn, double x, double y, double z, ItemStack stack) {
 			Item drop = Items.GRAVEL;
-			if (block == BlockRegistry.PEA_GRAVEL || block == BlockRegistry.SHINING_PEA_GRAVEL) {
+			if (block == BlockRegistry.PEA_GRAVEL.get() || block == BlockRegistry.SHINING_PEA_GRAVEL.get()) {
 				stoneRate *= 0.5;
 				chipRate *= 2.0;
 				goldRate *= 2.0;
@@ -139,23 +261,23 @@ public class FiveMinSurvival
 				silverRate *= 2.0;
 				prismarineRate = 1.0 / 1000.0;
 				scaleRate = 1.0 / 1000.0;
-				drop = ItemRegistry.PEA_GRAVEL;
+				drop = ItemRegistry.PEA_GRAVEL.get();
 			}
 			
-			if (block == BlockRegistry.SHINING_GRAVEL || block == BlockRegistry.SHINING_PEA_GRAVEL) {
-				drop = ItemRegistry.FLINT_SHARD;
+			if (block == BlockRegistry.SHINING_GRAVEL.get() || block == BlockRegistry.SHINING_PEA_GRAVEL.get()) {
+				drop = ItemRegistry.FLINT_SHARD.get();
 			}
 			
 			boolean dropped = false;
 			
 			if (random.nextDouble() <= chipRate) {
-				drop = ItemRegistry.FLINT_SHARD;
+				drop = ItemRegistry.FLINT_SHARD.get();
 				dropped = true;
 			}
 			
 			if (!dropped)
 			if (random.nextDouble() <= stoneRate) {
-				drop = ItemRegistry.SMOOTH_STONE;
+				drop = ItemRegistry.SMOOTH_STONE.get();
 				dropped = true;
 			}
 			
@@ -172,12 +294,12 @@ public class FiveMinSurvival
 			}
 			if (!dropped)
 				if (random.nextDouble() <= copperRate) {
-					drop = ItemRegistry.COPPER_NUGGET;
+					drop = ItemRegistry.COPPER_NUGGET.get();
 					dropped = true;
 				}
 			if (!dropped)
 				if (random.nextDouble() <= silverRate) {
-					drop = ItemRegistry.SILVER_NUGGET;
+					drop = ItemRegistry.SILVER_NUGGET.get();
 					dropped = true;
 				}
 			if (!dropped)
@@ -203,6 +325,7 @@ public class FiveMinSurvival
 			ItemEntity item = new ItemEntity(e.getWorld().getWorld(), e.getPos().getX() + 0.5f, e.getPos().getY() + 0.5f, e.getPos().getZ() + 0.5f, new ItemStack(drop));
 			e.getWorld().addEntity(item);
 		}
+>>>>>>> 2eba99c0d696ed96f3b32c8e0a922901b317922d
 	}
 	
 	@SubscribeEvent
@@ -243,22 +366,21 @@ public class FiveMinSurvival
     
     @SubscribeEvent
 	public static void onBlockUpdate(NeighborNotifyEvent e) {
-    	
 		BlockPos pos = e.getPos();
 		BlockState state = e.getState();
 		for (Direction d : e.getNotifiedSides()) {
 			BlockPos pos2 = pos.offset(d);
 			BlockState state2 = e.getWorld().getBlockState(pos2);
 			if (state2.getBlock() == Blocks.DIRT) {
-				if (e.getWorld().getBlockState(pos2.down()).getMaterial().blocksMovement() == false) {
-					FallingBlockEntity fallingblockentity = new FallingBlockEntity(e.getWorld().getWorld(), (double)pos2.getX() + 0.5D, (double)pos2.getY(), (double)pos2.getZ() + 0.5D, state2);
+				if (!e.getWorld().getBlockState(pos2.down()).getMaterial().blocksMovement()) {
+					FallingBlockEntity fallingblockentity = new FallingBlockEntity(e.getWorld().getWorld(), (double)pos2.getX() + 0.5D, pos2.getY(), (double)pos2.getZ() + 0.5D, state2);
 		            e.getWorld().addEntity(fallingblockentity);
 				}
 			}
 		}
 		if (state.getBlock() == Blocks.DIRT) {
-			if (e.getWorld().getBlockState(pos.down()).getMaterial().blocksMovement() == false) {
-				FallingBlockEntity fallingblockentity = new FallingBlockEntity(e.getWorld().getWorld(), (double)pos.getX() + 0.5D, (double)pos.getY(), (double)pos.getZ() + 0.5D, state);
+			if (!e.getWorld().getBlockState(pos.down()).getMaterial().blocksMovement()) {
+				FallingBlockEntity fallingblockentity = new FallingBlockEntity(e.getWorld().getWorld(), (double)pos.getX() + 0.5D, pos.getY(), (double)pos.getZ() + 0.5D, state);
 	            e.getWorld().addEntity(fallingblockentity);
 			}
 		}
@@ -274,7 +396,7 @@ public class FiveMinSurvival
 				}
 			}
 			if (fuel <= 0)
-				e.getWorld().getWorld().setBlockState(pos, state.with(CampfireBlock.LIT, Boolean.valueOf(false)));
+				e.getWorld().getWorld().setBlockState(pos, state.with(CampfireBlock.LIT, Boolean.FALSE));
 		}
 		
 		if (state.getBlock() instanceof CropsBlock) {
@@ -317,6 +439,12 @@ public class FiveMinSurvival
         // some preinit code
         LOGGER.info("HELLO FROM PREINIT");
         LOGGER.info("DIRT BLOCK >> {}", Blocks.DIRT.getRegistryName());
+		FoodNutrients.init();
+		CraftingIngredients.init();
+		CropTypes.registerCropTypes();
+		VanillaTweaks.blocks();
+		VanillaTweaks.setToolTiers();
+		VanillaTweaks.fixStackSizes();
     }
 
     private void doClientStuff(final FMLClientSetupEvent event) {
@@ -328,26 +456,24 @@ public class FiveMinSurvival
         
         // do something that can only be done on the client
         LOGGER.info("Got game settings {}", event.getMinecraftSupplier().get().gameSettings);
-//        blockcolors.register((p_210225_0_, p_210225_1_, p_210225_2_, p_210225_3_) -> {
-//            return p_210225_1_ != null && p_210225_2_ != null ? BiomeColors.getGrassColor(p_210225_1_, p_210225_2_) : GrassColors.get(0.5D, 1.0D);
-//         }, Blocks.GRASS_BLOCK, Blocks.FERN, Blocks.GRASS, Blocks.POTTED_FERN);
-        event.getMinecraftSupplier().get().getBlockColors().register((p_210225_0_, p_210225_1_, p_210225_2_, p_210225_3_) -> {
-          return p_210225_1_ != null && p_210225_2_ != null ? BiomeColors.getGrassColor(p_210225_1_, p_210225_2_) : GrassColors.get(0.5D, 1.0D);
-       }, BlockRegistry.FLAX);
+		event.getMinecraftSupplier().get().getBlockColors().register(
+        		(p_210225_0_, p_210225_1_, p_210225_2_, p_210225_3_) ->
+						p_210225_1_ != null && p_210225_2_ != null
+								? BiomeColors.getGrassColor(p_210225_1_, p_210225_2_)
+								: GrassColors.get(0.5D, 1.0D),
+				BlockRegistry.FLAX.get());
         
-		RenderTypeLookup.setRenderLayer(BlockRegistry.FLAX, RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(BlockRegistry.FLAX.get(), RenderType.getCutout());
+<<<<<<< HEAD
+		RenderTypeLookup.setRenderLayer(BlockRegistry.CAMPFIRE_LOW.get(), RenderType.getCutout());
 
     }
 
-    private void enqueueIMC(final InterModEnqueueEvent event)
-    {
-        // some example code to dispatch IMC to another mod
+=======
+
     }
 
-    private void processIMC(final InterModProcessEvent event)
-    {
-        // some example code to receive and process InterModComms from other mods
-    }
+>>>>>>> 2eba99c0d696ed96f3b32c8e0a922901b317922d
     // You can use SubscribeEvent and let the Event Bus discover methods to call
     @SubscribeEvent
     public void onServerStarting(FMLServerStartingEvent event) {
@@ -355,3 +481,4 @@ public class FiveMinSurvival
     }
 
 }
+

@@ -42,9 +42,7 @@ public class SPacketSendNutrients {
     }
 	
 	public void handle(Supplier<NetworkEvent.Context> ctx) {
-		ctx.get().enqueueWork(() -> {
-			  Resources.clientNutrients = this.nutrients;
-        });
+		ctx.get().enqueueWork(() -> Resources.clientNutrients = this.nutrients);
         ctx.get().setPacketHandled(true);
 	}
 }

@@ -1,5 +1,6 @@
 package kelvin.fiveminsurvival.blocks;
 
+import kelvin.fiveminsurvival.init.BlockRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.CakeBlock;
 import net.minecraft.block.material.Material;
@@ -47,7 +48,7 @@ public class MITECakeBlock extends CakeBlock {
 	   }
 	
 	private ActionResultType eatCake(IWorld p_226911_1_, BlockPos p_226911_2_, BlockState p_226911_3_, PlayerEntity p_226911_4_) {
-		if (this != BlockRegistry.UNBAKED_CAKE)
+		if (this != BlockRegistry.UNBAKED_CAKE.get())
 		if (p_226911_4_.getHeldItemMainhand() != null || p_226911_4_.getHeldItemOffhand() != null) {
 			if (p_226911_4_.getHeldItemMainhand() != null && p_226911_4_.getHeldItemMainhand().getItem() instanceof DyeItem ||
 					p_226911_4_.getHeldItemOffhand() != null && p_226911_4_.getHeldItemOffhand().getItem() instanceof DyeItem) {

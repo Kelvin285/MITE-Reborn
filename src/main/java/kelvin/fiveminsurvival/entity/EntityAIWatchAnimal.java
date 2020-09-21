@@ -138,7 +138,7 @@ public class EntityAIWatchAnimal extends Goal {
                                 	//System.out.println("there is no air here");
                                     rc = Resources.getBlockCollisionForPhysicalReach(this.digger.getEyePosForBlockDestroying(), target_center_pos.add(0.0D, 1.0D, 0.0D), digger.getEntityWorld());
 
-                                    if (rc != null && rc.isBlock() && (!this.isRestrictedBlock(rc.getBlockHit()) || this.digger.isHoldingAnEffectiveTool(rc.getBlockHit()) || this.digger.getAttackTarget() instanceof PlayerEntity))
+                                    if (rc != null && rc.isBlock() && (this.isNotRestrictedBlock(rc.getBlockHit()) || this.digger.isHoldingAnEffectiveTool(rc.getBlockHit()) || this.digger.getAttackTarget() instanceof PlayerEntity))
                                     {
                                     	//System.out.println("i can mine this");
                                         ++rc.block_hit_y;
@@ -159,7 +159,7 @@ public class EntityAIWatchAnimal extends Goal {
 
                                 rc = Resources.getBlockCollisionForPhysicalReach(this.digger.getEyePosForBlockDestroying(), target_center_pos, this.digger.getEntityWorld());
 
-                                if (rc != null && rc.isBlock() && (!this.isRestrictedBlock(rc.getBlockHit()) || this.digger.isHoldingAnEffectiveTool(rc.getBlockHit()) || this.digger.getAttackTarget() instanceof PlayerEntity))
+                                if (rc != null && rc.isBlock() && (this.isNotRestrictedBlock(rc.getBlockHit()) || this.digger.isHoldingAnEffectiveTool(rc.getBlockHit()) || this.digger.getAttackTarget() instanceof PlayerEntity))
                                 {
                                 	//System.out.println("I CAN MINE THIS");
                                     ++rc.block_hit_y;
@@ -178,7 +178,7 @@ public class EntityAIWatchAnimal extends Goal {
                                 }
                                 
                                 rc = Resources.getBlockCollisionForPhysicalReach(this.digger.getAttackerLegPosForBlockDestroying(), target_center_pos, this.digger.getEntityWorld());
-                                boolean b = rc != null && rc.isBlock() && (!this.isRestrictedBlock(rc.getBlockHit()) || this.digger.isHoldingAnEffectiveTool(rc.getBlockHit()) || this.digger.getAttackTarget() instanceof PlayerEntity) && (isAirOrPassableBlock(rc.block_hit_x, rc.block_hit_y + 1, rc.block_hit_z, false, this.digger.getEntityWorld()) || this.digger.blockWillFall(rc.block_hit_x, rc.block_hit_y + 1, rc.block_hit_z)) && this.digger.setBlockToDig(rc.block_hit_x, rc.block_hit_y, rc.block_hit_z, false);
+                                boolean b = rc != null && rc.isBlock() && (this.isNotRestrictedBlock(rc.getBlockHit()) || this.digger.isHoldingAnEffectiveTool(rc.getBlockHit()) || this.digger.getAttackTarget() instanceof PlayerEntity) && (isAirOrPassableBlock(rc.block_hit_x, rc.block_hit_y + 1, rc.block_hit_z, false, this.digger.getEntityWorld()) || this.digger.blockWillFall(rc.block_hit_x, rc.block_hit_y + 1, rc.block_hit_z)) && this.digger.setBlockToDig(rc.block_hit_x, rc.block_hit_y, rc.block_hit_z, false);
                                 //System.out.println("stuff = " + b);
                                 return b;
                             }
@@ -203,11 +203,11 @@ public class EntityAIWatchAnimal extends Goal {
 
     public final boolean checkForLineOfPhysicalReach(Vec3d origin, Vec3d limit, World world)
     {
-        return this.getBlockCollisionForPhysicalReach(origin, limit, world).isBlock() == false;
+        return !this.getBlockCollisionForPhysicalReach(origin, limit, world).isBlock();
     }
 
-	private boolean isRestrictedBlock(Block blockHit) {
-		return blockHit == Blocks.BEDROCK || blockHit == Blocks.BARRIER;
+	private boolean isNotRestrictedBlock(Block blockHit) {
+		return blockHit != Blocks.BEDROCK && blockHit != Blocks.BARRIER;
 	}
 
 	public final boolean isAirOrPassableBlock(double x, double y, double z, boolean include_liquid, World world)
@@ -229,7 +229,7 @@ public class EntityAIWatchAnimal extends Goal {
                 else
                 {
                     Block block = world.getBlockState(new BlockPos(x, y, z)).getBlock();
-                    return block == null ? false : (!include_liquid && block.getDefaultState().getMaterial().isLiquid() ? false : !block.getDefaultState().getMaterial().isSolid());
+                    return block != null && ((include_liquid || !block.getDefaultState().getMaterial().isLiquid()) && !block.getDefaultState().getMaterial().isSolid());
                 }
             }
         }
@@ -274,7 +274,7 @@ public class EntityAIWatchAnimal extends Goal {
                 float y = (float)final_point.y;
                 float z = (float)final_point.z + 0.5F;
                 World var10000 = this.digger.worldObj;
-                return Resources.getDistanceFromDeltas((double)x - target.getPosX(), (double)y - target.getPosY(), (double)z - target.getPosZ()) > 1.0F ? false : !this.getIntersectingBlock(new Vec3d((double)x, (double)y, (double)z), this.digger.getTargetEntityCenterPosForBlockDestroying(target), this.digger.getEntityWorld()).isBlock();
+                return !(Resources.getDistanceFromDeltas((double) x - target.getPosX(), (double) y - target.getPosY(), (double) z - target.getPosZ()) > 1.0F) && !this.getIntersectingBlock(new Vec3d(x, y, z), this.digger.getTargetEntityCenterPosForBlockDestroying(target), this.digger.getEntityWorld()).isBlock();
             }
         }
     }
@@ -289,8 +289,7 @@ public class EntityAIWatchAnimal extends Goal {
         }
         else
         {
-            World var10000 = this.digger.worldObj;
-            double distance = (double)Resources.getDistanceFromDeltas(this.digger.getPosX() - target.getPosX(), this.digger.getPosY() - target.getPosY(), this.digger.getPosZ() - target.getPosZ());
+            double distance = Resources.getDistanceFromDeltas(this.digger.getPosX() - target.getPosX(), this.digger.getPosY() - target.getPosY(), this.digger.getPosZ() - target.getPosZ());
             Path path = this.digger.getNavigator().getPathToEntity(target, 16);
             
             if (path == null)
@@ -304,7 +303,6 @@ public class EntityAIWatchAnimal extends Goal {
                 float x = (float)final_point.x + 0.5F;
                 float y = (float)final_point.y;
                 float z = (float)final_point.z + 0.5F;
-                var10000 = this.digger.worldObj;
                 return (double)Resources.getDistanceFromDeltas((double)x - target.getPosX(), (double)y - target.getPosY(), (double)z - target.getPosZ()) < distance - 2.0D;
             }
         }
@@ -361,7 +359,7 @@ public class EntityAIWatchAnimal extends Goal {
             else
             {
                 LivingEntity target = this.digger.getAttackTarget();
-                return target == null ? false : (this.digger.getBlockPosX() == target.getPosition().getX() && this.digger.getBlockPosY() == target.getPosition().getY() && this.digger.getBlockPosZ() == target.getPosition().getZ() ? false : this.digger.getTicksExistedWithOffset() % 10 != 0 || !this.couldHitTargetByPathing());
+                return target != null && ((this.digger.getBlockPosX() != target.getPosition().getX() || this.digger.getBlockPosY() != target.getPosition().getY() || this.digger.getBlockPosZ() != target.getPosition().getZ()) && (this.digger.getTicksExistedWithOffset() % 10 != 0 || !this.couldHitTargetByPathing()));
             }
         }
     }

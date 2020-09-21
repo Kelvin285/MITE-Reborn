@@ -3,11 +3,11 @@ package kelvin.fiveminsurvival.survival.world;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Function;
 
-import com.google.common.base.Function;
 import com.mojang.datafixers.Dynamic;
 
-import kelvin.fiveminsurvival.blocks.BlockRegistry;
+import kelvin.fiveminsurvival.init.BlockRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.SkullBlock;
@@ -62,7 +62,7 @@ public class SpiderDenFeature extends Feature<NoFeatureConfig> {
 				int depth = 15 + rand.nextInt(8);
 				
 				
-				List<BlockPos> webs = new ArrayList<BlockPos>();
+				List<BlockPos> webs = new ArrayList<>();
 				double r = rand.nextDouble() * 5 + 2;
 				int chests = 0;
 				
@@ -73,7 +73,7 @@ public class SpiderDenFeature extends Feature<NoFeatureConfig> {
 							for (int y = -4; y < depth; y++) {
 								double distance = Math.sqrt(x * x + z * z);
 								
-								double opening = Math.sin((double)(y * Math.PI) / (double)(depth * 2.0)) * 5;
+								double opening = Math.sin((y * Math.PI) / (depth * 2.0)) * 5;
 								double D = rand.nextDouble() * 2;
 								pos2.setPos(blockpos.getX() + x, blockpos.getY() - y, blockpos.getZ() + z);
 								if (worldIn.getBlockState(pos2).getBlock() == Blocks.CHEST) {
@@ -84,7 +84,7 @@ public class SpiderDenFeature extends Feature<NoFeatureConfig> {
 									continue;
 								}
 								
-								if ((int)y == depth - 2 && ((int)x == 0 || (int)x == 1) && ((int)z == 0 || (int)z == 1)) {
+								if (y == depth - 2 && ((int)x == 0 || (int)x == 1) && ((int)z == 0 || (int)z == 1)) {
 									
 									if (chests < 3) {
 										chests++;
@@ -119,7 +119,7 @@ public class SpiderDenFeature extends Feature<NoFeatureConfig> {
 									
 									pos2.setPos(blockpos.getX() + x, blockpos.getY() - y, blockpos.getZ() + z);
 									if (worldIn.getBlockState(pos2).getBlock() != Blocks.CHEST)
-									worldIn.setBlockState(pos2, BlockRegistry.COBWEB_BLOCK.getDefaultState(), 2);
+									worldIn.setBlockState(pos2, BlockRegistry.COBWEB_BLOCK.get().getDefaultState(), 2);
 									pos2.setPos(blockpos.getX() + x, blockpos.getY() - y + 1, blockpos.getZ() + z);
 									
 								}
@@ -142,7 +142,7 @@ public class SpiderDenFeature extends Feature<NoFeatureConfig> {
 											
 											if (type == 0) {
 												if (worldIn.getBlockState(pos2).getBlock() != Blocks.CHEST)
-												worldIn.setBlockState(pos2, BlockRegistry.COBWEB_BLOCK.getDefaultState(), 2);
+												worldIn.setBlockState(pos2, BlockRegistry.COBWEB_BLOCK.get().getDefaultState(), 2);
 											}
 											
 											if (type == 1) {
@@ -155,7 +155,7 @@ public class SpiderDenFeature extends Feature<NoFeatureConfig> {
 															if (dist <= RAD * mul) {
 																pos2.setPos(blockpos.getX() + x + xx, blockpos.getY() - y + ii, blockpos.getZ() + z + zz);
 																if (worldIn.getBlockState(pos2).getBlock() != Blocks.CHEST)
-																worldIn.setBlockState(pos2, BlockRegistry.COBWEB_BLOCK.getDefaultState(), 2);
+																worldIn.setBlockState(pos2, BlockRegistry.COBWEB_BLOCK.get().getDefaultState(), 2);
 																mul -= 0.01 * rand.nextDouble();
 															}
 														}
@@ -210,7 +210,7 @@ public class SpiderDenFeature extends Feature<NoFeatureConfig> {
 												distance <= min_radius + D + opening + 1) {
 											if (worldIn.getBlockState(pos2).getBlock() != Blocks.CHEST)
 											{
-											worldIn.setBlockState(pos2, BlockRegistry.COBWEB_BLOCK.getDefaultState(), 2);
+											worldIn.setBlockState(pos2, BlockRegistry.COBWEB_BLOCK.get().getDefaultState(), 2);
 											if (rand.nextInt(1000) <= 3) {
 												webs.add(new BlockPos(pos2.getX(), pos2.getY(), pos2.getZ()));
 											}
@@ -236,9 +236,9 @@ public class SpiderDenFeature extends Feature<NoFeatureConfig> {
 							}
 							
 					
-							double slope_X = ((double)(b.getX() - a.getX()));
-							double slope_Y = ((double)(b.getY() - a.getY()));
-							double slope_Z = ((double)(b.getZ() - a.getZ()));
+							double slope_X = b.getX() - a.getX();
+							double slope_Y = b.getY() - a.getY();
+							double slope_Z = b.getZ() - a.getZ();
 							
 							double distance = Math.sqrt(slope_X * slope_X + slope_Y * slope_Y + slope_Z * slope_Z);
 							slope_X /= distance;
@@ -254,7 +254,7 @@ public class SpiderDenFeature extends Feature<NoFeatureConfig> {
 								if (worldIn.isAreaLoaded(pos2, 1))
 								if (worldIn.getBlockState(pos2).getBlock() != Blocks.SPAWNER)
 									if (worldIn.getBlockState(pos2).getBlock() != Blocks.CHEST)
-								worldIn.setBlockState(pos2, BlockRegistry.COBWEB_BLOCK.getDefaultState(), 2);
+								worldIn.setBlockState(pos2, BlockRegistry.COBWEB_BLOCK.get().getDefaultState(), 2);
 								
 								if (rand.nextInt(500) == 0) {
 									if (worldIn.getBlockState(pos2).getBlock() != Blocks.CHEST) {
@@ -268,14 +268,14 @@ public class SpiderDenFeature extends Feature<NoFeatureConfig> {
 								
 								if (rand.nextInt((int)(distance * 10)) <= 2) {
 									int length = rand.nextInt(4);
-									double y = pos2.getY() + 0;
+									double y = pos2.getY();
 									for (double l = 0; l < length; l+=0.01) {
 										pos2.setPos(pos2.getX(), y - l, pos2.getZ());
 										if (worldIn.getBlockState(pos2).getBlock() == Blocks.CHEST) continue;
 										if (worldIn.isAreaLoaded(pos2, 1))
 											if (worldIn.getBlockState(pos2).getBlock() != Blocks.SPAWNER)
 												if (worldIn.getBlockState(pos2).getBlock() != Blocks.CHEST)
-										worldIn.setBlockState(pos2, BlockRegistry.COBWEB_BLOCK.getDefaultState(), 2);
+										worldIn.setBlockState(pos2, BlockRegistry.COBWEB_BLOCK.get().getDefaultState(), 2);
 									}
 								}
 							}

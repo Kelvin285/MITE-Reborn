@@ -2,6 +2,6 @@
 	"parent": "item/generated",
 	"textures":
 	{
-		"layer0": "fiveminsurvival:item/unbaked_cake"
+		"layer0": "fiveminsurvival:item/food/bacon"
 	}
 }

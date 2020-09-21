@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "fiveminsurvival:dough"
+    },
+	{
+	  "item": "minecraft:sugar"
+	},
+	{
+	  "item": "fiveminsurvival:blueberries"
+	}
+  ],
+  "result": {
+    "item": "fiveminsurvival:blueberry_muffin"
+  }
+}
