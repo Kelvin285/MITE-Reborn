@@ -1,9 +1,15 @@
 package kelvin.fiveminsurvival.main;
 
+import java.lang.reflect.Field;
+
 import kelvin.fiveminsurvival.blocks.MITECraftingTableBlock;
 import kelvin.fiveminsurvival.items.SurvivalItemTier;
+import net.minecraft.block.AbstractBlock;
+import net.minecraft.block.AbstractBlock.AbstractBlockState;
+import net.minecraft.block.AbstractBlock.Properties;
 import net.minecraft.block.AnvilBlock;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.CarpetBlock;
 import net.minecraft.block.DoorBlock;
@@ -27,8 +33,6 @@ import net.minecraft.item.SwordItem;
 import net.minecraft.item.ToolItem;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.registries.ForgeRegistries;
-
-import java.lang.reflect.Field;
 
 public class VanillaTweaks {
 
@@ -56,15 +60,16 @@ public class VanillaTweaks {
     }
 
     private static void changeHardnessAndResistance(Block block, float i) throws Exception {
-        Field HARDNESS = ObfuscationReflectionHelper.findField(Block.class, "field_149782_v"); //blockHardness
-        Field RESISTANCE = ObfuscationReflectionHelper.findField(Block.class, "field_149781_w"); //blockResistance
-        HARDNESS.set(block, i);
-        RESISTANCE.set(block, i);
+		Field PROPERTIES = ObfuscationReflectionHelper.findField(AbstractBlock.class, "field_235684_aB_"); //blockHardness
+		Properties properties = (Properties) PROPERTIES.get(block);
+		properties.hardnessAndResistance(i, i);
     }
 
     private static void changeMaterial(Block block, Material mat) throws Exception {
-        Field MATERIAL = ObfuscationReflectionHelper.findField(Block.class, "field_149764_J"); //material
-        MATERIAL.set(block, mat);
+        Field MATERIAL = ObfuscationReflectionHelper.findField(AbstractBlock.Properties.class, "field_200953_a"); //material
+        Field PROPERTIES = ObfuscationReflectionHelper.findField(AbstractBlock.class, "field_235684_aB_"); //blockHardness
+		Properties properties = (Properties) PROPERTIES.get(block);
+        MATERIAL.set(properties, mat);
     }
 
     public static void setToolTiers() {
@@ -84,6 +89,7 @@ public class VanillaTweaks {
 
     private static void setItemTier(Item item,ItemTier original, SurvivalItemTier tier) {
         Class<ToolItem> c = ToolItem.class;
+        if (!(item instanceof ToolItem)) return;
         try {
             if (!(item instanceof HoeItem) && !(item instanceof SwordItem)) {
                 Field f = ObfuscationReflectionHelper.findField(c, "field_77864_a"); //efficiency

@@ -1,9 +1,13 @@
 package kelvin.fiveminsurvival.main.gui;
 
+import java.lang.reflect.Field;
+
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.AbstractFurnaceContainer;
+import net.minecraft.inventory.container.ClickType;
 import net.minecraft.inventory.container.FurnaceContainer;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -16,8 +20,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
-import java.lang.reflect.Field;
-
 public class MITEFurnaceContainer extends FurnaceContainer {
 
     public static final int CLAY = 0, HARDENED_CLAY = 1, SANDSTONE = 1, STONE = 2, OBSIDIAN = 3, NETHERRACK = 4;
@@ -25,24 +27,30 @@ public class MITEFurnaceContainer extends FurnaceContainer {
     public int HEAT_LEVEL = MITEFurnaceContainer.CLAY;
     public int CURRENT_HEAT_LEVEL = 0;
 
+    public static int STATIC_HEAT_LEVEL = 0;
+    
     public MITEFurnaceContainer(int p_i50082_1_, PlayerInventory p_i50082_2_) {
         super(p_i50082_1_, p_i50082_2_);
-        System.out.println("3");
+        System.out.println(HEAT_LEVEL);
+        STATIC_HEAT_LEVEL = 2;
+        MITEFurnaceContainer.STATIC_HEAT_LEVEL = 2;
     }
 
     public MITEFurnaceContainer(int p_i50082_1_, PlayerInventory p_i50082_2_, int HEAT_LEVEL) {
         super(p_i50082_1_, p_i50082_2_);
         this.HEAT_LEVEL = HEAT_LEVEL;
         System.out.println(HEAT_LEVEL);
+        STATIC_HEAT_LEVEL = HEAT_LEVEL;
+        MITEFurnaceContainer.STATIC_HEAT_LEVEL = HEAT_LEVEL;
     }
 
     public MITEFurnaceContainer(int p_i50083_1_, PlayerInventory p_i50083_2_, IInventory p_i50083_3_,
                                 IIntArray p_i50083_4_, int HEAT_LEVEL) {
         super(p_i50083_1_, p_i50083_2_, p_i50083_3_, p_i50083_4_);
         this.HEAT_LEVEL = HEAT_LEVEL;
-
+        MITEFurnaceContainer.STATIC_HEAT_LEVEL = HEAT_LEVEL;
     }
-
+    
     protected int getHeatForItem(Item item) {
         if (item instanceof BlockItem) {
             return 1;
@@ -65,7 +73,7 @@ public class MITEFurnaceContainer extends FurnaceContainer {
     }
 
     protected boolean func_217057_a(ItemStack p_217057_1_) {
-
+    	
         if (p_217057_1_.getItem() != null) {
             this.CURRENT_HEAT_LEVEL = getHeatForItem(p_217057_1_.getItem());
             if (HEAT_LEVEL < CURRENT_HEAT_LEVEL) {
@@ -128,7 +136,6 @@ public class MITEFurnaceContainer extends FurnaceContainer {
 
     @OnlyIn(Dist.CLIENT)
     public boolean func_217061_l() {
-
         try {
             Field field_217064_e = ObfuscationReflectionHelper.findField(AbstractFurnaceContainer.class, "field_217064_e");
             return ((IIntArray) field_217064_e.get(this)).get(0) > 0;

@@ -1,7 +1,7 @@
 package kelvin.fiveminsurvival.items;
 
-import kelvin.fiveminsurvival.survival.world.PlantState;
-import kelvin.fiveminsurvival.survival.world.WorldStateHolder;
+import kelvin.fiveminsurvival.game.world.PlantState;
+import kelvin.fiveminsurvival.game.world.WorldStateHolder;
 import net.minecraft.block.CropsBlock;
 import net.minecraft.block.MushroomBlock;
 import net.minecraft.item.BoneMealItem;

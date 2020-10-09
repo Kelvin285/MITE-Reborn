@@ -22,8 +22,8 @@ import java.util.function.Supplier;
 
 public class ContainerRegistry {
 
-    public static final DeferredRegister<ContainerType<?>> CONTAINERS = new DeferredRegister<>(ForgeRegistries.CONTAINERS, FiveMinSurvival.MODID);
-    public static final DeferredRegister<TileEntityType<?>> TILE_ENTITIES = new DeferredRegister<>(ForgeRegistries.TILE_ENTITIES, FiveMinSurvival.MODID);
+    public static final DeferredRegister<ContainerType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.CONTAINERS, FiveMinSurvival.MODID);
+    public static final DeferredRegister<TileEntityType<?>> TILE_ENTITIES = DeferredRegister.create(ForgeRegistries.TILE_ENTITIES, FiveMinSurvival.MODID);
 
     public static final RegistryObject<ContainerType<MITEWorkbenchContainer>> WORKBENCH = CONTAINERS.register("workbench", () -> new ContainerType<>(MITEWorkbenchContainer::new));
     public static final RegistryObject<ContainerType<MITEFurnaceContainer>> FURNACE = CONTAINERS.register("furnace", () -> new ContainerType<>(MITEFurnaceContainer::new));

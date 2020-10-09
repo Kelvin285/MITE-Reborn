@@ -4,6 +4,7 @@ package kelvin.fiveminsurvival.main.gui;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 
 import kelvin.fiveminsurvival.init.ItemRegistry;
@@ -26,6 +27,10 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.IFormattableTextComponent;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.ITextProperties;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -85,56 +90,64 @@ public class MITECraftingScreen extends ContainerScreen<WorkbenchContainer> impl
       this.craftingTick();
    }
 
-   public void render(int p_render_1_, int p_render_2_, float p_render_3_) {
-      this.renderBackground();
+   public void render(MatrixStack stack, int p_render_1_, int p_render_2_, float p_render_3_) {
+      this.renderBackground(stack);
       if (this.recipeBookGui.isVisible() && this.widthTooNarrow) {
-         this.drawGuiContainerBackgroundLayer(p_render_3_, p_render_1_, p_render_2_);
-         this.recipeBookGui.render(p_render_1_, p_render_2_, p_render_3_);
+         this.drawGuiContainerBackgroundLayer(stack, p_render_3_, p_render_1_, p_render_2_);
+         this.recipeBookGui.render(stack, p_render_1_, p_render_2_, p_render_3_);
       } else {
-         this.recipeBookGui.render(p_render_1_, p_render_2_, p_render_3_);
-         super.render(p_render_1_, p_render_2_, p_render_3_);
-         this.recipeBookGui.renderGhostRecipe(this.guiLeft, this.guiTop, true, p_render_3_);
+         this.recipeBookGui.render(stack, p_render_1_, p_render_2_, p_render_3_);
+         super.render(stack, p_render_1_, p_render_2_, p_render_3_);
+         this.recipeBookGui.func_230477_a_(stack, this.guiLeft, this.guiTop, true, p_render_3_); //renderGhostRecipe
       }
 
-      this.renderHoveredToolTip(p_render_1_, p_render_2_);
-      this.recipeBookGui.renderTooltip(this.guiLeft, this.guiTop, p_render_1_, p_render_2_);
-      this.func_212932_b(this.recipeBookGui);
+      this.renderHoveredTooltip(stack, p_render_1_, p_render_2_);
+      this.recipeBookGui.func_238924_c_(stack, this.guiLeft, this.guiTop, p_render_1_, p_render_2_); //renderTooltip
+      this.setListenerDefault(this.recipeBookGui);
+      
+      this.OldMouseX = (float)p_render_1_;
+      this.OldMouseY = (float)p_render_2_;
+      
+      if (this.getSlotUnderMouse() instanceof CraftingResultSlot) {
+    	  
+    	  if (!this.canCraft) {
+	    	  if (this.crafting) {
+	    		  List<ITextProperties> str = new ArrayList<>();
+	    		  str.add(new StringTextComponent(((int)(this.maxCraftTimer) - (int)(this.craftTimer)) / 20 + " seconds left"));
+            	  str.add(new StringTextComponent("Wait until the item is finished crafting!"));
+	        	  renderToolTip(stack, str, (int)this.OldMouseX, (int)this.OldMouseY, Minecraft.getInstance().fontRenderer);
+	    	  } else {
+	    		  List<ITextProperties> str = new ArrayList<>();
+	        	  str.add( new StringTextComponent("LOCKED!"));
+	        	  str.add(new StringTextComponent("Higher tier table required!"));
+	        	  
+	        	  renderToolTip(stack, str, (int)this.OldMouseX, (int)this.OldMouseY, Minecraft.getInstance().fontRenderer);
+	
+	    	  }
+    	  }
+      }
    }
 
    /**
     * Draw the foreground layer for the GuiContainer (everything in front of the items)
     */
-   protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-      this.font.drawString(this.title.getFormattedText(), 28.0F, 6.0F, 4210752);
-      this.font.drawString(this.playerInventory.getDisplayName().getFormattedText(), 8.0F, (float)(this.ySize - 96 + 2), 4210752);
+   protected void drawGuiContainerForegroundLayer(MatrixStack stack, int mouseX, int mouseY) {
+      this.font.drawString(stack, this.title.getString(), 28.0F, 6.0F, 4210752);
+      this.font.drawString(stack, this.playerInventory.getDisplayName().getString(), 8.0F, (float)(this.ySize - 96 + 2), 4210752);
       
       this.minecraft.getTextureManager().bindTexture(INVENTORY_EXTRAS);
       //18x17
       if (this.craftTimer > 0 && this.maxCraftTimer > 0 && this.crafting)
-      this.blit(this.arrow_position[0], this.arrow_position[1], this.arrow_location[0], this.arrow_location[1], (int)((double)this.arrow_size[0] * (this.craftTimer) / (this.maxCraftTimer)), this.arrow_size[1]);
+      this.blit(stack, this.arrow_position[0], this.arrow_position[1], this.arrow_location[0], this.arrow_location[1], (int)((double)this.arrow_size[0] * (this.craftTimer) / (this.maxCraftTimer)), this.arrow_size[1]);
       GlStateManager.disableDepthTest();
       int i = 8;
       if (!this.canCraft) {
           if (this.crafting) {
-              this.blit(this.lock_position[0] + 8, this.lock_position[1], this.lock_location[0] + 8, this.lock_location[1], 8 - (int)((double)8 * (this.craftTimer) / (this.maxCraftTimer)), 24);
+              this.blit(stack, this.lock_position[0] + 8, this.lock_position[1], this.lock_location[0] + 8, this.lock_location[1], 8 - (int)((double)8 * (this.craftTimer) / (this.maxCraftTimer)), 24);
           } else {
-              this.blit(this.lock_position[0], this.lock_position[1], this.lock_location[0], this.lock_location[1], 24, 24);
+              this.blit(stack, this.lock_position[0], this.lock_position[1], this.lock_location[0], this.lock_location[1], 24, 24);
           }
-          if (this.getSlotUnderMouse() instanceof CraftingResultSlot) {
-        	  
-        	  
-        	  if (this.crafting) {
-        		  ArrayList<String> str = new ArrayList<>();
-        		  str.add(((int)(this.maxCraftTimer) - (int)(this.craftTimer)) / 20 + " seconds left");
-            	  str.add("Wait until the item is finished crafting!");
-            	  renderTooltip(str, (int)this.mouseX, (int)this.mouseY, Minecraft.getInstance().fontRenderer);
-        	  } else {
-        		  ArrayList<String> str = new ArrayList<>();
-            	  str.add("LOCKED!");
-            	  str.add("Higher tier table required!");
-            	  renderTooltip(str, (int)this.mouseX, (int)this.mouseY, Minecraft.getInstance().fontRenderer);
-        	  }
-          }
+          
       }
       GlStateManager.enableDepthTest();
       this.minecraft.getTextureManager().bindTexture(INVENTORY_BACKGROUND);
@@ -143,12 +156,12 @@ public class MITECraftingScreen extends ContainerScreen<WorkbenchContainer> impl
    /**
     * Draws the background layer of this container (behind the items).
     */
-   protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
+   protected void drawGuiContainerBackgroundLayer(MatrixStack stack, float partialTicks, int mouseX, int mouseY) {
       GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
       this.minecraft.getTextureManager().bindTexture(CRAFTING_TABLE_GUI_TEXTURES);
       int i = this.guiLeft;
       int j = (this.height - this.ySize) / 2;
-      this.blit(i, j, 0, 0, this.xSize, this.ySize);
+      this.blit(stack, i, j, 0, 0, this.xSize, this.ySize);
    }
 
    protected boolean isPointInRegion(int p_195359_1_, int p_195359_2_, int p_195359_3_, int p_195359_4_, double p_195359_5_, double p_195359_7_) {
@@ -156,6 +169,7 @@ public class MITECraftingScreen extends ContainerScreen<WorkbenchContainer> impl
    }
 
    double mouseX, mouseY;
+   double OldMouseX, OldMouseY;
    
    public void mouseMoved(double x, double y) {
 	     this.mouseX = x;
@@ -358,9 +372,9 @@ public class MITECraftingScreen extends ContainerScreen<WorkbenchContainer> impl
       this.recipeBookGui.recipesUpdated();
    }
 
-   public void removed() {
+   public void onClose() {
       this.recipeBookGui.removed();
-      super.removed();
+      super.onClose();
    }
 
 	@Override

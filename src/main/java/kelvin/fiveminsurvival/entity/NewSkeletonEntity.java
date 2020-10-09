@@ -5,8 +5,8 @@ import javax.annotation.Nullable;
 import kelvin.fiveminsurvival.init.ItemRegistry;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ILivingEntityData;
-import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.monster.AbstractSkeletonEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
@@ -42,11 +42,15 @@ public class NewSkeletonEntity extends AbstractSkeletonEntity {
 	    */
 	   protected void setEnchantmentBasedOnDifficulty(DifficultyInstance difficulty) {
 	   }
-
+	   // field_233820_c_ = movement speed
+	   // field_233818_a_ = health
+	   // field_233823_f_ = attack damage
+	   // field_233819_b_ = follow range
+	   // field_233826_i_ = armor
 	   @Nullable
 	   public ILivingEntityData onInitialSpawn(IWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
 	      ILivingEntityData ilivingentitydata = super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
-	      this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(4.0D);
+	      this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(4.0D);
 	      this.setCombatTask();
 	      return ilivingentitydata;
 	   }

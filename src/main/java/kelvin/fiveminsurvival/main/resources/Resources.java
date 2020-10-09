@@ -4,10 +4,10 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
 import kelvin.fiveminsurvival.entity.RaycastCollision;
-import kelvin.fiveminsurvival.survival.food.Nutrients;
+import kelvin.fiveminsurvival.game.food.Nutrients;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
@@ -39,8 +39,8 @@ public class Resources {
 	    return a + lerp * (b - a);
 	}
 	
-	public static RaycastCollision getBlockCollisionForPhysicalReach(Vec3d start, Vec3d end, World world) {
-		Vec3d slope = new Vec3d(end.x - start.x, end.y - start.y, end.z - start.z);
+	public static RaycastCollision getBlockCollisionForPhysicalReach(Vector3d start, Vector3d end, World world) {
+		Vector3d slope = new Vector3d(end.x - start.x, end.y - start.y, end.z - start.z);
 		RaycastCollision rc = new RaycastCollision();
 		for (int i = 0; i < start.distanceTo(end); i++) {
 			BlockPos pos = new BlockPos(start.x + slope.x * i, start.y + slope.y * i, start.z * slope.z * i);

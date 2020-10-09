@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "iron_ingot",
+  "pattern": [
+    "#"
+  ],
+  "key": {
+    "#": {
+      "item": "fiveminsurvival:copper_ingot"
+    }
+  },
+  "result": {
+    "item": "fiveminsurvival:copper_nugget",
+	"count": 9
+  }
+}

@@ -13,7 +13,7 @@ import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
 public class EntityAIWatchAnimal extends Goal {
@@ -106,7 +106,7 @@ public class EntityAIWatchAnimal extends Goal {
                     else
                     {
 //                        Vec3Pool var10 = world.getWorldVec3Pool();
-                        boolean var11 = isAirOrPassableBlock(this.digger.getBlockPosX(), MathHelper.floor(this.digger.getEyePosForBlockDestroying().getY() + 1.0D), this.digger.getBlockPosZ(), false, digger.getEntityWorld()) && checkForLineOfPhysicalReach(new Vec3d(this.digger.getPosX(), this.digger.getEyePosForBlockDestroying().getY() + 1.0D, this.digger.getPosZ()), target.getPositionVec().add(0, target.getHeight() * 0.75, 0), digger.getEntityWorld());
+                        boolean var11 = isAirOrPassableBlock(this.digger.getBlockPosX(), MathHelper.floor(this.digger.getEyePosForBlockDestroying().getY() + 1.0D), this.digger.getBlockPosZ(), false, digger.getEntityWorld()) && checkForLineOfPhysicalReach(new Vector3d(this.digger.getPosX(), this.digger.getEyePosForBlockDestroying().getY() + 1.0D, this.digger.getPosZ()), target.getPositionVec().add(0, target.getHeight() * 0.75, 0), digger.getEntityWorld());
 
                         if (distance_to_target > (var11 ? 8.0F : (this.digger.isFrenzied() ? 6.0F : 4.0F)))
                         {
@@ -130,7 +130,7 @@ public class EntityAIWatchAnimal extends Goal {
                             else
                             {
                             	//System.out.println("I need to dig");
-                                Vec3d target_center_pos = this.digger.getTargetEntityCenterPosForBlockDestroying(target);
+                                Vector3d target_center_pos = this.digger.getTargetEntityCenterPosForBlockDestroying(target);
                                 RaycastCollision rc;
                                 
                                 if (isAirOrPassableBlock(target.getPosition().getX(), target.getPosition().getY() + target.getHeight() * 0.75 + 1, target.getPosition().getZ(), false, this.digger.world))
@@ -196,12 +196,12 @@ public class EntityAIWatchAnimal extends Goal {
 
 	
 
-	public final RaycastCollision getBlockCollisionForPhysicalReach(Vec3d origin, Vec3d limit, World world)
+	public final RaycastCollision getBlockCollisionForPhysicalReach(Vector3d origin, Vector3d limit, World world)
     {
         return Resources.getBlockCollisionForPhysicalReach(origin, limit, world);
     }
 
-    public final boolean checkForLineOfPhysicalReach(Vec3d origin, Vec3d limit, World world)
+    public final boolean checkForLineOfPhysicalReach(Vector3d origin, Vector3d limit, World world)
     {
         return !this.getBlockCollisionForPhysicalReach(origin, limit, world).isBlock();
     }
@@ -246,7 +246,7 @@ public class EntityAIWatchAnimal extends Goal {
         this.digger.is_destroying_block = true;
     }
     
-    private RaycastCollision getIntersectingBlock(Vec3d attacker_eye_pos, Vec3d target_pos, World world)
+    private RaycastCollision getIntersectingBlock(Vector3d attacker_eye_pos, Vector3d target_pos, World world)
     {
         return this.getBlockCollisionForPhysicalReach(attacker_eye_pos, target_pos, world);
     }
@@ -274,7 +274,7 @@ public class EntityAIWatchAnimal extends Goal {
                 float y = (float)final_point.y;
                 float z = (float)final_point.z + 0.5F;
                 World var10000 = this.digger.worldObj;
-                return !(Resources.getDistanceFromDeltas((double) x - target.getPosX(), (double) y - target.getPosY(), (double) z - target.getPosZ()) > 1.0F) && !this.getIntersectingBlock(new Vec3d(x, y, z), this.digger.getTargetEntityCenterPosForBlockDestroying(target), this.digger.getEntityWorld()).isBlock();
+                return !(Resources.getDistanceFromDeltas((double) x - target.getPosX(), (double) y - target.getPosY(), (double) z - target.getPosZ()) > 1.0F) && !this.getIntersectingBlock(new Vector3d(x, y, z), this.digger.getTargetEntityCenterPosForBlockDestroying(target), this.digger.getEntityWorld()).isBlock();
             }
         }
     }

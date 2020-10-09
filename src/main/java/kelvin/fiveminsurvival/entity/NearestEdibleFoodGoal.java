@@ -8,8 +8,9 @@ import javax.annotation.Nullable;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityPredicate;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.attributes.IAttributeInstance;
+import net.minecraft.entity.ai.attributes.Attribute;
+import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.Item;
@@ -19,6 +20,7 @@ import net.minecraft.scoreboard.Team;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
 public class NearestEdibleFoodGoal extends Goal {
@@ -91,9 +93,13 @@ public class NearestEdibleFoodGoal extends Goal {
          }
       }
    }
-
+   // field_233820_c_ = movement speed
+   // field_233818_a_ = health
+   // field_233823_f_ = attack damage
+   // field_233819_b_ = follow range
+   // field_233826_i_ = armor
    protected double getTargetDistance() {
-      IAttributeInstance iattributeinstance = this.goalOwner.getAttribute(SharedMonsterAttributes.FOLLOW_RANGE);
+      ModifiableAttributeInstance iattributeinstance = this.goalOwner.getAttribute(Attributes.FOLLOW_RANGE);
       return iattributeinstance == null ? 16.0D : iattributeinstance.getValue();
    }
 
@@ -122,7 +128,7 @@ public class NearestEdibleFoodGoal extends Goal {
          return false;
       } else if (!p_220777_2_.canTarget(this.goalOwner, p_220777_1_)) {
          return false;
-      } else if (!this.goalOwner.isWithinHomeDistanceFromPosition(new BlockPos(p_220777_1_))) {
+      } else if (!this.goalOwner.isWithinHomeDistanceFromPosition(p_220777_1_.getPosition())) {
          return false;
       } else {
          if (this.nearbyOnly) {

@@ -9,6 +9,7 @@ import kelvin.fiveminsurvival.items.SurvivalItemTier;
 import kelvin.fiveminsurvival.main.FiveMinSurvival;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraft.enchantment.EnchantmentType;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Food;
@@ -27,7 +28,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public class ItemRegistry {
 	
-	public static final DeferredRegister<Item> ITEMS = new DeferredRegister<>(ForgeRegistries.ITEMS, FiveMinSurvival.MODID);
+	public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, FiveMinSurvival.MODID);
 
 	public static final RegistryObject<Item> SMOOTH_STONE = ITEMS.register("smooth_stone", () -> new Item(new Properties().group(ItemGroup.MATERIALS).maxStackSize(8)));
 	public static final RegistryObject<Item> STRIPPED_BARK = ITEMS.register("stripped_bark", () -> new ItemBurnable(new Properties().group(ItemGroup.MATERIALS).maxStackSize(32), 20 * 4));
@@ -78,7 +79,7 @@ public class ItemRegistry {
 	public static final RegistryObject<Item> COPPER_SHOVEL = ITEMS.register("copper_shovel", () -> new ShovelItem(SurvivalItemTier.COPPER_SHOVEL, 1.0f, -3.0f, new Item.Properties().group(ItemGroup.TOOLS)));
 	public static final RegistryObject<Item> COPPER_SWORD = ITEMS.register("copper_sword", () -> new SwordItem(SurvivalItemTier.COPPER_SWORD, 3, -2.4F, new Item.Properties().group(ItemGroup.COMBAT)));
 	public static final RegistryObject<Item> COPPER_KNIFE = ITEMS.register("copper_knife", () -> new SwordItem(SurvivalItemTier.COPPER_SHORTSWORD, 2, -1.0F, new Item.Properties().group(ItemGroup.COMBAT)));
-	public static final RegistryObject<Item> COPPER_HOE = ITEMS.register("copper_hoe", () -> new HoeItem(SurvivalItemTier.COPPER_SHORTSWORD, -1.0F, new Item.Properties().group(ItemGroup.COMBAT)));
+	public static final RegistryObject<Item> COPPER_HOE = ITEMS.register("copper_hoe", () -> new HoeItem(SurvivalItemTier.COPPER_SHORTSWORD, 1, -1.0F, new Item.Properties().group(ItemGroup.COMBAT)));
 	public static final RegistryObject<Item> COPPER_HATCHET = ITEMS.register("copper_hatchet", () -> new AxeItem(SurvivalItemTier.COPPER_HATCHET, 3, -2.5f, new Item.Properties().group(ItemGroup.TOOLS)));
 
 	public static final RegistryObject<Item> SILVER_PICKAXE = ITEMS.register("silver_pickaxe", () -> new PickaxeItem(SurvivalItemTier.COPPER_PICKAXE, 1, -2.0f, new Item.Properties().group(ItemGroup.TOOLS)));
@@ -86,7 +87,7 @@ public class ItemRegistry {
 	public static final RegistryObject<Item> SILVER_SHOVEL = ITEMS.register("silver_shovel", () -> new ShovelItem(SurvivalItemTier.COPPER_SHOVEL, 1.0f, -3.0f, new Item.Properties().group(ItemGroup.TOOLS)));
 	public static final RegistryObject<Item> SILVER_SWORD = ITEMS.register("silver_sword", () -> new SwordItem(SurvivalItemTier.COPPER_SWORD, 3, -2.4F, new Item.Properties().group(ItemGroup.COMBAT)));
 	public static final RegistryObject<Item> SILVER_KNIFE = ITEMS.register("silver_knife", () -> new SwordItem(SurvivalItemTier.COPPER_SHORTSWORD, 2, -1.0F, new Item.Properties().group(ItemGroup.COMBAT)));
-	public static final RegistryObject<Item> SILVER_HOE = ITEMS.register("silver_hoe", () -> new HoeItem(SurvivalItemTier.COPPER_SHORTSWORD, -1.0F, new Item.Properties().group(ItemGroup.COMBAT)));
+	public static final RegistryObject<Item> SILVER_HOE = ITEMS.register("silver_hoe", () -> new HoeItem(SurvivalItemTier.COPPER_SHORTSWORD, 1, -1.0F, new Item.Properties().group(ItemGroup.COMBAT)));
 	public static final RegistryObject<Item> SILVER_HATCHET = ITEMS.register("silver_hatchet", () -> new AxeItem(SurvivalItemTier.COPPER_HATCHET, 3, -2.5f, new Item.Properties().group(ItemGroup.TOOLS)));
 	
 	public static final RegistryObject<Item> SALAD = ITEMS.register("salad", () -> new SoupItem((new Item.Properties()).maxStackSize(1).group(ItemGroup.FOOD).food(buildStew(1, 0.1f))));

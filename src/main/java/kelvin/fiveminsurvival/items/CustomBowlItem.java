@@ -11,7 +11,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
 public class CustomBowlItem extends Item {
@@ -22,8 +22,8 @@ public class CustomBowlItem extends Item {
 
 	
    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-	   double reach = playerIn.getAttribute(playerIn.REACH_DISTANCE).getBaseValue();
-       RayTraceResult result = worldIn.rayTraceBlocks(new RayTraceContext(playerIn.getEyePosition(0), playerIn.getEyePosition(0).add(playerIn.getForward().mul(new Vec3d(reach, reach, reach))), RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.ANY, playerIn));
+	   double reach = playerIn.getAttribute(net.minecraftforge.common.ForgeMod.REACH_DISTANCE.get()).getBaseValue();
+       RayTraceResult result = worldIn.rayTraceBlocks(new RayTraceContext(playerIn.getEyePosition(0), playerIn.getEyePosition(0).add(playerIn.getForward().mul(new Vector3d(reach, reach, reach))), RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.ANY, playerIn));
 	   
        if (result != null) {
     	   if (result instanceof BlockRayTraceResult) {

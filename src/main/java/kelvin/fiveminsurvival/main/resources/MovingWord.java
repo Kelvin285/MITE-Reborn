@@ -31,11 +31,11 @@ public class MovingWord {
 		int posX = 0;
 		int width = 0;
 		for (char c : text.toCharArray()) {
-			width += Minecraft.getInstance().fontRenderer.getCharWidth(c);
+			width += Minecraft.getInstance().fontRenderer.getStringWidth(""+c);
 		}
 		for (char c : text.toCharArray()) {
 			mtext.add(new MovingText(""+c, startX, startY, endX + posX - (width / 2.0F), endY, lerp));
-			posX += Minecraft.getInstance().fontRenderer.getCharWidth(c);
+			posX += Minecraft.getInstance().fontRenderer.getStringWidth(""+c);
 			i++;
 		}
 	}

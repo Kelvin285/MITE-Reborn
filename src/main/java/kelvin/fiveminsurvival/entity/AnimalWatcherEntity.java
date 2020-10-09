@@ -6,18 +6,16 @@ import java.util.List;
 import java.util.Random;
 
 import kelvin.fiveminsurvival.main.resources.Resources;
-import kelvin.fiveminsurvival.main.resources.Vec3Pool;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FallingBlock;
-import net.minecraft.block.LogBlock;
+import net.minecraft.block.RotatedPillarBlock;
 import net.minecraft.block.TorchBlock;
 import net.minecraft.block.WallTorchBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.HurtByTargetGoal;
 import net.minecraft.entity.ai.goal.MoveThroughVillageGoal;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
@@ -25,7 +23,6 @@ import net.minecraft.entity.ai.goal.ZombieAttackGoal;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
 import net.minecraft.entity.monster.ZombieEntity;
-import net.minecraft.entity.monster.ZombiePigmanEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.passive.TurtleEntity;
@@ -46,7 +43,7 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
 public class AnimalWatcherEntity extends ZombieEntity {
@@ -81,7 +78,7 @@ public class AnimalWatcherEntity extends ZombieEntity {
 	      this.goalSelector.addGoal(2, new ZombieAttackGoal(this, 1.0D, true));
 	      this.goalSelector.addGoal(6, new MoveThroughVillageGoal(this, 1.0D, true, 4, this::isBreakDoorsTaskSet));
 	      this.goalSelector.addGoal(7, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
-	      this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)).setCallsForHelp(ZombiePigmanEntity.class));
+	      //this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)).setCallsForHelp(ZombifiedPiglinEntity.class));
 	      this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
 	      this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, AnimalEntity.class, true));
 	      this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, AbstractVillagerEntity.class, false));
@@ -242,12 +239,12 @@ public class AnimalWatcherEntity extends ZombieEntity {
 	        return this.getPosY() + (double)(this.getHeight() * 0.5F);
 	    }
 
-	    protected Vec3d getEyePosForBlockDestroying()
+	    protected Vector3d getEyePosForBlockDestroying()
 	    {
 	        return this.getPrimaryPointOfAttack();
 	    }
 	    
-	    public Vec3d getPrimaryPointOfAttack()
+	    public Vector3d getPrimaryPointOfAttack()
 	    {
 	        return this.getPositionVec().add(0, this.getHeight() * 0.75F, 0);
 	    }
@@ -265,19 +262,16 @@ public class AnimalWatcherEntity extends ZombieEntity {
 	        return this.getEntitySenses().canSee(this.getAttackTarget());
 	    }
 
-	    protected Vec3d getAttackerLegPosForBlockDestroying()
+	    protected Vector3d getAttackerLegPosForBlockDestroying()
 	    {
-	        Vec3Pool vec3_pool = vecPool;
-	        return vec3_pool.getVecFromPool(this.getPosX(), this.getPosY() + (double)(this.getHeight() * 0.25F), this.getPosZ());
+	        return new Vector3d(this.getPosX(), this.getPosY() + (double)(this.getHeight() * 0.25F), this.getPosZ());
 	    }
 
-	    protected Vec3d getTargetEntityCenterPosForBlockDestroying(LivingEntity entity_living_base)
+	    protected Vector3d getTargetEntityCenterPosForBlockDestroying(LivingEntity entity_living_base)
 	    {
-	        Vec3Pool vec3_pool = vecPool;
-	        return vec3_pool.getVecFromPool(entity_living_base.getPosX(), entity_living_base.getPosY() + (double)(entity_living_base.getHeight() / 2.0F), entity_living_base.getPosZ());
+	        return new Vector3d(entity_living_base.getPosX(), entity_living_base.getPosY() + (double)(entity_living_base.getHeight() / 2.0F), entity_living_base.getPosZ());
 	    }
 
-	    public static final Vec3Pool vecPool = new Vec3Pool(300, 2000);
 	    
 	    private boolean hasDownwardsDiggingTool()
 	    {
@@ -404,10 +398,9 @@ public class AnimalWatcherEntity extends ZombieEntity {
 //	                        Item held_item1 = this.getHeldItemMainhand() == null ? null : this.getHeldItemMainhand().getItem();
 //	                        boolean has_effective_tool = held_item1 instanceof ToolItem && ((ToolItem)held_item1).getStrVsBlock(block1, metadata) > 0.0F;
 //	                        return block1.blockMaterial.requiresTool(block1, metadata) && (!this.isFrenzied() || block1.getMinHarvestLevel(metadata) >= 2) && !has_effective_tool && block1 != Block.sand && block1 != Block.dirt && block1 != Block.grass && block1 != Block.gravel && block1 != Block.blockSnow && block1 != Block.tilledField && block1 != Block.blockClay && block1 != Block.leaves && block1 != Block.cloth && (block1 != Block.cactus || !this.isEntityInvulnerable() && !this.isEntityUndead()) && block1 != Block.sponge && !(block1 instanceof BlockPumpkin) && !(block1 instanceof BlockMelon) && block1 != Block.mycelium && block1 != Block.hay && block1 != Block.thinGlass ? false : !this.isBlockClaimedByAnother(x, y, z);
-	                    	
 	                    	if (block1.getDefaultState().getMaterial() != Material.ROCK)
 	                    		if (block1.getDefaultState().getMaterial() != Material.IRON)
-	                    			if (!(block1.getDefaultState().getBlock() instanceof LogBlock))
+	                    			if (!(block1.getDefaultState().getBlock() instanceof RotatedPillarBlock))
 	                    				return true;
 	                    			else {
 	                    				if (this.getHeldItemMainhand() != null) {
@@ -417,7 +410,7 @@ public class AnimalWatcherEntity extends ZombieEntity {
 	        	                    				return true;
 	        	                    		}
 	        	                    		if (held_item1 instanceof AxeItem) {
-												return block1.getDefaultState().getBlock() instanceof LogBlock;
+												return block1.getDefaultState().getBlock() instanceof RotatedPillarBlock;
 	        	                    		}
 	        	                    	}
 	                    			}
@@ -646,15 +639,15 @@ public class AnimalWatcherEntity extends ZombieEntity {
 			return true;
 		}
 
-		public boolean hasLineOfStrike(Vec3d target_pos)
+		public boolean hasLineOfStrike(Vector3d target_pos)
 	    {
 			
-			List<Vec3d> target_points = new ArrayList<>();
+			List<Vector3d> target_points = new ArrayList<>();
 	        target_points.add(getPositionVec());
-	        target_points.add(new Vec3d(getPositionVec().x, getPositionVec().y + getHeight() * 0.5, getPositionVec().z));
-	        target_points.add(new Vec3d(getPositionVec().x, getPositionVec().y + getHeight() * 0.75, getPositionVec().z));
+	        target_points.add(new Vector3d(getPositionVec().x, getPositionVec().y + getHeight() * 0.5, getPositionVec().z));
+	        target_points.add(new Vector3d(getPositionVec().x, getPositionVec().y + getHeight() * 0.75, getPositionVec().z));
 	        
-	        Iterator<Vec3d> i = target_points.iterator();
+	        Iterator<Vector3d> i = target_points.iterator();
 
 	        do
 	        {
@@ -671,12 +664,12 @@ public class AnimalWatcherEntity extends ZombieEntity {
 		
 		public boolean hasLineOfStrike(Entity target)
 	    {
-	        List<Vec3d> target_points = new ArrayList<>();
+	        List<Vector3d> target_points = new ArrayList<>();
 	        target_points.add(target.getPositionVec());
-	        target_points.add(new Vec3d(target.getPositionVec().x, target.getPositionVec().y + target.getHeight() * 0.5, target.getPositionVec().z));
-	        target_points.add(new Vec3d(target.getPositionVec().x, target.getPositionVec().y + target.getHeight() * 0.75, target.getPositionVec().z));
+	        target_points.add(new Vector3d(target.getPositionVec().x, target.getPositionVec().y + target.getHeight() * 0.5, target.getPositionVec().z));
+	        target_points.add(new Vector3d(target.getPositionVec().x, target.getPositionVec().y + target.getHeight() * 0.75, target.getPositionVec().z));
 
-			for (Vec3d target_point : target_points) {
+			for (Vector3d target_point : target_points) {
 				if (this.hasLineOfStrike(target_point)) {
 					return true;
 				}
@@ -693,7 +686,7 @@ public class AnimalWatcherEntity extends ZombieEntity {
 	        }
 	        else
 	        {
-	            return this.getPositionVec().distanceTo(new Vec3d(target.getPosX(), target.getBoundingBox().minY, target.getPosZ())) <= 1.5;
+	            return this.getPositionVec().distanceTo(new Vector3d(target.getPosX(), target.getBoundingBox().minY, target.getPosZ())) <= 1.5;
 	        }
 	    }
 		

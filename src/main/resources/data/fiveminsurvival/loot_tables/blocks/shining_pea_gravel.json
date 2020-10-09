@@ -129,7 +129,7 @@
                       ]
                     }
                   ],
-                  "name": "fiveminsurvival:sea_crystal"
+                  "name": "minecraft:prismarine_crystals"
                 },
 				{
                   "type": "minecraft:item",
@@ -145,7 +145,7 @@
                       ]
                     }
                   ],
-                  "name": "fiveminsurvival:prismarine_shard"
+                  "name": "minecraft:prismarine_shard"
                 }
               ]
             }

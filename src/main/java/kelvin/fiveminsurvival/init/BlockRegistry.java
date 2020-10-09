@@ -13,13 +13,14 @@ import net.minecraft.block.GravelBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-
 public class BlockRegistry {
-
-    public static final DeferredRegister<Block> BLOCKS = new DeferredRegister<>(ForgeRegistries.BLOCKS, FiveMinSurvival.MODID);
+	
+    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, FiveMinSurvival.MODID);
 
 
     public static final RegistryObject<Block> FLAX = BLOCKS.register("flax", () -> new TallPlantBlock(Block.Properties.create(Material.TALL_PLANTS).doesNotBlockMovement().hardnessAndResistance(0.5f).sound(SoundType.PLANT)));
@@ -41,7 +42,7 @@ public class BlockRegistry {
     public static final RegistryObject<Block> OBSIDIAN_FURNACE = BLOCKS.register("obsidian_furnace", () -> new MITEFurnaceBlock((Block.Properties.create(Material.CLAY).sound(SoundType.STONE).hardnessAndResistance(0.2F).sound(SoundType.GROUND)), MITEFurnaceContainer.OBSIDIAN));
     public static final RegistryObject<Block> NETHERRACK_FURNACE = BLOCKS.register("netherrack_furnace", () -> new MITEFurnaceBlock((Block.Properties.create(Material.CLAY).sound(SoundType.STONE).hardnessAndResistance(0.2F).sound(SoundType.GROUND)), MITEFurnaceContainer.NETHERRACK));
     public static final RegistryObject<Block> PEA_GRAVEL = BLOCKS.register("pea_gravel", () -> new GravelBlock(Block.Properties.create(Material.SAND, MaterialColor.STONE).hardnessAndResistance(0.6F).sound(SoundType.GROUND)));
-    public static final RegistryObject<Block> CAMPFIRE_LOW = BLOCKS.register("campfire_low", () -> new CustomCampfireBlock(Block.Properties.create(Material.WOOD, MaterialColor.OBSIDIAN).hardnessAndResistance(2.0F).sound(SoundType.WOOD).lightValue(15).tickRandomly().notSolid()));
+    public static final RegistryObject<Block> CAMPFIRE_LOW = BLOCKS.register("campfire_low", () -> new CustomCampfireBlock(false, 1, Block.Properties.create(Material.WOOD, MaterialColor.OBSIDIAN).hardnessAndResistance(2.0F).setLightLevel((state) -> {return 15;} ).sound(SoundType.WOOD).tickRandomly().notSolid()));
     public static final RegistryObject<Block> SHINING_PEA_GRAVEL = BLOCKS.register("shining_pea_gravel", () -> new GravelBlock(Block.Properties.create(Material.SAND, MaterialColor.STONE).hardnessAndResistance(0.6F).sound(SoundType.GROUND)));
     public static final RegistryObject<Block> SHINING_GRAVEL = BLOCKS.register("shining_gravel", () -> new GravelBlock(Block.Properties.create(Material.SAND, MaterialColor.STONE).hardnessAndResistance(0.6F).sound(SoundType.GROUND)));
 

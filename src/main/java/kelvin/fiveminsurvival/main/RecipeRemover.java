@@ -1,8 +1,19 @@
 package kelvin.fiveminsurvival.main;
 
+import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Predicate;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.google.common.collect.ImmutableMap;
+
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import kelvin.fiveminsurvival.init.VanillaOverrides;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -12,17 +23,10 @@ import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.tags.Tag;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Predicate;
 
 @Mod.EventBusSubscriber(modid = FiveMinSurvival.MODID)
 public class RecipeRemover {
@@ -33,7 +37,8 @@ public class RecipeRemover {
     		Items.STONE_HOE, Items.SANDSTONE, Items.RED_SANDSTONE, Items.COBBLESTONE, Items.CAKE, Items.BREAD, Items.COOKIE, Items.FLINT_AND_STEEL,
     		Items.SADDLE, Items.BRICK, Items.SNOW_BLOCK, Items.FISHING_ROD, Items.BRICKS, Items.SMOOTH_STONE, Items.ARROW, Items.COBBLESTONE_WALL,
     		Items.STONE_BRICKS, Items.TERRACOTTA, Items.NETHER_BRICKS, Items.MUSHROOM_STEW, Items.MELON_SEEDS, Items.COMPASS, Items.CLOCK, Items.GOLDEN_APPLE,
-    		Items.SADDLE, Items.CAKE, Items.MELON_SEEDS, Items.PUMPKIN_SEEDS, Items.COBBLESTONE_WALL);
+    		Items.SADDLE, Items.CAKE, Items.MELON_SEEDS, Items.PUMPKIN_SEEDS, Items.COBBLESTONE_WALL, Items.OAK_SIGN, Items.SPRUCE_SIGN, Items.BIRCH_SIGN,
+    		Items.ACACIA_SIGN, Items.JUNGLE_SIGN, Items.DARK_OAK_SIGN);
 
     private static final Logger LOGGER = LogManager.getLogger();
 
@@ -50,6 +55,12 @@ public class RecipeRemover {
     public static void removeRecipes(final FMLServerStartedEvent event) {
         recipeManager = event.getServer().getRecipeManager();
         vanillaRecipesToRemove.forEach(RecipeRemover::removeVanilla);
+        for (Object object : VanillaOverrides.DELETED_ITEMS) {
+        	@SuppressWarnings("unchecked")
+			RegistryObject<Item> item = (RegistryObject<Item>)object;
+        	
+        	RecipeRemover.removeVanilla(item.get());
+        }
     }
 
     private static void removeVanilla(Item item) {
@@ -71,7 +82,7 @@ public class RecipeRemover {
             return !recipeOutput.isEmpty() && recipeOutput.getItem().isIn(tag);
         });
 
-        LOGGER.info("Removed {} recipe(s) for tag {}", recipesRemoved, tag.getId());
+        LOGGER.info("Removed {} recipe(s) for tag {}", recipesRemoved, tag);
     }
 
     /**

@@ -1,41 +1,41 @@
 package kelvin.fiveminsurvival.main;
 
 import java.lang.reflect.Field;
-import java.util.Random;
+import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import kelvin.fiveminsurvival.commands.CustomTimeCommand;
 import kelvin.fiveminsurvival.entity.model.ModelRegistry;
+import kelvin.fiveminsurvival.game.OverlayEvents;
+import kelvin.fiveminsurvival.game.crops.CropTypes;
+import kelvin.fiveminsurvival.game.food.FoodNutrients;
+import kelvin.fiveminsurvival.game.world.CampfireState;
+import kelvin.fiveminsurvival.game.world.PlantState;
+import kelvin.fiveminsurvival.game.world.WorldStateHolder;
 import kelvin.fiveminsurvival.init.BlockRegistry;
 import kelvin.fiveminsurvival.init.ContainerRegistry;
 import kelvin.fiveminsurvival.init.EntityRegistry;
 import kelvin.fiveminsurvival.init.ItemRegistry;
 import kelvin.fiveminsurvival.init.VanillaOverrides;
 import kelvin.fiveminsurvival.main.crafting.CraftingIngredients;
+import kelvin.fiveminsurvival.main.loot.BlockLootTables;
+import kelvin.fiveminsurvival.main.loot.LootTable;
 import kelvin.fiveminsurvival.main.network.NetworkHandler;
-import kelvin.fiveminsurvival.survival.OverlayEvents;
-import kelvin.fiveminsurvival.survival.SurvivalEvents;
-import kelvin.fiveminsurvival.survival.crops.CropTypes;
-import kelvin.fiveminsurvival.survival.food.FoodNutrients;
-import kelvin.fiveminsurvival.survival.world.CampfireState;
-import kelvin.fiveminsurvival.survival.world.PlantState;
-import kelvin.fiveminsurvival.survival.world.WorldFeatures;
-import kelvin.fiveminsurvival.survival.world.WorldStateHolder;
 import net.minecraft.block.AirBlock;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.CampfireBlock;
 import net.minecraft.block.CropsBlock;
-import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.item.FallingBlockEntity;
 import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
@@ -48,8 +48,8 @@ import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 import net.minecraftforge.event.world.BlockEvent.NeighborNotifyEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -73,26 +73,37 @@ public class FiveMinSurvival
     	} catch (Exception e) {
     		DEBUG = false;
     	}
+    	
+    	IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
+    	
+    	EntityRegistry.ENTITIES.register(modBus);
+    	BlockRegistry.BLOCKS.register(modBus);
+    	ItemRegistry.ITEMS.register(modBus);
+    	VanillaOverrides.BLOCKS.register(modBus);
+    	VanillaOverrides.ITEMS.register(modBus);
+    	VanillaOverrides.FEATURES.register(modBus);
+    	ContainerRegistry.CONTAINERS.register(modBus);
+    	
+    	
         // Register the setup method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         
-    	BlockRegistry.BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
-    	ItemRegistry.ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
-		VanillaOverrides.ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
-		VanillaOverrides.BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
-		ContainerRegistry.CONTAINERS.register(FMLJavaModLoadingContext.get().getModEventBus());
+    	//BlockRegistry.BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
+    	//ItemRegistry.ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
+		//VanillaOverrides.ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
+		//VanillaOverrides.BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
+		//ContainerRegistry.CONTAINERS.register(FMLJavaModLoadingContext.get().getModEventBus());
 		ContainerRegistry.TILE_ENTITIES.register(FMLJavaModLoadingContext.get().getModEventBus());
-		EntityRegistry.ENTITIES.register(FMLJavaModLoadingContext.get().getModEventBus());
-
+		//EntityRegistry.ENTITIES.register(FMLJavaModLoadingContext.get().getModEventBus());
+		
         // Register the doClientStuff method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
         
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
-        MinecraftForge.EVENT_BUS.register(BlockRegistry.class);
-        MinecraftForge.EVENT_BUS.register(SurvivalEvents.class);
+//        MinecraftForge.EVENT_BUS.register(GameEvents.class);
         
-        MinecraftForge.EVENT_BUS.register(WorldFeatures.class);
+//        MinecraftForge.EVENT_BUS.register(WorldFeatures.class);
 
         MinecraftForge.EVENT_BUS.addListener(FiveMinSurvival::onWorldTick);
         MinecraftForge.EVENT_BUS.addListener(FiveMinSurvival::onBlockUpdate);
@@ -116,6 +127,36 @@ public class FiveMinSurvival
     @SubscribeEvent
 	public static void blockBreak(BreakEvent e) {
     	e.setExpToDrop(0);
+    	
+    	LootTable loot_table = BlockLootTables.LOOT_TABLES.get(e.getState().getBlock());
+    	
+    	if (e.getPlayer() != null)
+    	if (loot_table != null && !e.getPlayer().isCreative()) {
+    		
+    		boolean silk_touch = false;
+    		ItemStack stack = e.getPlayer().getHeldItemMainhand();
+    		if (stack != null) {
+    			Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(stack);
+    			for(Enchantment enchantment : enchantments.keySet()) {
+    				if (enchantment == Enchantments.SILK_TOUCH) {
+    					silk_touch = true;
+    					break;
+    				}
+    			}
+    		}
+    		
+			ItemEntity item = new ItemEntity(e.getWorld().getWorld(), e.getPos().getX() + 0.5f, e.getPos().getY() + 0.5f, e.getPos().getZ() + 0.5f, loot_table.GetDrop(e.getPos(), silk_touch, e.getWorld().getRandom()));
+			e.getWorld().addEntity(item);
+    					
+			if (loot_table.overridesVanillaLoot) {
+				e.getWorld().setBlockState(e.getPos(), Blocks.AIR.getDefaultState(), 0);
+	        	e.setCanceled(true);
+			}
+    		
+    	}
+    	
+    	
+    	
 //		Block block = e.getState().getBlock();
 //		Random random = e.getWorld().getRandom();
 //		if (block == Blocks.GRAVEL || block == BlockRegistry.PEA_GRAVEL.get() || block == BlockRegistry.SHINING_GRAVEL.get() || block == BlockRegistry.SHINING_PEA_GRAVEL.get()) {
@@ -216,7 +257,7 @@ public class FiveMinSurvival
 	
 	@SubscribeEvent
 	public static void harvestDrops(HarvestDropsEvent e) {
-		
+		e.getDrops().clear();
 	}
 	
     
@@ -331,6 +372,7 @@ public class FiveMinSurvival
 		VanillaTweaks.blocks();
 		VanillaTweaks.setToolTiers();
 		VanillaTweaks.fixStackSizes();
+		BlockLootTables.RegisterLootTables();
     }
 
     private void doClientStuff(final FMLClientSetupEvent event) {
@@ -358,6 +400,7 @@ public class FiveMinSurvival
     @SubscribeEvent
     public void onServerStarting(FMLServerStartingEvent event) {
         // do something when the server starts
+    	CustomTimeCommand.register(event.getServer().getCommandManager().getDispatcher());
     }
 
 }

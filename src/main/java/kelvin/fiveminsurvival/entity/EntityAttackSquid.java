@@ -6,11 +6,13 @@ import kelvin.fiveminsurvival.init.EntityRegistry;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.SquidEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.network.IPacket;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 public class EntityAttackSquid extends SquidEntity {
 
@@ -133,7 +135,7 @@ public class EntityAttackSquid extends SquidEntity {
 	            this.setMotion(this.randomMotionVecX * this.randomMotionSpeed, this.randomMotionVecY * this.randomMotionSpeed, this.randomMotionVecZ * this.randomMotionSpeed);
 	         }
 
-	         Vec3d vec3d = this.getMotion();
+	         Vector3d vec3d = this.getMotion();
 	         float f1 = MathHelper.sqrt(horizontalMag(vec3d));
 	         this.renderYawOffset += (-((float)MathHelper.atan2(vec3d.x, vec3d.z)) * (180F / (float)Math.PI) - this.renderYawOffset) * 0.1F;
 	         this.rotationYaw = this.renderYawOffset;
@@ -155,4 +157,10 @@ public class EntityAttackSquid extends SquidEntity {
 	         this.squidPitch = (float)((double)this.squidPitch + (double)(-90.0F - this.squidPitch) * 0.02D);
 	      }
 	}
+	
+	@Override
+    public IPacket<?> createSpawnPacket() {
+
+        return NetworkHooks.getEntitySpawningPacket(this);
+    }
 }

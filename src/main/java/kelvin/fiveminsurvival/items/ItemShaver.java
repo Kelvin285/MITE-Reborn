@@ -2,7 +2,7 @@ package kelvin.fiveminsurvival.items;
 
 import kelvin.fiveminsurvival.init.ItemRegistry;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.LogBlock;
+import net.minecraft.block.RotatedPillarBlock;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -26,27 +26,27 @@ public class ItemShaver extends Item {
 		if (pos != null) {
 			boolean cutLog = false;
 			if (world.getBlockState(pos).getBlock().getDefaultState() == Blocks.ACACIA_LOG.getDefaultState()) {
-				world.setBlockState(pos, Blocks.STRIPPED_ACACIA_LOG.getDefaultState().with(LogBlock.AXIS, world.getBlockState(pos).get(LogBlock.AXIS)));
+				world.setBlockState(pos, Blocks.STRIPPED_ACACIA_LOG.getDefaultState().with(RotatedPillarBlock.AXIS, world.getBlockState(pos).get(RotatedPillarBlock.AXIS)));
 				cutLog = true;
 			}
 			if (world.getBlockState(pos).getBlock().getDefaultState() == Blocks.BIRCH_LOG.getDefaultState()) {
-				world.setBlockState(pos, Blocks.STRIPPED_BIRCH_LOG.getDefaultState().with(LogBlock.AXIS, world.getBlockState(pos).get(LogBlock.AXIS)));
+				world.setBlockState(pos, Blocks.STRIPPED_BIRCH_LOG.getDefaultState().with(RotatedPillarBlock.AXIS, world.getBlockState(pos).get(RotatedPillarBlock.AXIS)));
 				cutLog = true;
 			}
 			if (world.getBlockState(pos).getBlock().getDefaultState() == Blocks.DARK_OAK_LOG.getDefaultState()) {
-				world.setBlockState(pos, Blocks.STRIPPED_DARK_OAK_LOG.getDefaultState().with(LogBlock.AXIS, world.getBlockState(pos).get(LogBlock.AXIS)));
+				world.setBlockState(pos, Blocks.STRIPPED_DARK_OAK_LOG.getDefaultState().with(RotatedPillarBlock.AXIS, world.getBlockState(pos).get(RotatedPillarBlock.AXIS)));
 				cutLog = true;
 			}
 			if (world.getBlockState(pos).getBlock().getDefaultState() == Blocks.JUNGLE_LOG.getDefaultState()) {
-				world.setBlockState(pos, Blocks.STRIPPED_JUNGLE_LOG.getDefaultState().with(LogBlock.AXIS, world.getBlockState(pos).get(LogBlock.AXIS)));
+				world.setBlockState(pos, Blocks.STRIPPED_JUNGLE_LOG.getDefaultState().with(RotatedPillarBlock.AXIS, world.getBlockState(pos).get(RotatedPillarBlock.AXIS)));
 				cutLog = true;
 			}
 			if (world.getBlockState(pos).getBlock().getDefaultState() == Blocks.OAK_LOG.getDefaultState()) {
-				world.setBlockState(pos, Blocks.STRIPPED_OAK_LOG.getDefaultState().with(LogBlock.AXIS, world.getBlockState(pos).get(LogBlock.AXIS)));
+				world.setBlockState(pos, Blocks.STRIPPED_OAK_LOG.getDefaultState().with(RotatedPillarBlock.AXIS, world.getBlockState(pos).get(RotatedPillarBlock.AXIS)));
 				cutLog = true;
 			}
 			if (world.getBlockState(pos).getBlock().getDefaultState() == Blocks.SPRUCE_LOG.getDefaultState()) {
-				world.setBlockState(pos, Blocks.STRIPPED_SPRUCE_LOG.getDefaultState().with(LogBlock.AXIS, world.getBlockState(pos).get(LogBlock.AXIS)));
+				world.setBlockState(pos, Blocks.STRIPPED_SPRUCE_LOG.getDefaultState().with(RotatedPillarBlock.AXIS, world.getBlockState(pos).get(RotatedPillarBlock.AXIS)));
 				cutLog = true;
 			}
 			if (cutLog) {

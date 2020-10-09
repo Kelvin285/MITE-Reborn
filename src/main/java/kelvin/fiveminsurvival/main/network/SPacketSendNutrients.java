@@ -2,8 +2,8 @@ package kelvin.fiveminsurvival.main.network;
 
 import java.util.function.Supplier;
 
+import kelvin.fiveminsurvival.game.food.Nutrients;
 import kelvin.fiveminsurvival.main.resources.Resources;
-import kelvin.fiveminsurvival.survival.food.Nutrients;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
 

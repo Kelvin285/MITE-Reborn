@@ -16,7 +16,7 @@ modId="fiveminsurvival" #mandatory
 # The version number of the mod - there's a few well known ${} variables useable here or just hardcode it
 version="${file.jarVersion}" #mandatory
  # A display name for the mod
-displayName="MITE:Reforged 1.15.2" #mandatory
+displayName="MITE:Reborn 1.16.1" #mandatory
 # A URL to query for updates for this mod. See the JSON update specification <here>
 updateJSONURL="http://myurl.me/" #optional
 # A URL for the "homepage" for this mod, displayed in the mod UI
@@ -29,7 +29,7 @@ credits="Thanks for this example mod goes to Java" #optional
 authors="Kelvin" #optional
 # The description text for the mod (multi line!) (#mandatory)
 description='''
-MITE:Reforged is a remade version of a Minecraft mod called MITE, which was created by a MinecraftForum user
+MITE:Reborn is a remade version of a Minecraft mod called MITE, which was created by a MinecraftForum user
 named Avernite.  The original mod attempted to make Minecraft a much harder game, and this mod does the same.
 However, the goal of this mod is also to improve upon features of the original MITE.
 '''
@@ -49,6 +49,6 @@ However, the goal of this mod is also to improve upon features of the original M
 [[dependencies.fiveminsurvival]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.15.2]"
+    versionRange="[1.16.1]"
     ordering="NONE"
     side="BOTH"

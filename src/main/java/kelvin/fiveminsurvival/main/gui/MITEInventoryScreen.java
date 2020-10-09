@@ -1,12 +1,16 @@
 package kelvin.fiveminsurvival.main.gui;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
+
 import kelvin.fiveminsurvival.init.ItemRegistry;
 import kelvin.fiveminsurvival.main.crafting.CraftingIngredient;
 import kelvin.fiveminsurvival.main.crafting.CraftingIngredients;
-import net.java.games.input.Keyboard;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
@@ -17,8 +21,6 @@ import net.minecraft.client.gui.recipebook.RecipeBookGui;
 import net.minecraft.client.gui.screen.inventory.CreativeScreen;
 import net.minecraft.client.gui.widget.button.ImageButton;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.Quaternion;
-import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -30,13 +32,14 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.Quaternion;
+import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.util.text.ITextProperties;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
-
-import java.lang.reflect.Field;
-import java.util.ArrayList;
 
 @OnlyIn(Dist.CLIENT)
 public class MITEInventoryScreen extends DisplayEffectsScreen<PlayerContainer> implements IRecipeShownListener {
@@ -106,50 +109,50 @@ public class MITEInventoryScreen extends DisplayEffectsScreen<PlayerContainer> i
    /**
     * Draw the foreground layer for the GuiContainer (everything in front of the items)
     */
-   protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-      this.font.drawString(this.title.getFormattedText(), 97.0F, 8.0F, 4210752);
+   protected void drawGuiContainerForegroundLayer(MatrixStack stack, int mouseX, int mouseY) {
+      this.font.drawString(stack, this.title.getString(), 97.0F, 8.0F, 4210752);
    }
 
-   public void render(int p_render_1_, int p_render_2_, float p_render_3_) {
-      this.renderBackground();
+   public void render(MatrixStack stack, int p_render_1_, int p_render_2_, float p_render_3_) {
+      this.renderBackground(stack);
       this.hasActivePotionEffects = !this.recipeBookGui.isVisible();
       if (this.recipeBookGui.isVisible() && this.widthTooNarrow) {
-         this.drawGuiContainerBackgroundLayer(p_render_3_, p_render_1_, p_render_2_);
-         this.recipeBookGui.render(p_render_1_, p_render_2_, p_render_3_);
+         this.drawGuiContainerBackgroundLayer(stack, p_render_3_, p_render_1_, p_render_2_);
+         this.recipeBookGui.render(stack, p_render_1_, p_render_2_, p_render_3_);
       } else {
-         this.recipeBookGui.render(p_render_1_, p_render_2_, p_render_3_);
-         super.render(p_render_1_, p_render_2_, p_render_3_);
-         this.recipeBookGui.renderGhostRecipe(this.guiLeft, this.guiTop, false, p_render_3_);
+         this.recipeBookGui.render(stack, p_render_1_, p_render_2_, p_render_3_);
+         super.render(stack, p_render_1_, p_render_2_, p_render_3_);
+         this.recipeBookGui.func_230477_a_(stack, this.guiLeft, this.guiTop, false, p_render_3_); // renderGhostRecipe
       }
 
-      this.renderHoveredToolTip(p_render_1_, p_render_2_);
-      this.recipeBookGui.renderTooltip(this.guiLeft, this.guiTop, p_render_1_, p_render_2_);
+      this.renderHoveredTooltip(stack, p_render_1_, p_render_2_);
+      this.recipeBookGui.func_238924_c_(stack, this.guiLeft, this.guiTop, p_render_1_, p_render_2_); // renderTooltip
       this.oldMouseX = (float)p_render_1_;
       this.oldMouseY = (float)p_render_2_;
-      this.func_212932_b(this.recipeBookGui);
+      this.setListenerDefault(this.recipeBookGui);
       
       this.minecraft.getTextureManager().bindTexture(INVENTORY_EXTRAS);
       //18x17
       if (this.craftTimer > 0 && this.maxCraftTimer > 0 && this.crafting)
-      this.blit(this.guiLeft + arrow_position[0], this.guiTop + arrow_position[1], arrow_location[0], arrow_location[1], (int)(18.0 * (this.craftTimer) / (this.maxCraftTimer)), 17);
+      this.blit(stack, this.guiLeft + arrow_position[0], this.guiTop + arrow_position[1], arrow_location[0], arrow_location[1], (int)(18.0 * (this.craftTimer) / (this.maxCraftTimer)), 17);
       GlStateManager.disableDepthTest();
       if (!this.canCraft) {
     	  if (this.crafting) {
-              this.blit(this.guiLeft + lock_position[0] + 4, this.guiTop + lock_position[1], lock_location[0] + 4, lock_location[1], 8 - (int)(8.0 * (this.craftTimer) / (this.maxCraftTimer)), 17);
+              this.blit(stack, this.guiLeft + lock_position[0] + 4, this.guiTop + lock_position[1], lock_location[0] + 4, lock_location[1], 8 - (int)(8.0 * (this.craftTimer) / (this.maxCraftTimer)), 17);
     	  } else {
-              this.blit(this.guiLeft + lock_position[0], this.guiTop + lock_position[1], lock_location[0], lock_location[1], 18, 17);
+              this.blit(stack, this.guiLeft + lock_position[0], this.guiTop + lock_position[1], lock_location[0], lock_location[1], 18, 17);
     	  }
           if (this.getSlotUnderMouse() instanceof CraftingResultSlot) {
         	  if (crafting) {
-        		  ArrayList<String> str = new ArrayList<>();
-            	  str.add(((int)(this.maxCraftTimer) - (int)(this.craftTimer)) / 20 + " seconds left");
-            	  str.add("Wait until the item is finished crafting!");
-            	  renderTooltip(str, (int)this.oldMouseX, (int)this.oldMouseY, Minecraft.getInstance().fontRenderer);
+        		  List<ITextProperties> str = new ArrayList<>();
+            	  str.add(new StringTextComponent(((int)(this.maxCraftTimer) - (int)(this.craftTimer)) / 20 + " seconds left"));
+            	  str.add(new StringTextComponent("Wait until the item is finished crafting!"));
+            	  renderToolTip(stack, str, (int)this.oldMouseX, (int)this.oldMouseY, Minecraft.getInstance().fontRenderer);
         	  } else {
-        		  ArrayList<String> str = new ArrayList<>();
-            	  str.add("LOCKED!");
-            	  str.add("Higher tier table required!");
-            	  renderTooltip(str, (int)this.oldMouseX, (int)this.oldMouseY, Minecraft.getInstance().fontRenderer);
+        		  ArrayList<ITextProperties> str = new ArrayList<>();
+            	  str.add(new StringTextComponent("LOCKED!"));
+            	  str.add(new StringTextComponent("Higher tier table required!"));
+            	  renderToolTip(stack, str, (int)this.oldMouseX, (int)this.oldMouseY, Minecraft.getInstance().fontRenderer);
         	  }
         	  
           }
@@ -162,12 +165,12 @@ public class MITEInventoryScreen extends DisplayEffectsScreen<PlayerContainer> i
    /**
     * Draws the background layer of this container (behind the items).
     */
-   protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
+   protected void drawGuiContainerBackgroundLayer(MatrixStack stack, float partialTicks, int mouseX, int mouseY) {
       GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
       this.minecraft.getTextureManager().bindTexture(INVENTORY_BACKGROUND);
       int i = this.guiLeft;
       int j = this.guiTop;
-      this.blit(i, j, 0, 0, this.xSize, this.ySize);
+      this.blit(stack, i, j, 0, 0, this.xSize, this.ySize);
       drawEntityOnScreen(i + 51, j + 75, 30, (float)(i + 51) - this.oldMouseX, (float)(j + 75 - 50) - this.oldMouseY, this.minecraft.player);
    }
 
@@ -415,12 +418,12 @@ public class MITEInventoryScreen extends DisplayEffectsScreen<PlayerContainer> i
       this.recipeBookGui.recipesUpdated();
    }
 
-   public void removed() {
+   public void onClose() {
       if (this.field_212353_B) {
          this.recipeBookGui.removed();
       }
 
-      super.removed();
+      super.onClose();
    }
 
    public RecipeBookGui getRecipeGui() {
