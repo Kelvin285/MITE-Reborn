@@ -46,7 +46,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent.WorldTickEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
-import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 import net.minecraftforge.event.world.BlockEvent.NeighborNotifyEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -110,7 +109,7 @@ public class FiveMinSurvival
         MinecraftForge.EVENT_BUS.addListener(FiveMinSurvival::onCropGrowth);
 
         MinecraftForge.EVENT_BUS.addListener(FiveMinSurvival::blockBreak);
-        MinecraftForge.EVENT_BUS.addListener(FiveMinSurvival::harvestDrops);
+        //MinecraftForge.EVENT_BUS.addListener(FiveMinSurvival::harvestDrops);
 
         NetworkHandler.register();
     }
@@ -145,7 +144,7 @@ public class FiveMinSurvival
     			}
     		}
     		
-			ItemEntity item = new ItemEntity(e.getWorld().getWorld(), e.getPos().getX() + 0.5f, e.getPos().getY() + 0.5f, e.getPos().getZ() + 0.5f, loot_table.GetDrop(e.getPos(), silk_touch, e.getWorld().getRandom()));
+			ItemEntity item = new ItemEntity((World)e.getWorld(), e.getPos().getX() + 0.5f, e.getPos().getY() + 0.5f, e.getPos().getZ() + 0.5f, loot_table.GetDrop(e.getPos(), silk_touch, e.getWorld().getRandom()));
 			e.getWorld().addEntity(item);
     					
 			if (loot_table.overridesVanillaLoot) {
@@ -154,110 +153,6 @@ public class FiveMinSurvival
 			}
     		
     	}
-    	
-    	
-    	
-//		Block block = e.getState().getBlock();
-//		Random random = e.getWorld().getRandom();
-//		if (block == Blocks.GRAVEL || block == BlockRegistry.PEA_GRAVEL.get() || block == BlockRegistry.SHINING_GRAVEL.get() || block == BlockRegistry.SHINING_PEA_GRAVEL.get()) {
-//			boolean dropsSelf = true;
-//			double stoneRate = 1.0 / 3.0;
-//			double chipRate = 1.0 / 3.0;
-//			double flintRate = 1.0 / 10.0;
-//			double copperRate = 1.0 / 100.0;
-//			double silverRate = 1.0 / 100.0;
-//
-//			double ironRate = 1.0 / 300.0;
-//			double goldRate = 1.0 / 400.0;
-//			double prismarineRate = -1.0;
-//			double scaleRate = -1.0f;
-//			
-//			stoneRate *= 0.25;
-//			chipRate *= 0.25;
-//			flintRate *= 0.25;
-//			ironRate *= 0.25;
-//			goldRate *= 0.25;
-//			copperRate *= 0.25;
-//			silverRate *= 0.25;
-//			//   public ItemEntity(World worldIn, double x, double y, double z, ItemStack stack) {
-//			Item drop = Items.GRAVEL;
-//			if (block == BlockRegistry.PEA_GRAVEL.get() || block == BlockRegistry.SHINING_PEA_GRAVEL.get()) {
-//				stoneRate *= 0.5;
-//				chipRate *= 2.0;
-//				goldRate *= 2.0;
-//				copperRate *= 2.0;
-//				silverRate *= 2.0;
-//				prismarineRate = 1.0 / 1000.0;
-//				scaleRate = 1.0 / 1000.0;
-//				drop = ItemRegistry.PEA_GRAVEL.get();
-//			}
-//			
-//			if (block == BlockRegistry.SHINING_GRAVEL.get() || block == BlockRegistry.SHINING_PEA_GRAVEL.get()) {
-//				drop = ItemRegistry.FLINT_SHARD.get();
-//			}
-//			
-//			boolean dropped = false;
-//			
-//			if (random.nextDouble() <= chipRate) {
-//				drop = ItemRegistry.FLINT_SHARD.get();
-//				dropped = true;
-//			}
-//			
-//			if (!dropped)
-//			if (random.nextDouble() <= stoneRate) {
-//				drop = ItemRegistry.SMOOTH_STONE.get();
-//				dropped = true;
-//			}
-//			
-//			if (!dropped)
-//			if (random.nextDouble() <= prismarineRate) {
-//				drop = Items.PRISMARINE_SHARD;
-//				dropped = true;
-//			}
-//			
-//			if (!dropped)
-//			if (random.nextDouble() <= scaleRate) {
-//				drop = Items.PRISMARINE_CRYSTALS;
-//				dropped = true;
-//			}
-//			if (!dropped)
-//				if (random.nextDouble() <= copperRate) {
-//					drop = ItemRegistry.COPPER_NUGGET.get();
-//					dropped = true;
-//				}
-//			if (!dropped)
-//				if (random.nextDouble() <= silverRate) {
-//					drop = ItemRegistry.SILVER_NUGGET.get();
-//					dropped = true;
-//				}
-//			if (!dropped)
-//			if (random.nextDouble() <= ironRate) {
-//				drop = Items.IRON_NUGGET;
-//				dropped = true;
-//			}
-//			
-//			if (!dropped)
-//			if (random.nextDouble() <= goldRate) {
-//				drop = Items.GOLD_NUGGET;
-//				dropped = true;
-//			}
-//			
-//			if (!dropped)
-//			if (random.nextDouble() <= flintRate) {
-//				drop = Items.FLINT;
-//				dropped = true;
-//			}
-//			
-//			
-//			
-//			ItemEntity item = new ItemEntity(e.getWorld().getWorld(), e.getPos().getX() + 0.5f, e.getPos().getY() + 0.5f, e.getPos().getZ() + 0.5f, new ItemStack(drop));
-//			e.getWorld().addEntity(item);
-//		}
-	}
-	
-	@SubscribeEvent
-	public static void harvestDrops(HarvestDropsEvent e) {
-		e.getDrops().clear();
 	}
 	
     
@@ -278,13 +173,13 @@ public class FiveMinSurvival
 				p = null;
 			}
 			if (dayPlanted != -1) {
-				long day = e.getWorld().getWorld().getDayTime() / 24000L;
+				long day = ((World)e.getWorld()).getDayTime() / 24000L;
 				if (p != null) {
-					CropTypes.tickForCrop(e.getWorld().getWorld(), pos, state, day, p);
+					CropTypes.tickForCrop(((World)e.getWorld()), pos, state, day, p);
 				}
 			} else {
 				p = new PlantState();
-				p.dayPlanted = e.getWorld().getWorld().getDayTime() / 24000L;
+				p.dayPlanted = ((World)e.getWorld()).getDayTime() / 24000L;
 				p.pos = pos;
 				stateHolder.crops.add(p);
 			}
@@ -300,14 +195,14 @@ public class FiveMinSurvival
 			BlockState state2 = e.getWorld().getBlockState(pos2);
 			if (state2.getBlock() == Blocks.DIRT) {
 				if (!e.getWorld().getBlockState(pos2.down()).getMaterial().blocksMovement()) {
-					FallingBlockEntity fallingblockentity = new FallingBlockEntity(e.getWorld().getWorld(), (double)pos2.getX() + 0.5D, pos2.getY(), (double)pos2.getZ() + 0.5D, state2);
+					FallingBlockEntity fallingblockentity = new FallingBlockEntity(((World)e.getWorld()), (double)pos2.getX() + 0.5D, pos2.getY(), (double)pos2.getZ() + 0.5D, state2);
 		            e.getWorld().addEntity(fallingblockentity);
 				}
 			}
 		}
 		if (state.getBlock() == Blocks.DIRT) {
 			if (!e.getWorld().getBlockState(pos.down()).getMaterial().blocksMovement()) {
-				FallingBlockEntity fallingblockentity = new FallingBlockEntity(e.getWorld().getWorld(), (double)pos.getX() + 0.5D, pos.getY(), (double)pos.getZ() + 0.5D, state);
+				FallingBlockEntity fallingblockentity = new FallingBlockEntity(((World)e.getWorld()), (double)pos.getX() + 0.5D, pos.getY(), (double)pos.getZ() + 0.5D, state);
 	            e.getWorld().addEntity(fallingblockentity);
 			}
 		}
@@ -323,7 +218,7 @@ public class FiveMinSurvival
 				}
 			}
 			if (fuel <= 0)
-				e.getWorld().getWorld().setBlockState(pos, state.with(CampfireBlock.LIT, Boolean.FALSE));
+				((World)e.getWorld()).setBlockState(pos, state.with(CampfireBlock.LIT, Boolean.FALSE));
 		}
 		
 		if (state.getBlock() instanceof CropsBlock) {
@@ -339,13 +234,13 @@ public class FiveMinSurvival
 				p = null;
 			}
 			if (dayPlanted != -1) {
-				long day = e.getWorld().getWorld().getDayTime() / 24000L;
+				long day = ((World)e.getWorld()).getDayTime() / 24000L;
 				if (p != null) {
-					CropTypes.tickForCrop(e.getWorld().getWorld(), pos, state, day, p);
+					CropTypes.tickForCrop(((World)e.getWorld()), pos, state, day, p);
 				}
 			} else {
 				p = new PlantState();
-				p.dayPlanted = e.getWorld().getWorld().getDayTime() / 24000L;
+				p.dayPlanted = ((World)e.getWorld()).getDayTime() / 24000L;
 				p.pos = pos;
 				stateHolder.crops.add(p);
 			}
@@ -373,6 +268,12 @@ public class FiveMinSurvival
 		VanillaTweaks.setToolTiers();
 		VanillaTweaks.fixStackSizes();
 		BlockLootTables.RegisterLootTables();
+		
+		event.enqueueWork(
+				() -> {
+					EntityRegistry.RegisterEntityAttributes();
+				}
+				);
     }
 
     private void doClientStuff(final FMLClientSetupEvent event) {
@@ -393,7 +294,8 @@ public class FiveMinSurvival
         
 		RenderTypeLookup.setRenderLayer(BlockRegistry.FLAX.get(), RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(BlockRegistry.CAMPFIRE_LOW.get(), RenderType.getCutout());
-
+		
+		
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call

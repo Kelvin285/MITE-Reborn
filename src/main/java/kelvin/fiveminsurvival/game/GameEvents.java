@@ -89,6 +89,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biomes;
@@ -98,7 +99,6 @@ import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.event.entity.item.ItemEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingExperienceDropEvent;
@@ -491,7 +491,7 @@ public class GameEvents {
 		if (event.getEntity() instanceof SquidEntity) {
 			if (event instanceof LivingSpawnEvent.CheckSpawn) {
 				Biome biome = event.getEntity().world.getBiome(event.getEntity().getPosition());
-				if (biome == Biomes.RIVER || biome == Biomes.FROZEN_RIVER) {
+				if (biome.getRegistryName().equals(Biomes.RIVER.getRegistryName()) || biome.getRegistryName().equals(Biomes.FROZEN_RIVER.getRegistryName())) {
 					if (event.getWorld().getRandom().nextBoolean()) {
 						event.getEntity().remove();
 						event.setResult(Result.DENY);
@@ -572,7 +572,7 @@ public class GameEvents {
 			BlockPos pos = event.getEntity().getPosition();
 			event.getEntity().remove();
 			
-			AnimalWatcherEntity zombie = EntityRegistry.ZOMBIE_ENTITY.get().create(event.getWorld().getWorld());
+			AnimalWatcherEntity zombie = EntityRegistry.ZOMBIE_ENTITY.get().create(event.getEntity().world);
 			zombie.setPosition(pos.getX(), pos.getY(), pos.getZ());
 			event.getWorld().addEntity(zombie);
 			event.setResult(Result.DENY);
@@ -582,7 +582,7 @@ public class GameEvents {
 			BlockPos pos = event.getEntity().getPosition();
 			event.getEntity().remove();
 			
-			EntityAttackSquid entity = EntityRegistry.ATTACK_SQUID.get().create(event.getWorld().getWorld());
+			EntityAttackSquid entity = EntityRegistry.ATTACK_SQUID.get().create(event.getEntity().world);
 			entity.setPosition(pos.getX(), pos.getY(), pos.getZ());
 			event.getWorld().addEntity(entity);
 			event.setResult(Result.DENY);
@@ -603,7 +603,7 @@ public class GameEvents {
 					
 					BlockPos pos = s.getPosition();
 					s.remove();
-					NewSkeletonEntity skeleton = EntityRegistry.SKELETON_ENTITY.get().create(event.getWorld().getWorld());
+					NewSkeletonEntity skeleton = EntityRegistry.SKELETON_ENTITY.get().create(event.getEntity().world);
 					skeleton.setPosition(pos.getX(), pos.getY(), pos.getZ());
 					ItemStack club = new ItemStack(ItemRegistry.WOODEN_CLUB.get());
 					club.setDamage(new Random().nextInt(5));
@@ -674,11 +674,13 @@ public class GameEvents {
 	    		if (player.world.getRandom().nextDouble() <= 0.001f)
 				if (Minecraft.getInstance() != null) {
 					Biome biome = player.world.getBiome(player.getPosition());
-		    		if (biome == Biomes.OCEAN || biome == Biomes.BEACH || biome == Biomes.SNOWY_BEACH ||
-		    				biome == Biomes.COLD_OCEAN || biome == Biomes.DEEP_COLD_OCEAN
-		    				|| biome == Biomes.DEEP_FROZEN_OCEAN || biome == Biomes.DEEP_LUKEWARM_OCEAN ||
-		    				biome == Biomes.DEEP_OCEAN || biome == Biomes.DEEP_WARM_OCEAN || biome == Biomes.FROZEN_OCEAN ||
-		    				biome == Biomes.LUKEWARM_OCEAN || biome == Biomes.WARM_OCEAN) {
+					System.out.println(biome);
+					if (biome.getRegistryName() != null)
+		    		if (biome.getRegistryName().equals(Biomes.OCEAN.getRegistryName()) || biome.getRegistryName().equals(Biomes.BEACH.getRegistryName()) || biome.getRegistryName().equals(Biomes.SNOWY_BEACH.getRegistryName()) ||
+		    				biome.getRegistryName().equals(Biomes.COLD_OCEAN.getRegistryName()) || biome.getRegistryName().equals(Biomes.DEEP_COLD_OCEAN.getRegistryName())
+		    				|| biome.getRegistryName().equals(Biomes.DEEP_FROZEN_OCEAN.getRegistryName()) || biome.getRegistryName().equals(Biomes.DEEP_LUKEWARM_OCEAN.getRegistryName()) ||
+		    						biome.getRegistryName().equals(Biomes.DEEP_OCEAN.getRegistryName()) || biome.getRegistryName().equals(Biomes.DEEP_WARM_OCEAN.getRegistryName()) || biome.getRegistryName().equals(Biomes.FROZEN_OCEAN.getRegistryName()) ||
+		    						biome.getRegistryName().equals(Biomes.LUKEWARM_OCEAN.getRegistryName()) || biome.getRegistryName().equals(Biomes.WARM_OCEAN.getRegistryName())) {
 		    			
 		    			//g = game music
 		    			//f = underwater music
@@ -717,13 +719,8 @@ public class GameEvents {
         			
         			customStats.foodLevel = stats.getFoodLevel();
         			customStats.foodSaturationLevel = stats.getSaturationLevel();
-        			Field foodTimer = ObfuscationReflectionHelper.findField(FoodStats.class, "field_75123_d"); //foodTimer
-        			Resources.makeFieldAccessible(foodTimer);
-        			customStats.foodTimer = (int)foodTimer.get(stats);
-        			System.out.println(stats.getFoodLevel());
-        			Field foodStats = ObfuscationReflectionHelper.findField(PlayerEntity.class, "field_71100_bB"); //foodStats
-        			Resources.makeFieldAccessible(foodStats);
-        			foodStats.set(player, customStats);
+        			customStats.foodTimer = (int)ObfuscationReflectionHelper.getPrivateValue(FoodStats.class, stats, "field_75123_d");
+        			ObfuscationReflectionHelper.setPrivateValue(PlayerEntity.class, player, customStats, "field_71100_bB");
         			
         			
         		}catch (Exception e) {

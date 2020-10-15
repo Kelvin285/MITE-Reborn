@@ -14,9 +14,11 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.world.Dimension;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biomes;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.DimensionSavedDataManager;
 import net.minecraft.world.storage.WorldSavedData;
@@ -76,7 +78,7 @@ public class WorldStateHolder extends WorldSavedData {
 
 		ServerWorld overworld = null;
 		for (ServerWorld w : ((ServerWorld)world).getServer().getWorlds()) {
-			if (w.getDimensionTypeKey() == DimensionType.OVERWORLD) {
+			if (w.getDimensionKey() == World.OVERWORLD) {
 				overworld = w;
 				break;
 			}

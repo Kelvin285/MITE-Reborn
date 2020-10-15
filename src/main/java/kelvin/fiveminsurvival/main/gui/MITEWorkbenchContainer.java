@@ -16,6 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.ICraftingRecipe;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.item.crafting.RecipeBookCategory;
 import net.minecraft.item.crafting.RecipeItemHelper;
 import net.minecraft.network.play.server.SSetSlotPacket;
 import net.minecraft.util.IWorldPosCallable;
@@ -191,4 +192,9 @@ public class MITEWorkbenchContainer extends RecipeBookContainer<CraftingInventor
 	   public int getSize() {
 	      return 10;
 	   }
+
+		@Override
+		public RecipeBookCategory func_241850_m() {
+			return RecipeBookCategory.FURNACE;
+		}
 	}

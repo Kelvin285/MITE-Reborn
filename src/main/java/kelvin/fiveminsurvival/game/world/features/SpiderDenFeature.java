@@ -20,7 +20,6 @@ import net.minecraft.world.ISeedReader;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
-import net.minecraft.world.gen.feature.structure.StructureManager;
 
 public class SpiderDenFeature extends Feature<NoFeatureConfig> {
 	
@@ -28,8 +27,9 @@ public class SpiderDenFeature extends Feature<NoFeatureConfig> {
 		super(p_i231953_1_);
 	}
 
+
 	@Override
-	public boolean func_230362_a_(ISeedReader worldIn, StructureManager manager, ChunkGenerator generator,
+	public boolean func_241855_a(ISeedReader worldIn, ChunkGenerator generator,
 			Random rand, BlockPos pos, NoFeatureConfig config) {
 		pos = new BlockPos(pos.getX(), 0, pos.getZ());
 		if (rand.nextInt(100) == 0)

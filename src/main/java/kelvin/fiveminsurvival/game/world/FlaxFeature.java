@@ -22,8 +22,8 @@ public class FlaxFeature extends Feature<NoFeatureConfig> {
 	}
 
 	@Override
-	public boolean func_230362_a_(ISeedReader worldIn, StructureManager manager, ChunkGenerator generator,
-			Random rand, BlockPos pos, NoFeatureConfig config) {
+	public boolean func_241855_a(ISeedReader worldIn, ChunkGenerator generator, Random rand,
+			BlockPos pos, NoFeatureConfig config) {
 		for(BlockState blockstate = worldIn.getBlockState(pos); (blockstate.isAir(worldIn, pos) || blockstate.isIn(BlockTags.LEAVES)) && pos.getY() > 0; blockstate = worldIn.getBlockState(pos)) {
 	         pos = pos.down();
 	      }
@@ -41,5 +41,6 @@ public class FlaxFeature extends Feature<NoFeatureConfig> {
 
 	      return i > 0;
 	}
-	}
+
+}
 

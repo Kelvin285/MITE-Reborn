@@ -143,18 +143,20 @@ public class MITEInventoryScreen extends DisplayEffectsScreen<PlayerContainer> i
               this.blit(stack, this.guiLeft + lock_position[0], this.guiTop + lock_position[1], lock_location[0], lock_location[1], 18, 17);
     	  }
           if (this.getSlotUnderMouse() instanceof CraftingResultSlot) {
-        	  if (crafting) {
-        		  List<ITextProperties> str = new ArrayList<>();
-            	  str.add(new StringTextComponent(((int)(this.maxCraftTimer) - (int)(this.craftTimer)) / 20 + " seconds left"));
-            	  str.add(new StringTextComponent("Wait until the item is finished crafting!"));
-            	  renderToolTip(stack, str, (int)this.oldMouseX, (int)this.oldMouseY, Minecraft.getInstance().fontRenderer);
-        	  } else {
-        		  ArrayList<ITextProperties> str = new ArrayList<>();
-            	  str.add(new StringTextComponent("LOCKED!"));
-            	  str.add(new StringTextComponent("Higher tier table required!"));
-            	  renderToolTip(stack, str, (int)this.oldMouseX, (int)this.oldMouseY, Minecraft.getInstance().fontRenderer);
-        	  }
-        	  
+        	  if (this.crafting) {
+            	  StringTextComponent comp = new StringTextComponent(((int)(this.maxCraftTimer) - (int)(this.craftTimer)) / 20 + " seconds left\n"
+            	  		+ "Wait until the item is finished crafting!");
+            	  
+	        	  renderTooltip(stack, comp, (int)this.oldMouseX, (int)this.oldMouseY);
+	    	  } else {	        	  
+	        	  StringTextComponent comp = new StringTextComponent(
+	        			  "LOCKED!\n"
+	        			  +"Higher tier table required!"
+	        			  );
+	            	  
+		        	  renderTooltip(stack, comp, (int)this.oldMouseX, (int)this.oldMouseY);
+	
+	    	  }
           }
       }
       GlStateManager.enableDepthTest();
