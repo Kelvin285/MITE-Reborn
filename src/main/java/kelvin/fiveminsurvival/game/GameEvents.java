@@ -86,13 +86,13 @@ import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.FoodStats;
 import net.minecraft.util.Hand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.Biomes;
+import net.minecraft.world.biome.Biome.Category;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -367,15 +367,17 @@ public class GameEvents {
 				if (event.getPlayer().getHeldItem(Hand.MAIN_HAND).getItem() != null)
 		if (player.getCooldownTracker().getCooldown(player.getHeldItem(Hand.MAIN_HAND).getItem(), 0) <= 0)
 			if (state.getBlock() instanceof CampfireBlock && !world.isRemote()) {
-				
+				System.out.println("campfire block click");
 				ItemStack stack = event.getPlayer().getHeldItem(Hand.MAIN_HAND);
 				if (stack != null) {
 					Item item = stack.getItem();
 					if (item != null) {
 						Map<IRegistryDelegate<Item>, Integer> BURNS = null;
 						try {
-							Field VANILLA_BURNS = ObfuscationReflectionHelper.findField(ForgeHooks.class, "VANILLA_BURNS");
-							Resources.makeFieldAccessible(VANILLA_BURNS);
+							
+							Field VANILLA_BURNS = ForgeHooks.class.getDeclaredField("VANILLA_BURNS");
+							VANILLA_BURNS.setAccessible(true);
+//							Resources.makeFieldAccessible(VANILLA_BURNS);
 							BURNS = (Map<IRegistryDelegate<Item>, Integer>) VANILLA_BURNS.get(null);
 						} catch (Exception e) {
 							e.printStackTrace();
@@ -459,7 +461,7 @@ public class GameEvents {
 			}
 			if (cutLog) {
 				world.addEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(ItemRegistry.STRIPPED_BARK.get(), new Random().nextInt(2) + 1)));
-//				world.playSound(event.getPlayer(), pos, SoundEvents.ITEM_AXE_STRIP, SoundCategory.BLOCKS, 1.0F, 1.0F);
+				world.playSound(event.getPlayer(), pos, SoundEvents.ITEM_AXE_STRIP, SoundCategory.BLOCKS, 1.0F, 1.0F);
 			}
 		}
 	}
@@ -488,74 +490,24 @@ public class GameEvents {
 			event.getEntityLiving().getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(event.getEntityLiving().getAttribute(Attributes.FOLLOW_RANGE).getBaseValue() * 2.0f);
 		}
 		
-		if (event.getEntity() instanceof SquidEntity) {
-			if (event instanceof LivingSpawnEvent.CheckSpawn) {
-				Biome biome = event.getEntity().world.getBiome(event.getEntity().getPosition());
-				if (biome.getRegistryName().equals(Biomes.RIVER.getRegistryName()) || biome.getRegistryName().equals(Biomes.FROZEN_RIVER.getRegistryName())) {
-					if (event.getWorld().getRandom().nextBoolean()) {
-						event.getEntity().remove();
-						event.setResult(Result.DENY);
-					}
+		
+		if (event instanceof LivingSpawnEvent.CheckSpawn) {
+			if (event.getEntity() instanceof AnimalEntity) {
+				if (!(((LivingSpawnEvent.CheckSpawn)event).getSpawnReason() == SpawnReason.CHUNK_GENERATION)) {
+					event.getEntity().remove();
+					event.setResult(Result.DENY);
+					event.getEntity().forceSetPosition(0, -100, 0);
 				}
 			}
-		}
-		
-		if (event.getEntity() instanceof AnimalEntity) {
-			if (event instanceof LivingSpawnEvent.CheckSpawn) {
-				if (!(((LivingSpawnEvent.CheckSpawn)event).getSpawnReason() == SpawnReason.CHUNK_GENERATION)) {
+			if (event.getEntity() instanceof SquidEntity) {
+				if (!(event.getWorld().getRandom().nextInt(1000) <= 2)) {
+					event.getEntity().forceSetPosition(0, -100, 0);
 					event.getEntity().remove();
 					event.setResult(Result.DENY);
 				}
 			}
 		}
-//		if (!(event.getEntity() instanceof DrownedEntity))
-//		if (event.getEntity() instanceof ZombieEntity ||
-//				event.getEntity() instanceof SkeletonEntity) {
-//			if (event.getWorld().canBlockSeeSky(event.getEntity().func_233580_cy_()) ||
-//					event.getWorld().getBlockState(event.getEntity().func_233580_cy_().down()).getBlock() != Blocks.STONE) {
-//				if (event.getWorld().getRandom().nextInt(100) >= 15) {
-//					event.getEntity().remove();
-//					event.setResult(Result.DENY);
-//				}
-//				
-//			}
-//				
-//		}
-//		
-//		if (event instanceof LivingSpawnEvent.CheckSpawn) {
-//			if (event.getEntity().isAlive())
-//			{
-//				if (event.getEntity() instanceof CreeperEntity) {
-//					if (event.getWorld().getRandom().nextInt() <= 7) {
-//						event.setResult(Result.DENY);
-//					}
-//				}
-//				if (!event.getWorld().getWorld().isDaytime()) {
-//					if (event.getEntity().getType() == EntityRegistry.CREEPER.get()) {
-//						if (event.getWorld().getRandom().nextInt() <= 7) {
-//							event.setResult(Result.DENY);
-//						}
-//					}
-//				}
-//			}
-//		} else {
-//			if (event.getEntity().isAlive()) {
-//				if (event.getEntity() instanceof CreeperEntity) {
-//					if (event instanceof LivingSpawnEvent.SpecialSpawn) 
-//					if (event.getWorld().getRandom().nextInt() <= 7) {
-//						event.setResult(Result.DENY);
-//					}
-//				}
-//				if (!event.getWorld().getWorld().isDaytime()) {
-//					if (event.getEntity().getType() == EntityRegistry.CREEPER.get()) {
-//						if (event instanceof LivingSpawnEvent.SpecialSpawn) 
-//						if (event.getWorld().getRandom().nextInt() <= 7) {
-//							event.setResult(Result.DENY);
-//						}
-//					}
-//				}
-//			}
-//		}
+		
 		
 		if (event.getEntity() instanceof PhantomEntity) {
 			if (event.getWorld().getRandom().nextInt() <= 7) {
@@ -597,10 +549,9 @@ public class GameEvents {
 		if (event.getEntity() instanceof SkeletonEntity) {
 			SkeletonEntity s = (SkeletonEntity)event.getEntity();
 			
-			if (s.ticksExisted < 100) {
-
+			if (s.ticksExisted < 2) {
 				if (new Random().nextInt(25) == 0) {
-					
+
 					BlockPos pos = s.getPosition();
 					s.remove();
 					NewSkeletonEntity skeleton = EntityRegistry.SKELETON_ENTITY.get().create(event.getEntity().world);
@@ -666,22 +617,16 @@ public class GameEvents {
 			}
 		}
 		
-		
 		if (entity instanceof PlayerEntity) {
 			PlayerEntity player = (PlayerEntity)event.getEntity();
 			
 			if (player.world.isRemote) {
 	    		if (player.world.getRandom().nextDouble() <= 0.001f)
 				if (Minecraft.getInstance() != null) {
-					Biome biome = player.world.getBiome(player.getPosition());
-					System.out.println(biome);
-					if (biome.getRegistryName() != null)
-		    		if (biome.getRegistryName().equals(Biomes.OCEAN.getRegistryName()) || biome.getRegistryName().equals(Biomes.BEACH.getRegistryName()) || biome.getRegistryName().equals(Biomes.SNOWY_BEACH.getRegistryName()) ||
-		    				biome.getRegistryName().equals(Biomes.COLD_OCEAN.getRegistryName()) || biome.getRegistryName().equals(Biomes.DEEP_COLD_OCEAN.getRegistryName())
-		    				|| biome.getRegistryName().equals(Biomes.DEEP_FROZEN_OCEAN.getRegistryName()) || biome.getRegistryName().equals(Biomes.DEEP_LUKEWARM_OCEAN.getRegistryName()) ||
-		    						biome.getRegistryName().equals(Biomes.DEEP_OCEAN.getRegistryName()) || biome.getRegistryName().equals(Biomes.DEEP_WARM_OCEAN.getRegistryName()) || biome.getRegistryName().equals(Biomes.FROZEN_OCEAN.getRegistryName()) ||
-		    						biome.getRegistryName().equals(Biomes.LUKEWARM_OCEAN.getRegistryName()) || biome.getRegistryName().equals(Biomes.WARM_OCEAN.getRegistryName())) {
-		    			
+					Biome biome = player.world.getBiomeManager().getBiomeAtPosition(player.getPosition());
+//					
+//					System.out.println(biome + ", " + );
+		    		if (biome.getCategory() == Category.OCEAN) {
 		    			//g = game music
 		    			//f = underwater music
 		    			//b = creative music

@@ -2,13 +2,16 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "minecraft:pumpkin"
+      "item": "minecraft:brown_mushroom"
     },
+	{
+	  "item": "minecraft:brown_mushroom"
+	},
 	{
 	  "item": "fiveminsurvival:bowl_water"
 	}
   ],
   "result": {
-    "item": "fiveminsurvival:pumpkin_soup"
+    "item": "fiveminsurvival:cream_of_mushroom_soup"
   }
 }

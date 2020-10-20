@@ -18,6 +18,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.ISeedReader;
 import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.Heightmap.Type;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 
@@ -32,12 +33,19 @@ public class SpiderDenFeature extends Feature<NoFeatureConfig> {
 	public boolean func_241855_a(ISeedReader worldIn, ChunkGenerator generator,
 			Random rand, BlockPos pos, NoFeatureConfig config) {
 		pos = new BlockPos(pos.getX(), 0, pos.getZ());
-		if (rand.nextInt(100) == 0)
-		for(int i = 0; i < 128; ++i) {
-			BlockPos blockpos = pos.add(rand.nextInt(8) - rand.nextInt(8), i, rand.nextInt(8) - rand.nextInt(8));
+		
+		
+		int i = worldIn.getHeight(Type.MOTION_BLOCKING_NO_LEAVES, pos.getX(), pos.getZ());
+		if (rand.nextInt(100) == 0) {
+			
+			BlockPos blockpos = pos.add(rand.nextInt(8) - rand.nextInt(8), i - 10, rand.nextInt(8) - rand.nextInt(8));
 			Block surface = worldIn.getBlockState(blockpos).getBlock();
+			for (int I = 0; I < 25 && !(surface == Blocks.GRASS_BLOCK || surface == Blocks.PODZOL || surface == Blocks.SAND); I++) {
+				blockpos = blockpos.add(0, 1, 0);
+				surface = worldIn.getBlockState(blockpos).getBlock();
+			}
+			
 			if (surface == Blocks.GRASS_BLOCK || surface == Blocks.PODZOL || surface == Blocks.SAND) {
-//				System.out.println ("den " + blockpos);
 				
 				//check to see if the spider den can be placed
 				int min_radius = 4;
@@ -52,7 +60,7 @@ public class SpiderDenFeature extends Feature<NoFeatureConfig> {
 						double distance = Math.sqrt(x * x + z * z);
 						if (distance <= max_radius) {
 							pos2.setPos(blockpos.getX() + x, blockpos.getY(), blockpos.getZ() + z);
-							if (worldIn.getBlockState(pos2).getBlock() == Blocks.AIR || worldIn.getBlockState(pos2).getBlock() == Blocks.WATER || worldIn.getBlockState(pos2).getBlock() == Blocks.LAVA) {
+							if (worldIn.getBlockState(pos2).getBlock() == Blocks.WATER || worldIn.getBlockState(pos2).getBlock() == Blocks.LAVA) {
 								can_place = false;
 								break;
 							}

@@ -5,16 +5,10 @@
       "item": "minecraft:cocoa_beans"
     },
 	{
-	  "item": "minecraft:snowball"
-	},
-	{
 	  "item": "minecraft:sugar"
-	},
-	{
-	  "item": "fiveminsurvival:bowl_milk"
 	}
   ],
   "result": {
-    "item": "fiveminsurvival:chocolate_ice_cream"
+    "item": "fiveminsurvival:chocolate"
   }
 }

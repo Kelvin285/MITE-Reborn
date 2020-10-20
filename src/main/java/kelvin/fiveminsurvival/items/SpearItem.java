@@ -169,13 +169,18 @@ public class SpearItem extends Item {
 		   public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType equipmentSlot, ItemStack stack) {
 //		      Multimap<Attribute, AttributeModifier> multimap = super.getAttributeModifiers(equipmentSlot, stack);
 		      
-		      Builder<Attribute, AttributeModifier> lvt_2_1_ = ImmutableMultimap.builder();
-				lvt_2_1_.put(Attributes.ATTACK_DAMAGE,
-						new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Tool modifier", attackDamage, Operation.ADDITION));
-				lvt_2_1_.put(Attributes.ATTACK_SPEED, new AttributeModifier(ATTACK_SPEED_MODIFIER, "Tool modifier",
-						-2.9F, Operation.ADDITION));
+			   if (equipmentSlot == EquipmentSlotType.MAINHAND) { 
+				   Builder<Attribute, AttributeModifier> lvt_2_1_ = ImmutableMultimap.builder();
+					lvt_2_1_.put(Attributes.ATTACK_DAMAGE,
+							new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Tool modifier", attackDamage, Operation.ADDITION));
+					lvt_2_1_.put(Attributes.ATTACK_SPEED, new AttributeModifier(ATTACK_SPEED_MODIFIER, "Tool modifier",
+							-2.9F, Operation.ADDITION));
+				      return lvt_2_1_.build();
 
-		      return lvt_2_1_.build();
+ 			   }
+			   
+		      
+			   return super.getAttributeModifiers(equipmentSlot, stack);
 		   }
 
 		   

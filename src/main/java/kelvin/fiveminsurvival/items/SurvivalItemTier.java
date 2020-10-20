@@ -191,7 +191,6 @@ public enum SurvivalItemTier implements IItemTier {
         this.enchantability = enchantabilityIn;
         this.repairMaterial = new LazyValue<>(repairMaterialIn);
         this.itemClass = itemClass;
-
     }
 
     public int getMaxUses() {

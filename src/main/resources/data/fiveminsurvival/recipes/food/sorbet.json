@@ -2,16 +2,16 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "fiveminsurvival:bowl_water"
+      "item": "fiveminsurvival:orange"
     },
-	{
-	  "item": "minecraft:sugar"
-	},
 	{
 	  "item": "minecraft:snowball"
 	},
 	{
-	  "item": "fiveminsurvival:orange"
+	  "item": "minecraft:sugar"
+	},
+	{
+	  "item": "minecraft:bowl"
 	}
   ],
   "result": {

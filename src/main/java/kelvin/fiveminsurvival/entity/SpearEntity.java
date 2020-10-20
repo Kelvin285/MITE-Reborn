@@ -6,6 +6,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import kelvin.fiveminsurvival.init.EntityRegistry;
+import net.minecraft.command.arguments.EntityAnchorArgument.Type;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntitySize;
@@ -51,7 +52,6 @@ public class SpearEntity extends TridentEntity {
         this.setPosition(p_i48790_2_.getPosX(), p_i48790_2_.getPosY() + p_i48790_2_.getEyeHeight(), p_i48790_2_.getPosZ());
         this.thrownStack = p_i48790_3_;
         this.dataManager.set(THROWN_STACK, thrownStack);
-        
     }
 
     protected ItemStack getArrowStack() {
@@ -78,6 +78,7 @@ public class SpearEntity extends TridentEntity {
     		if (((EntityRayTraceResult)result).getEntity() != null)
     		onEntityHit((EntityRayTraceResult)result);
     	}
+    	this.lookAt(Type.EYES, getPositionVec().add(new Vector3d(this.getMotion().x, this.getMotion().y, this.getMotion().z).normalize()));
     }
     
     protected void registerData() {

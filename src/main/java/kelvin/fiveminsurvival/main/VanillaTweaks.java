@@ -126,6 +126,9 @@ public class VanillaTweaks {
                     System.out.println("null");
                     continue;
                 }
+                if (item.getMaxStackSize() < 8) {
+                	continue;
+                }
                 maxStack.set(item, 16);
                 if (item instanceof SoupItem) {
                     maxStack.set(item, 4);

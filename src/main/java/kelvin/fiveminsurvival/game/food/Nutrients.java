@@ -63,9 +63,11 @@ public class Nutrients implements Serializable {
 		negativeLevel = getInt(data[11]);
 	}
 	public double getDouble(String str) {
+		if (str.isEmpty())return 0;
 		return Double.parseDouble(str);
 	}
 	public int getInt(String str) {
+		if (str.isEmpty())return 0;
 		return Integer.parseInt(str);
 	}
 	

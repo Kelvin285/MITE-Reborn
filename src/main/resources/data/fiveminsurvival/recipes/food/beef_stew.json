@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "fiveminsurvival:bowl_water"
+    },
+	{
+	  "item": "minecraft:cooked_beef"
+	},
+	{
+	  "item": "minecraft:brown_mushroom"
+	},
+	{
+	  "item": "minecraft:potato"
+	}
+  ],
+  "result": {
+    "item": "fiveminsurvival:beef_stew"
+  }
+}

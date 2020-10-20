@@ -3,6 +3,7 @@ package kelvin.fiveminsurvival.init;
 import kelvin.fiveminsurvival.blocks.CustomAirBlock;
 import kelvin.fiveminsurvival.blocks.CustomSnowBlock;
 import kelvin.fiveminsurvival.blocks.MITECakeBlock;
+import kelvin.fiveminsurvival.items.BurnableBlockItem;
 import kelvin.fiveminsurvival.items.CustomBowlItem;
 import kelvin.fiveminsurvival.items.CustomEggItem;
 import kelvin.fiveminsurvival.items.CustomMilkBucketItem;
@@ -32,7 +33,6 @@ public class VanillaOverrides {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, "minecraft");
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, "minecraft");
     public static final DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(ForgeRegistries.FEATURES, "minecraft");
-    public static final DeferredRegister<Enchantment> ENCHANTMENTS = DeferredRegister.create(ForgeRegistries.ENCHANTMENTS, "minecraft");
     
     public static final RegistryObject<Item> WHEAT_SEEDS = ITEMS.register("wheat_seeds", () -> new BlockNamedItem(Blocks.WHEAT, (new Item.Properties()).group(ItemGroup.MATERIALS).food(new Food.Builder().saturation(0.1F).build())));
     public static final RegistryObject<Item> PUMPKIN_SEEDS = ITEMS.register("pumpkin_seeds", () -> new BlockNamedItem(Blocks.PUMPKIN_STEM, (new Item.Properties()).group(ItemGroup.MATERIALS).food(new Food.Builder().hunger(2).saturation(0.1F).build())));
@@ -51,12 +51,12 @@ public class VanillaOverrides {
 
     
     //Burnable Saplings
-    public static final RegistryObject<Item> OAK_SAPLING = ITEMS.register("oak_sapling", () -> new ItemBurnable(new Item.Properties().group(ItemGroup.MISC), 110));
-    public static final RegistryObject<Item> SPRUCE_SAPLING = ITEMS.register("spruce_sapling", () -> new ItemBurnable(new Item.Properties().group(ItemGroup.MISC), 110));
-    public static final RegistryObject<Item> BIRCH_SAPLING = ITEMS.register("birch_sapling", () -> new ItemBurnable(new Item.Properties().group(ItemGroup.MISC), 110));
-    public static final RegistryObject<Item> JUNGLE_SAPLING = ITEMS.register("jungle_sapling", () -> new ItemBurnable(new Item.Properties().group(ItemGroup.MISC), 110));
-    public static final RegistryObject<Item> ACACIA_SAPLING = ITEMS.register("acacia_sapling", () -> new ItemBurnable(new Item.Properties().group(ItemGroup.MISC), 110));
-    public static final RegistryObject<Item> DARK_OAK_SAPLING = ITEMS.register("dark_oak_sapling", () -> new ItemBurnable(new Item.Properties().group(ItemGroup.MISC), 110));
+    public static final RegistryObject<Item> OAK_SAPLING = ITEMS.register("oak_sapling", () -> new BurnableBlockItem(Blocks.OAK_SAPLING, new Item.Properties().group(ItemGroup.MISC), 110));
+    public static final RegistryObject<Item> SPRUCE_SAPLING = ITEMS.register("spruce_sapling", () -> new BurnableBlockItem(Blocks.SPRUCE_SAPLING, new Item.Properties().group(ItemGroup.MISC), 110));
+    public static final RegistryObject<Item> BIRCH_SAPLING = ITEMS.register("birch_sapling", () -> new BurnableBlockItem(Blocks.BIRCH_SAPLING, new Item.Properties().group(ItemGroup.MISC), 110));
+    public static final RegistryObject<Item> JUNGLE_SAPLING = ITEMS.register("jungle_sapling", () -> new BurnableBlockItem(Blocks.JUNGLE_SAPLING, new Item.Properties().group(ItemGroup.MISC), 110));
+    public static final RegistryObject<Item> ACACIA_SAPLING = ITEMS.register("acacia_sapling", () -> new BurnableBlockItem(Blocks.ACACIA_SAPLING, new Item.Properties().group(ItemGroup.MISC), 110));
+    public static final RegistryObject<Item> DARK_OAK_SAPLING = ITEMS.register("dark_oak_sapling", () -> new BurnableBlockItem(Blocks.DARK_OAK_SAPLING, new Item.Properties().group(ItemGroup.MISC), 110));
 
     public static final RegistryObject<Block> SNOW = BLOCKS.register("snow", () -> new CustomSnowBlock(Block.Properties.create(Material.SNOW).tickRandomly().hardnessAndResistance(0.1F).sound(SoundType.SNOW)));
     
@@ -70,13 +70,13 @@ public class VanillaOverrides {
 //    public static final RegistryObject<Structure<NoFeatureConfig>> SWAMP_HUT = FEATURES.register("swamp_hut", () -> new CustomSwampHutStructure(NoFeatureConfig::deserialize));
 
     public static final Object[] DELETED_ITEMS = {
-    		DeleteItem("wooden_sword"), DeleteItem("diamond_sword"), DeleteItem("wooden_hoe"), DeleteItem("wooden_axe"), DeleteItem("wooden_pickaxe"), DeleteItem("diamond_axe"), DeleteItem("diamond_hoe"),
-    		DeleteItem("diamond_pickaxe"), DeleteItem("diamond_shovel"), DeleteItem("diamond_helmet"), DeleteItem("diamond_chestplate"), DeleteItem("diamond_leggings"), DeleteItem("diamond_boots"), DeleteItem("stone_pickaxe"),
-    		DeleteItem("stone_axe"), DeleteItem("stone_shovel"), DeleteItem("stone_hoe"), DeleteItem("stone_sword")
+//    		DeleteItem("wooden_sword"), DeleteItem("diamond_sword"), DeleteItem("wooden_hoe"), DeleteItem("wooden_axe"), DeleteItem("wooden_pickaxe"), DeleteItem("diamond_axe"), DeleteItem("diamond_hoe"),
+//    		DeleteItem("diamond_pickaxe"), DeleteItem("diamond_shovel"), DeleteItem("diamond_helmet"), DeleteItem("diamond_chestplate"), DeleteItem("diamond_leggings"), DeleteItem("diamond_boots"), DeleteItem("stone_pickaxe"),
+//    		DeleteItem("stone_axe"), DeleteItem("stone_shovel"), DeleteItem("stone_hoe"), DeleteItem("stone_sword")
     };
     
     public static RegistryObject<Item> DeleteItem(String item) {
-    	
-    	return ITEMS.register(item, () -> new AirItem(new CustomAirBlock(item, AbstractBlock.Properties.create(Material.AIR)), new Item.Properties()));
+    	Item air = new AirItem(new CustomAirBlock(item, AbstractBlock.Properties.create(Material.AIR)), new Item.Properties());
+    	return ITEMS.register(item, () -> air);
     }
 }

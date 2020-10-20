@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+	"#",
+	"S",
+	"F"
+  ],
+  "key": {
+    "#": {
+      "item": "fiveminsurvival:flint_shard"
+    },
+	"S": {
+	  "item": "minecraft:stick"
+	},
+	"F": {
+	  "item": "minecraft:feather"
+	}
+  },
+  "result": {
+    "item": "minecraft:arrow",
+	"count": 1
+  }
+}

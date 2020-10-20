@@ -38,6 +38,12 @@ public class WorldStateHolder extends WorldSavedData {
 	
 	public boolean wheat_found = false, beetroot_found = false, carrot_found = false, potato_found = false, pumpkin_found = false, melon_found = false;
 	
+	public boolean obsidian_block = false;
+	public boolean prismarine_found = false;
+	public boolean ender_eye_crafted = false;
+	public boolean netherite_found = false;
+	public boolean blaze_rod_found = false;
+	
 	public int placeTick = 0;
 	
 	public static class WorldState {
@@ -126,7 +132,7 @@ public class WorldStateHolder extends WorldSavedData {
 		}
 		worldState.time = nbt.getLong("time");
 		worldState.timeCounter = nbt.getDouble("timeCounter");
-		worldState.rainStrength = nbt.getFloat("rainStrength");
+		//worldState.rainStrength = nbt.getFloat("rainStrength");
 		
 		int[] crops_found = nbt.getIntArray("crops_found");
 		wheat_found = crops_found[0] == 1;
@@ -156,7 +162,7 @@ public class WorldStateHolder extends WorldSavedData {
 		}
 		compound.putLong("time",worldState.time);
 		compound.putDouble("timeCounter",worldState.timeCounter);
-		compound.putFloat("rainStrength",worldState.rainStrength);
+		//compound.putFloat("rainStrength",worldState.rainStrength);
 		for (CampfireState state : campfires) {
 			int x = state.pos.getX();
 			int y = state.pos.getY();

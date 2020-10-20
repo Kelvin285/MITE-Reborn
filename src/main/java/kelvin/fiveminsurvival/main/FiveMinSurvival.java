@@ -83,7 +83,6 @@ public class FiveMinSurvival
     	VanillaOverrides.FEATURES.register(modBus);
     	ContainerRegistry.CONTAINERS.register(modBus);
     	
-    	
         // Register the setup method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         
@@ -259,8 +258,6 @@ public class FiveMinSurvival
     private void setup(final FMLCommonSetupEvent event)
     {
         // some preinit code
-        LOGGER.info("HELLO FROM PREINIT");
-        LOGGER.info("DIRT BLOCK >> {}", Blocks.DIRT.getRegistryName());
 		FoodNutrients.init();
 		CraftingIngredients.init();
 		CropTypes.registerCropTypes();

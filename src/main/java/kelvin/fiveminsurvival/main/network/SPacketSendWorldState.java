@@ -30,7 +30,7 @@ public class SPacketSendWorldState {
 	public void handle(Supplier<NetworkEvent.Context> ctx) {
 		ctx.get().enqueueWork(() -> {
 			  Minecraft.getInstance().world.setDayTime(time);
-			  Minecraft.getInstance().world.setRainStrength(rainStrength);
+			  //Minecraft.getInstance().world.setRainStrength(rainStrength);
         });
         ctx.get().setPacketHandled(true);
 	}

@@ -1,5 +1,6 @@
 package kelvin.fiveminsurvival.game;
 
+import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraftforge.event.world.WorldEvent.Load;
 import net.minecraftforge.event.world.WorldEvent.Unload;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -23,5 +24,6 @@ public class WorldEvents {
 //			ServerWorld world = (ServerWorld)e.getWorld();
 //			world.getServer().sendMessage(new StringTextComponent("/datapack disable vanilla"));
 //		}
+		ChunkGenerator gen;
 	}
 }

@@ -305,16 +305,20 @@ public class OverlayEvents {
 		if (event.getType() == ElementType.DEBUG) {
 			
 			int FPS = 0;
-			try {
-				Field f = ObfuscationReflectionHelper.findField(Minecraft.class, "debugFPS");
-				Resources.makeFieldAccessible(f);
-				FPS = f.getInt(null);
-			}catch (Exception e) {
-				e.printStackTrace();
-			}
+//			try {
+//				
+//				Field f = ObfuscationReflectionHelper.findField(Minecraft.class, "debugFPS");
+//				Resources.makeFieldAccessible(f);
+//				FPS = f.getInt(null);
+//			}catch (Exception e) {
+//				e.printStackTrace();
+//			}
 			Vector3d pos = Minecraft.getInstance().player.getPositionVec();
 			//drawStringWithShadow
-			Minecraft.getInstance().fontRenderer.drawStringWithShadow(event.getMatrixStack(), "FPS: " + FPS, 10, 10, Color.WHITE.getRGB());
+			String debug = Minecraft.getInstance().debug;
+			int f = debug.indexOf("fps");
+			debug = debug.substring(0, f);
+			Minecraft.getInstance().fontRenderer.drawStringWithShadow(event.getMatrixStack(), "FPS: " + debug, 10, 10, Color.WHITE.getRGB());
 			Minecraft.getInstance().fontRenderer.drawStringWithShadow(event.getMatrixStack(), "X: " + roundHundreth(pos.getX()) + ", Y: " + roundHundreth(pos.getY()) + ", Z: " + roundHundreth(pos.getZ()), 10, 20, Color.WHITE.getRGB());
 
 			if (FiveMinSurvival.DEBUG) {

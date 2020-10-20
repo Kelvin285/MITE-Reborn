@@ -27,8 +27,8 @@ public class SpearRenderer extends EntityRenderer<SpearEntity> {
    public void render(SpearEntity entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
 	  matrixStackIn.push();
 	  
-	  matrixStackIn.rotate(new Quaternion(-entityIn.rotationPitch, MathHelper.lerp(partialTicks, entityIn.prevRotationYaw, entityIn.rotationYaw), 0, true));
-            
+	  matrixStackIn.rotate(new Quaternion(-entityIn.rotationPitch, -entityIn.rotationYaw, 0, true));
+	  
       IVertexBuilder ivertexbuilder = net.minecraft.client.renderer.ItemRenderer.getBuffer(bufferIn, this.spearModel.getRenderType(this.getEntityTexture(entityIn)), false, false);
       this.spearModel.render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
       matrixStackIn.pop();
