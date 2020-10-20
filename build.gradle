@@ -70,7 +70,6 @@ minecraft {
 
         data {
             workingDirectory project.file('run')
-			arg "-mixin.config="+archivesBaseName+".mixins.json"
 
             // Recommended logging data for a userdev environment
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'

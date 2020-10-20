@@ -2,17 +2,16 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "minecraft:red_mushroom"
+      "item": "minecraft:brown_mushroom"
     },
 	{
-	  "item": "minecraft:brown_mushroom"
+	  "item": "minecraft:red_mushroom"
 	},
 	{
 	  "item": "fiveminsurvival:bowl_water"
 	}
   ],
   "result": {
-    "item": "minecraft:mushroom_stew",
-	"count": 1
+    "item": "minecraft:mushroom_stew"
   }
 }

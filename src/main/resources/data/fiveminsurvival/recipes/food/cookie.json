@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "fiveminsurvival:cookie_dough"
+  },
+  "result": "minecraft:cookie",
+  "experience": 0.35,
+  "cookingtime": 200,
+  "count": 4
+}

@@ -144,18 +144,16 @@ public class MITEInventoryScreen extends DisplayEffectsScreen<PlayerContainer> i
     	  }
           if (this.getSlotUnderMouse() instanceof CraftingResultSlot) {
         	  if (this.crafting) {
-            	  StringTextComponent comp = new StringTextComponent(((int)(this.maxCraftTimer) - (int)(this.craftTimer)) / 20 + " seconds left\n"
-            	  		+ "Wait until the item is finished crafting!");
-            	  
-	        	  renderTooltip(stack, comp, (int)this.oldMouseX, (int)this.oldMouseY);
+            	  StringTextComponent comp = new StringTextComponent(
+            			  ((int)(this.maxCraftTimer) - (int)(this.craftTimer)) / 20 + " seconds left"
+	        			  );
+	            	  		        	  
+		        	  renderTooltip(stack, comp, (int)this.oldMouseX, (int)this.oldMouseY - 15);
 	    	  } else {	        	  
 	        	  StringTextComponent comp = new StringTextComponent(
-	        			  "LOCKED!\n"
-	        			  +"Higher tier table required!"
+	        			  "Higher tier table required!"
 	        			  );
-	            	  
-		        	  renderTooltip(stack, comp, (int)this.oldMouseX, (int)this.oldMouseY);
-	
+		        	  renderTooltip(stack, comp, (int)this.oldMouseX, (int)this.oldMouseY + 15 - 30);
 	    	  }
           }
       }

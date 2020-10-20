@@ -112,18 +112,16 @@ public class MITECraftingScreen extends ContainerScreen<WorkbenchContainer> impl
     	  
     	  if (!this.canCraft) {
 	    	  if (this.crafting) {
-            	  StringTextComponent comp = new StringTextComponent(((int)(this.maxCraftTimer) - (int)(this.craftTimer)) / 20 + " seconds left\n"
-            	  		+ "Wait until the item is finished crafting!");
-            	  
-	        	  renderTooltip(stack, comp, (int)this.OldMouseX, (int)this.OldMouseY);
+            	  StringTextComponent comp = new StringTextComponent(
+            			  ((int)(this.maxCraftTimer) - (int)(this.craftTimer)) / 20 + " seconds left"
+	        			  );
+	            	  		        	  
+		        	  renderTooltip(stack, comp, (int)this.OldMouseX, (int)this.OldMouseY - 15);
 	    	  } else {	        	  
 	        	  StringTextComponent comp = new StringTextComponent(
-	        			  "LOCKED!\n"
-	        			  +"Higher tier table required!"
+	        			  "Higher tier table required!"
 	        			  );
-	            	  
-		        	  renderTooltip(stack, comp, (int)this.OldMouseX, (int)this.OldMouseY);
-	
+		        	  renderTooltip(stack, comp, (int)this.OldMouseX, (int)this.OldMouseY + 15 - 30);
 	    	  }
     	  }
       }

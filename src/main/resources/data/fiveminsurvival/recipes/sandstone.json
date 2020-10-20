@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "minecraft:sand",
+	"count": 4
+  },
+  "result": "minecraft:sandstone",
+  "experience": 0.35,
+  "cookingtime": 200,
+  "count": 1
+}

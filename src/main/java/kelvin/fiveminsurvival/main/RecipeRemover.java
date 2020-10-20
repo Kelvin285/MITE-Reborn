@@ -38,7 +38,8 @@ public class RecipeRemover {
     		Items.SADDLE, Items.BRICK, Items.SNOW_BLOCK, Items.FISHING_ROD, Items.BRICKS, Items.SMOOTH_STONE, Items.ARROW, Items.COBBLESTONE_WALL,
     		Items.STONE_BRICKS, Items.TERRACOTTA, Items.NETHER_BRICKS, Items.MUSHROOM_STEW, Items.MELON_SEEDS, Items.COMPASS, Items.CLOCK, Items.GOLDEN_APPLE,
     		Items.SADDLE, Items.CAKE, Items.MELON_SEEDS, Items.PUMPKIN_SEEDS, Items.COBBLESTONE_WALL, Items.OAK_SIGN, Items.SPRUCE_SIGN, Items.BIRCH_SIGN,
-    		Items.ACACIA_SIGN, Items.JUNGLE_SIGN, Items.DARK_OAK_SIGN);
+    		Items.ACACIA_SIGN, Items.JUNGLE_SIGN, Items.DARK_OAK_SIGN, Items.BREAD, Items.PUMPKIN_PIE, Items.PUMPKIN_SEEDS, Items.MELON_SEEDS, Items.COOKIE,
+    		Items.SANDSTONE, Items.STONE, Items.NETHER_BRICK, Items.NETHER_BRICKS, Items.BRICK, Items.BRICKS);
 
     private static final Logger LOGGER = LogManager.getLogger();
 
