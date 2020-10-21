@@ -23,7 +23,11 @@ public class ServerPlayerMixins {
    		}
 	 */
 	
-	@Inject(method = "onItemPickup", at = @At("HEAD"), cancellable = true)
+	
+	//DEBUG: onItemPickup
+	//BUILD: 
+	
+	@Inject(method = "onItemPickup", at = @At("HEAD"))
 	public void onItemPickup(Entity entityIn, int quantity, CallbackInfo info) {
 		if (entityIn instanceof ItemEntity) {
 			ItemStack stack = ((ItemEntity) entityIn).getItem();

@@ -28,6 +28,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.CampfireBlock;
 import net.minecraft.block.CropsBlock;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.enchantment.Enchantment;
@@ -274,7 +275,6 @@ public class FiveMinSurvival
     }
 
     private void doClientStuff(final FMLClientSetupEvent event) {
-    	
 
     	
     	MinecraftForge.EVENT_BUS.register(ModelRegistry.class);
@@ -292,7 +292,9 @@ public class FiveMinSurvival
 		RenderTypeLookup.setRenderLayer(BlockRegistry.FLAX.get(), RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(BlockRegistry.CAMPFIRE_LOW.get(), RenderType.getCutout());
 		
-		
+    	Minecraft.getInstance().gameSettings.fovScaleEffect = 0;
+    	
+    	Minecraft.getInstance().gameSettings.autoJump = false;
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call

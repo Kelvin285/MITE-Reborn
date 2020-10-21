@@ -22,7 +22,6 @@ import kelvin.fiveminsurvival.items.CustomBowlItem;
 import kelvin.fiveminsurvival.items.CustomEggItem;
 import kelvin.fiveminsurvival.items.HatchetItem;
 import kelvin.fiveminsurvival.items.ShortswordItem;
-import kelvin.fiveminsurvival.main.resources.Resources;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -46,6 +45,7 @@ import net.minecraft.entity.monster.AbstractSkeletonEntity;
 import net.minecraft.entity.monster.BlazeEntity;
 import net.minecraft.entity.monster.CaveSpiderEntity;
 import net.minecraft.entity.monster.CreeperEntity;
+import net.minecraft.entity.monster.DrownedEntity;
 import net.minecraft.entity.monster.GhastEntity;
 import net.minecraft.entity.monster.MagmaCubeEntity;
 import net.minecraft.entity.monster.PhantomEntity;
@@ -53,6 +53,7 @@ import net.minecraft.entity.monster.SkeletonEntity;
 import net.minecraft.entity.monster.SlimeEntity;
 import net.minecraft.entity.monster.WitchEntity;
 import net.minecraft.entity.monster.ZombieEntity;
+import net.minecraft.entity.monster.ZombieVillagerEntity;
 import net.minecraft.entity.monster.ZombifiedPiglinEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.ChickenEntity;
@@ -520,7 +521,9 @@ public class GameEvents {
 			}
 		}
 		
-		if (event.getEntity() instanceof ZombieEntity && !(event.getEntity() instanceof AnimalWatcherEntity)) {
+		if (event.getEntity() instanceof ZombieEntity && !(event.getEntity() instanceof AnimalWatcherEntity) &&
+				!(event.getEntity() instanceof ZombieVillagerEntity) && 
+				!(event.getEntity() instanceof DrownedEntity)) {
 			BlockPos pos = event.getEntity().getPosition();
 			event.getEntity().remove();
 			
@@ -528,6 +531,8 @@ public class GameEvents {
 			zombie.setPosition(pos.getX(), pos.getY(), pos.getZ());
 			event.getWorld().addEntity(zombie);
 			event.setResult(Result.DENY);
+			
+			zombie.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.2f);
 		}
 		
 		if (event.getEntity() instanceof SquidEntity && !(event.getEntity() instanceof EntityAttackSquid)) {
@@ -571,7 +576,6 @@ public class GameEvents {
 			}
 			event.setResult(Result.DENY);
 		}
-		
 		
 		
 	}
