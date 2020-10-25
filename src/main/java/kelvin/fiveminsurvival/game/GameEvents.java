@@ -71,6 +71,7 @@ import net.minecraft.entity.passive.SquidEntity;
 import net.minecraft.entity.passive.StriderEntity;
 import net.minecraft.entity.passive.TurtleEntity;
 import net.minecraft.entity.passive.WolfEntity;
+import net.minecraft.entity.passive.fish.AbstractFishEntity;
 import net.minecraft.entity.passive.horse.HorseEntity;
 import net.minecraft.entity.passive.horse.SkeletonHorseEntity;
 import net.minecraft.entity.passive.horse.ZombieHorseEntity;
@@ -525,7 +526,7 @@ public class GameEvents {
 		}
 		
 		if (event instanceof LivingSpawnEvent.CheckSpawn) {
-			if (event.getEntity() instanceof AnimalEntity) {
+			if (event.getEntity() instanceof AnimalEntity || event.getEntity() instanceof AbstractFishEntity) {
 				if (!(((LivingSpawnEvent.CheckSpawn)event).getSpawnReason() == SpawnReason.CHUNK_GENERATION)) {
 					event.getEntity().remove();
 					event.setResult(Result.DENY);
