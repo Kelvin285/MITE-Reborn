@@ -31,7 +31,7 @@ public class RunFromPlayerGoal extends PanicGoal {
        if (!world.isRemote()) {
      	  for (PlayerEntity e : world.getEntitiesWithinAABB(PlayerEntity.class, new AxisAlignedBB(entity.getPositionVec().subtract(3, 3, 3), entity.getPositionVec().add(3, 3, 3))))
      	  {
-     		 if (!e.isCrouching()) {
+     		 if (e.isSprinting()) {
      		  entity.setRevengeTarget(e);
      		  return true;
      		 }

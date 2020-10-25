@@ -330,6 +330,7 @@ public class OverlayEvents {
 				Minecraft.getInstance().fontRenderer.drawStringWithShadow(event.getMatrixStack(), "Sugar: " + roundHundreth(Resources.clientNutrients.sugars) + "%", 10, 70, Color.WHITE.getRGB());
 				Minecraft.getInstance().fontRenderer.drawStringWithShadow(event.getMatrixStack(), "Insulin Resistance: " + roundHundreth(Resources.clientNutrients.insulin_resistance) + "%", 10, 80, Color.WHITE.getRGB());
 				Minecraft.getInstance().fontRenderer.drawStringWithShadow(event.getMatrixStack(), "Happiness: " + roundHundreth(Resources.clientNutrients.happiness) + "%", 10, 90, Color.WHITE.getRGB());
+
 			} else {
 				ArrayList<String> lowValues = new ArrayList<>();
 				ArrayList<Color> valColors = new ArrayList<>();

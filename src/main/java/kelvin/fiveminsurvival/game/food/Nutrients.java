@@ -24,6 +24,7 @@ public class Nutrients implements Serializable {
 	public double happiness = 100.0;
 	public double sickness = 0.0;
 	public double carbs = 100.0;
+	public double lastSickness = 0;
 	
 	public double negativeXP;
 	public int negativeLevel;
@@ -49,18 +50,22 @@ public class Nutrients implements Serializable {
 	
 	public void loadFromString(String str) {
 		String[] data = str.split(",");
-		protein = getDouble(data[0]);
-		phytonutrients = getDouble(data[1]);
-		sugars = getDouble(data[2]);
-		insulin_resistance = getDouble(data[3]);
-		fatigue = getDouble(data[4]);
-		fatigueHolder = getDouble(data[5]);
-		fatty_acids = getDouble(data[6]);
-		happiness = getDouble(data[7]);
-		sickness = getDouble(data[8]);
-		carbs = getDouble(data[9]);
-		negativeXP = getDouble(data[10]);
-		negativeLevel = getInt(data[11]);
+		try {
+			protein = getDouble(data[0]);
+			phytonutrients = getDouble(data[1]);
+			sugars = getDouble(data[2]);
+			insulin_resistance = getDouble(data[3]);
+			fatigue = getDouble(data[4]);
+			fatigueHolder = getDouble(data[5]);
+			fatty_acids = getDouble(data[6]);
+			happiness = getDouble(data[7]);
+			sickness = getDouble(data[8]);
+			carbs = getDouble(data[9]);
+			negativeXP = getDouble(data[10]);
+			negativeLevel = getInt(data[11]);
+		}catch (Exception e) {
+			
+		}
 	}
 	public double getDouble(String str) {
 		if (str.isEmpty())return 0;
@@ -275,19 +280,20 @@ public class Nutrients implements Serializable {
 			nightMul -= 0.5;
 		}
 		
-		if (sickness > 15) {
-			player.addPotionEffect(new EffectInstance(Effects.WEAKNESS, 20 * 5, (int)sickness / 30));
+		if (sickness > 15 && lastSickness < sickness && foodStats.justAteFood) {
+			player.addPotionEffect(new EffectInstance(Effects.WEAKNESS, 20 * (5 + 5 * (int)sickness / 15), (int)sickness / 30));
+			player.addPotionEffect(new EffectInstance(Effects.MINING_FATIGUE, 20 * (5 + 5 * (int)sickness / 15), (int)sickness / 30));
 			if (sickness > 30) {
-				player.addPotionEffect(new EffectInstance(Effects.NAUSEA, 20 * 5, 1));
+				player.addPotionEffect(new EffectInstance(Effects.NAUSEA, 20 * (10 + 5 * ((int)(sickness - 30) / 15)), 1));
 			}
 			if (sickness > 60 && sickness <= 80) {
-				player.addPotionEffect(new EffectInstance(Effects.POISON, 20 * 5, 0));
+				player.addPotionEffect(new EffectInstance(Effects.POISON, 20 * (10 + 5 * ((int)(sickness - 60) / 15)), 0));
 			}
 			if (sickness > 80) {
-				player.addPotionEffect(new EffectInstance(Effects.WITHER, 20 * 5, 1));
+				player.addPotionEffect(new EffectInstance(Effects.WITHER, 20 * (5 + (int)sickness / 30), 1));
 			}
 		}
-		
+		lastSickness = sickness;
 		
 		double sugarMod = 1.0;
 		
@@ -339,7 +345,7 @@ public class Nutrients implements Serializable {
 		carbs = clamp(carbs, 0, 100 + player.experienceLevel * 5);
 		sickness = clamp(sickness, 0, 100);
 
-
+		foodStats.justAteFood = false;
 	}
 	
 	private double clamp(double var, double min, double max) {

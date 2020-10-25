@@ -6,7 +6,11 @@ import java.lang.reflect.Modifier;
 import kelvin.fiveminsurvival.entity.RaycastCollision;
 import kelvin.fiveminsurvival.game.food.Nutrients;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceContext;
+import net.minecraft.util.math.RayTraceContext.BlockMode;
+import net.minecraft.util.math.RayTraceContext.FluidMode;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
@@ -40,18 +44,19 @@ public class Resources {
 	}
 	
 	public static RaycastCollision getBlockCollisionForPhysicalReach(Vector3d start, Vector3d end, World world) {
-		Vector3d slope = new Vector3d(end.x - start.x, end.y - start.y, end.z - start.z);
+		//   public RayTraceContext(Vector3d startVecIn, Vector3d endVecIn, RayTraceContext.BlockMode blockModeIn, RayTraceContext.FluidMode fluidModeIn, @javax.annotation.Nullable Entity entityIn) {
+
+		
 		RaycastCollision rc = new RaycastCollision();
-		for (int i = 0; i < start.distanceTo(end); i++) {
-			BlockPos pos = new BlockPos(start.x + slope.x * i, start.y + slope.y * i, start.z * slope.z * i);
-			if (world.isAreaLoaded(pos, 1))
-			if (world.getBlockState(pos).getMaterial().isSolid()) {
-				rc.block_hit_x = pos.getX();
-				rc.block_hit_y = pos.getY();
-				rc.block_hit_z = pos.getZ();
-				rc.blockHit = world.getBlockState(pos).getBlock();
-			}
+		BlockRayTraceResult result = world.rayTraceBlocks(new RayTraceContext(start, end, BlockMode.COLLIDER, FluidMode.NONE, null));
+		
+		if (result != null) {
+			rc.block_hit_x = result.getPos().getX();
+			rc.block_hit_y = result.getPos().getY();
+			rc.block_hit_z = result.getPos().getZ();
+			rc.blockHit = world.getBlockState(result.getPos()).getBlock();
 		}
+		
 		return rc;
 	}
 }

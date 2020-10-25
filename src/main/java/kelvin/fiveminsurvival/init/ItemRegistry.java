@@ -1,5 +1,7 @@
 package kelvin.fiveminsurvival.init;
 
+import kelvin.fiveminsurvival.items.ClubItem;
+import kelvin.fiveminsurvival.items.CudgelItem;
 import kelvin.fiveminsurvival.items.HatchetItem;
 import kelvin.fiveminsurvival.items.ItemBurnable;
 import kelvin.fiveminsurvival.items.ItemManure;
@@ -7,9 +9,6 @@ import kelvin.fiveminsurvival.items.ShortswordItem;
 import kelvin.fiveminsurvival.items.SpearItem;
 import kelvin.fiveminsurvival.items.SurvivalItemTier;
 import kelvin.fiveminsurvival.main.FiveMinSurvival;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.RenderTypeLookup;
-import net.minecraft.enchantment.EnchantmentType;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Food;
@@ -37,8 +36,8 @@ public class ItemRegistry {
 	public static final RegistryObject<Item> FLINT_AXE = ITEMS.register("flint_axe", () -> new AxeItem(SurvivalItemTier.FLINT_AXE, 2.0F, -3.0F, new Properties().group(ItemGroup.COMBAT).maxStackSize(1)));
 	public static final RegistryObject<Item> FLINT_SHOVEL = ITEMS.register("flint_shovel", () -> new ShovelItem(SurvivalItemTier.FLINT_SHOVEL, 1.5F, -3.0F, new Properties().group(ItemGroup.COMBAT).maxStackSize(1)));
 	public static final RegistryObject<Item> FLINT_KNIFE = ITEMS.register("flint_knife", () -> new ShortswordItem(SurvivalItemTier.FLINT_SHORTSWORD, 2, -0.5F, new Properties().group(ItemGroup.COMBAT).maxStackSize(1)));
-	public static final RegistryObject<Item> WOODEN_CUDGEL = ITEMS.register("wooden_cudgel", () -> new ShortswordItem(SurvivalItemTier.WOOD_SHORTSWORD, 3, -0.5F, new Properties().group(ItemGroup.COMBAT).maxStackSize(1)));
-	public static final RegistryObject<Item> WOODEN_CLUB = ITEMS.register("wooden_club", () -> new SwordItem(SurvivalItemTier.WOOD_SWORD, 4, -2.5F, new Properties().group(ItemGroup.COMBAT).maxStackSize(1)));
+	public static final RegistryObject<Item> WOODEN_CUDGEL = ITEMS.register("wooden_cudgel", () -> new CudgelItem(SurvivalItemTier.WOOD_SHORTSWORD, 3, -0.5F, new Properties().group(ItemGroup.COMBAT).maxStackSize(1)));
+	public static final RegistryObject<Item> WOODEN_CLUB = ITEMS.register("wooden_club", () -> new ClubItem(SurvivalItemTier.WOOD_SWORD, 4, -2.5F, new Properties().group(ItemGroup.COMBAT).maxStackSize(1)));
 	public static final RegistryObject<Item> SINEW = ITEMS.register("sinew", () -> new Item(new Properties().group(ItemGroup.MATERIALS).maxStackSize(16)));
 	public static final RegistryObject<Item> SPEAR = ITEMS.register("spear", () -> new SpearItem(new Properties().group(ItemGroup.COMBAT).maxStackSize(1).maxDamage(10), 2.0D));
 	public static final RegistryObject<Item> WOODEN_SHIELD = ITEMS.register("wooden_shield", () -> new ShieldItem(new Properties().group(ItemGroup.COMBAT).maxStackSize(1).maxDamage(15)));

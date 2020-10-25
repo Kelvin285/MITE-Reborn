@@ -12,7 +12,9 @@ import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
@@ -41,24 +43,28 @@ public class EntityAIWatchAnimal extends Goal {
 
             if (target == null)
             {
+            	
             	//System.out.println("no target");
                 return false;
             }
             else if (this.digger.getBlockPosX() == target.getPosition().getX() && this.digger.getBlockPosY() == target.getPosition().getY() && this.digger.getBlockPosZ() == target.getPosition().getZ())
             {
+            	
             	//System.out.println("position is the same as target's position");
                 return false;
             }
             else if (this.digger.is_destroying_block && this.digger.canDestroyBlock(this.digger.destroy_block_x, this.digger.destroy_block_y, this.digger.destroy_block_z, true))
             {
+            	
             	//System.out.println("can destroy block");
                 return true;
             }
-            else if (!this.digger.is_destroying_block && this.digger.RAND.nextInt(20) != 0)
-            {
-            	//System.out.println("random can't destroy block");
-                return false;
-            }
+//            else if (!this.digger.is_destroying_block && this.digger.RAND.nextInt(20) != 0)
+//            {
+//            	
+////            	System.out.println("random can't destroy block");
+//                return false;
+//            }
             else
             {
             	//System.out.println("probably can destroy block");
@@ -67,23 +73,25 @@ public class EntityAIWatchAnimal extends Goal {
 
                 if (distance_to_target > 16.0F)
                 {
+                	
                 	//System.out.println("too far from target");
                     return false;
                 }
                 else
                 {
+                	
                 	//System.out.println("close to target");
                     int attacker_foot_y = this.digger.getFootBlockPosY();
 
                     if (distance_to_target * distance_to_target > 2.0F)
                     {
+                    	
                         int vec3_pool = target.getPosition().getX();
-                        int can_attacker_see_target = target.getPosition().getY();
+                        int can_attacker_see_target = target.getPosition().getY() + 2;
                         int path = target.getPosition().getZ();
 
                         while (true)
                         {
-                            --can_attacker_see_target;
 
                             if (can_attacker_see_target < attacker_foot_y)
                             {
@@ -92,14 +100,18 @@ public class EntityAIWatchAnimal extends Goal {
                             //System.out.println("setting digging block");
                             if (this.digger.setBlockToDig(vec3_pool, can_attacker_see_target, path, true))
                             {
+                            	this.digger.is_destroying_block = true;
                             	//System.out.println("digging block set");
                                 return true;
                             }
+                            --can_attacker_see_target;
+
                         }
                     }
 
                     if (distance_to_target > 8.0F)
                     {
+                    	
                     	//System.out.println("TOO FAR (>8)");
                         return false;
                     }
@@ -108,22 +120,25 @@ public class EntityAIWatchAnimal extends Goal {
 //                        Vec3Pool var10 = world.getWorldVec3Pool();
                         boolean var11 = isAirOrPassableBlock(this.digger.getBlockPosX(), MathHelper.floor(this.digger.getEyePosForBlockDestroying().getY() + 1.0D), this.digger.getBlockPosZ(), false, digger.getEntityWorld()) && checkForLineOfPhysicalReach(new Vector3d(this.digger.getPosX(), this.digger.getEyePosForBlockDestroying().getY() + 1.0D, this.digger.getPosZ()), target.getPositionVec().add(0, target.getHeight() * 0.75, 0), digger.getEntityWorld());
 
-                        if (distance_to_target > (var11 ? 8.0F : (this.digger.isFrenzied() ? 6.0F : 4.0F)))
+                        if (distance_to_target > (var11 ? 8.0F : (this.digger.isFrenzied() ? 16.0F : 8.0F)))
                         {
+                        	
                         	//System.out.println("a bit too far, sorry");
                             return false;
                         }
                         else
                         {
-                            Path var12 = this.digger.getNavigator().getPathToEntity(target, 16);
+                            Path var12 = this.digger.getNavigator().getPathToEntity(target, 32);
 
                             if (!this.digger.getNavigator().noPath())
                             {
+                            	
                             	//System.out.println("there is a path to the target");
                                 return false;
                             }
                             else if (this.digger.hasLineOfStrikeAndTargetIsWithinStrikingDistance(target))
                             {
+                            	
                             	//System.out.println("target is within striking distance");
                                 return false;
                             }
@@ -178,7 +193,12 @@ public class EntityAIWatchAnimal extends Goal {
                                 }
                                 
                                 rc = Resources.getBlockCollisionForPhysicalReach(this.digger.getAttackerLegPosForBlockDestroying(), target_center_pos, this.digger.getEntityWorld());
-                                boolean b = rc != null && rc.isBlock() && (this.isNotRestrictedBlock(rc.getBlockHit()) || this.digger.isHoldingAnEffectiveTool(rc.getBlockHit()) || this.digger.getAttackTarget() instanceof PlayerEntity) && (isAirOrPassableBlock(rc.block_hit_x, rc.block_hit_y + 1, rc.block_hit_z, false, this.digger.getEntityWorld()) || this.digger.blockWillFall(rc.block_hit_x, rc.block_hit_y + 1, rc.block_hit_z)) && this.digger.setBlockToDig(rc.block_hit_x, rc.block_hit_y, rc.block_hit_z, false);
+                                
+                                if (rc == null || rc.getBlockHit() == null) {
+                                	return false;
+                                }
+
+                                boolean b = rc != null && rc.isBlock() && (this.isNotRestrictedBlock(rc.getBlockHit()) || this.digger.isHoldingAnEffectiveTool(rc.getBlockHit()) || this.digger.getAttackTarget() instanceof PlayerEntity) && (!isAirOrPassableBlock(rc.block_hit_x, rc.block_hit_y + 1, rc.block_hit_z, false, this.digger.getEntityWorld()) || this.digger.blockWillFall(rc.block_hit_x, rc.block_hit_y + 1, rc.block_hit_z)) && this.digger.setBlockToDig(rc.block_hit_x, rc.block_hit_y, rc.block_hit_z, false);
                                 //System.out.println("stuff = " + b);
                                 return b;
                             }
@@ -320,7 +340,6 @@ public class EntityAIWatchAnimal extends Goal {
         else
         {
 //            EntityAIAttackOnCollide ai = (EntityAIAttackOnCollide)this.digger.getEntityAITask(EntityAIAttackOnCollide.class);
-//
 //            if (ai != null)
 //            {
 //                if (ai.attackTick > 0)
@@ -334,14 +353,15 @@ public class EntityAIWatchAnimal extends Goal {
 //                    return false;
 //                }
 //            }
-        	
         	if (digger.getAttackTarget() != null)
         	if (digger.getPositionVec().distanceTo(digger.getAttackTarget().getPositionVec()) <= 1.5f) {
+        		
         		return false;
         	}
 
             if (this.digger.destroy_pause_ticks > 0)
             {
+            	
                 return this.digger.destroy_pause_ticks != 1 || !this.couldGetCloserByPathing();
             }
             else if (!this.digger.is_destroying_block)

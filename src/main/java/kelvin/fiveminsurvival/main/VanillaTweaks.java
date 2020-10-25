@@ -136,6 +136,10 @@ public class VanillaTweaks {
                 if (item.isFood()) {
                     maxStack.set(item, 16);
                 }
+                
+                if (item == Items.IRON_NUGGET || item == Items.GOLD_NUGGET) {
+                	maxStack.set(item, 16);
+                }
 
                 if (item instanceof BlockItem) {
                     maxStack.set(item, 4);

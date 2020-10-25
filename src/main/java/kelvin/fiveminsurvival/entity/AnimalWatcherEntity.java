@@ -323,9 +323,24 @@ public class AnimalWatcherEntity extends ZombieEntity {
 	    }
 	    protected boolean canDestroyBlock(int x, int y, int z, boolean check_clipping)
 	    {
-	    	if (isBlockClaimedByAnother(x, y, z)) return false;
+	    	if (isBlockClaimedByAnother(x, y, z)) {
+
+	    		return false;
+	    		}
 	    	if (this.getAttackTarget() != null) {
-	    		if (canEntityBeSeen(this.getAttackTarget())) {
+	    		boolean canBeSeen = false;
+	    		if (canBeSeen == false) {
+	    			
+	    			Vector3d vector3d = new Vector3d(this.getPosX(), this.getPosYEye(), this.getPosZ());
+		    	      Vector3d vector3d1 = new Vector3d(getAttackTarget().getPosX(), getAttackTarget().getPosYEye(), getAttackTarget().getPosZ());
+		    	      canBeSeen = this.world.rayTraceBlocks(new RayTraceContext(vector3d, vector3d1, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this)).getType() == RayTraceResult.Type.MISS;
+	    		}
+    			Vector3d vector3d = new Vector3d(this.getPosX(), this.getPosYEye(), this.getPosZ());
+	    	    Vector3d vector3d1 = new Vector3d(getAttackTarget().getPosX(), getAttackTarget().getPosY(), getAttackTarget().getPosZ());
+	    	    canBeSeen = this.world.rayTraceBlocks(new RayTraceContext(vector3d, vector3d1, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this)).getType() == RayTraceResult.Type.MISS;
+	    		
+	    	    if (canBeSeen) {
+	    	    	
 		    		this.is_destroying_block = false;
 		    		return false;
 		    	}
@@ -333,6 +348,7 @@ public class AnimalWatcherEntity extends ZombieEntity {
 	    	
 	        if (this.isHoldingItemThatPreventsDigging())
 	        {
+	        	
 	            return false;
 	        }
 	        else
@@ -341,17 +357,19 @@ public class AnimalWatcherEntity extends ZombieEntity {
 
 	            if (y < foot_y && !this.hasDownwardsDiggingTool())
 	            {
+	            	
 	                return false;
 	            }
 	            else if (y > foot_y + 1)
 	            {
+	            	
 	                return false;
 	            }
 	            else
 	            {
 	                World world = this.worldObj;
 
-	                if (AnimalWatcherEntity.getDistanceSqFromDeltas(this.getPosX() - (double)((float)x + 0.5F), this.getCenterPosYForBlockDestroying() - (double)((float)y + 0.5F), this.getPosZ() - (double)((float)z + 0.5F)) > 3.25D)
+	                if (AnimalWatcherEntity.getDistanceSqFromDeltas(this.getPosX() - (double)((float)x + 0.5F), this.getCenterPosYForBlockDestroying() - (double)((float)y + 0.5F), this.getPosZ() - (double)((float)z + 0.5F)) > 4.5D)
 	                {
 	                    return false;
 	                }
@@ -359,16 +377,18 @@ public class AnimalWatcherEntity extends ZombieEntity {
 	                {
 	                    if (check_clipping)
 	                    {
-	                        BlockRayTraceResult block = world.rayTraceBlocks(new RayTraceContext(this.getEyePosForBlockDestroying(), this.getLookVec(), RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this));
-	                        if (block != null && (block.getType() == RayTraceResult.Type.ENTITY || block.getType() == RayTraceResult.Type.BLOCK && (block.getPos().getX() != x || block.getPos().getY() != y || block.getPos().getZ() != z)))
-	                        {
-	                            block = world.rayTraceBlocks(new RayTraceContext(this.getAttackerLegPosForBlockDestroying(), this.getLookVec(), RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this));
-
-		                        if (block != null && (block.getType() == RayTraceResult.Type.ENTITY || block.getType() == RayTraceResult.Type.BLOCK && (block.getPos().getX() != x || block.getPos().getY() != y || block.getPos().getZ() != z)))
-	                            {
-	                                return false;
-	                            }
-	                        }
+	                    	
+//	                        BlockRayTraceResult block = world.rayTraceBlocks(new RayTraceContext(this.getEyePosForBlockDestroying(), this.getLookVec(), RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this));
+//	                        if (block != null && (block.getType() == RayTraceResult.Type.ENTITY || block.getType() == RayTraceResult.Type.BLOCK && (block.getPos().getX() != x || block.getPos().getY() != y || block.getPos().getZ() != z)))
+//	                        {
+//	                            block = world.rayTraceBlocks(new RayTraceContext(this.getAttackerLegPosForBlockDestroying(), this.getLookVec(), RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this));
+//	                            
+//		                        if (block != null && (block.getType() == RayTraceResult.Type.ENTITY || block.getType() == RayTraceResult.Type.BLOCK && (block.getPos().getX() != x || block.getPos().getY() != y || block.getPos().getZ() != z)))
+//	                            {
+//		                        	
+//	                                return false;
+//	                            }
+//	                        }
 	                    }
 
 	                    Block block1 = world.getBlockState(new BlockPos(x, y, z)).getBlock();
@@ -376,6 +396,9 @@ public class AnimalWatcherEntity extends ZombieEntity {
 	                    if (block1 == null)
 	                    {
 	                        return false;
+	                    }
+	                    else if (block1.getDefaultState() == Blocks.AIR.getDefaultState()) {
+	                    	return false;
 	                    }
 	                    else if (block1.getDefaultState().getMaterial().isLiquid())
 	                    {
@@ -400,9 +423,10 @@ public class AnimalWatcherEntity extends ZombieEntity {
 //	                        return block1.blockMaterial.requiresTool(block1, metadata) && (!this.isFrenzied() || block1.getMinHarvestLevel(metadata) >= 2) && !has_effective_tool && block1 != Block.sand && block1 != Block.dirt && block1 != Block.grass && block1 != Block.gravel && block1 != Block.blockSnow && block1 != Block.tilledField && block1 != Block.blockClay && block1 != Block.leaves && block1 != Block.cloth && (block1 != Block.cactus || !this.isEntityInvulnerable() && !this.isEntityUndead()) && block1 != Block.sponge && !(block1 instanceof BlockPumpkin) && !(block1 instanceof BlockMelon) && block1 != Block.mycelium && block1 != Block.hay && block1 != Block.thinGlass ? false : !this.isBlockClaimedByAnother(x, y, z);
 	                    	if (block1.getDefaultState().getMaterial() != Material.ROCK)
 	                    		if (block1.getDefaultState().getMaterial() != Material.IRON)
-	                    			if (!(block1.getDefaultState().getBlock() instanceof RotatedPillarBlock))
+	                    			if (!(block1.getDefaultState().getBlock() instanceof RotatedPillarBlock)) {
+	                    				
 	                    				return true;
-	                    			else {
+	                    			} else {
 	                    				if (this.getHeldItemMainhand() != null) {
 	        	                    		Item held_item1 = this.getHeldItemMainhand().getItem();
 	        	                    		if (held_item1 instanceof PickaxeItem) {
@@ -433,7 +457,6 @@ public class AnimalWatcherEntity extends ZombieEntity {
 	        else
 	        {
 	            this.is_destroying_block = true;
-
 	            if (x == this.destroy_block_x && y == this.destroy_block_y && z == this.destroy_block_z)
 	            {
 	                return true;
@@ -444,7 +467,6 @@ public class AnimalWatcherEntity extends ZombieEntity {
 	                {
 	                    --y;
 	                }
-
 	                this.destroy_block_progress = -1;
 	                this.destroy_block_x = x;
 	                this.destroy_block_y = y;
@@ -468,6 +490,7 @@ public class AnimalWatcherEntity extends ZombieEntity {
 	    {
 	        if (this.is_destroying_block)
 	        {
+	        	
 	            watchAnimal(this.getEntityId(), this.destroy_block_x, this.destroy_block_y, this.destroy_block_z, -1, this.world);
 	            this.is_destroying_block = false;
 	            this.destroy_block_progress = -1;
@@ -543,6 +566,10 @@ public class AnimalWatcherEntity extends ZombieEntity {
 	     */
 	    public void tick()
 	    {
+	    	
+	    	if (this.getAttackTarget() == null) {
+	    		this.setAttackTarget(world.getClosestPlayer(getPosX(), getPosY(), getPosZ(), 64, false));
+	    	}
 	    	if (attackFood != null) {
 	    		if (this.getAttackTarget() == null) {
 	    			this.getNavigator().tryMoveToXYZ(attackFood.getPositionVec().getX(), attackFood.getPositionVec().getY(), attackFood.getPositionVec().getZ(), 1.0);

@@ -87,7 +87,7 @@ public class MITECraftingScreen extends ContainerScreen<WorkbenchContainer> impl
    public void tick() {
       super.tick();
       this.recipeBookGui.tick();
-      this.craftingTick();
+      this.craftingTick(this.container.inventorySlots);
    }
 
    public void render(MatrixStack stack, int p_render_1_, int p_render_2_, float p_render_3_) {
@@ -256,7 +256,7 @@ public class MITECraftingScreen extends ContainerScreen<WorkbenchContainer> impl
 	   return difficulty;
    }
    
-   protected boolean canCraft() {
+   protected boolean canCraft(List<Slot> inventorySlots) {
 	   int difficulty = 0;
 	   this.craftSlot = this.container.getSlot(0);
 	   if (this.craftSlot != null) {
@@ -308,11 +308,26 @@ public class MITECraftingScreen extends ContainerScreen<WorkbenchContainer> impl
 			   }
 		   }
 	   }
+	   
+	   Slot slot = inventorySlots.get(0);
+	   if (slot.getHasStack()) {
+		   Item item = slot.getStack().getItem();
+		   if (item == ItemRegistry.COPPER_CRAFTING_TABLE.get() ||
+				   item == ItemRegistry.SILVER_CRAFTING_TABLE.get() ||
+				   item == ItemRegistry.GOLD_CRAFTING_TABLE.get() || 
+				   item == ItemRegistry.IRON_CRAFTING_TABLE.get() ||
+				   item == ItemRegistry.MITHRIL_CRAFTING_TABLE.get() ||
+				   item == ItemRegistry.ANCIENT_METAL_CRAFTING_TABLE.get() ||
+				   item == ItemRegistry.ADAMANTIUM_CRAFTING_TABLE.get())
+			   difficulty --;
+		   if (item == ItemRegistry.OBSIDIAN_CRAFTING_TABLE.get()) difficulty = 0;
+	   }
+	   
 	   return difficulty <= this.toolbench;
    }
    
-   protected void craftingTick() {
-	   this.canCraft = this.canCraft();
+   protected void craftingTick(List<Slot> inventorySlots) {
+	   this.canCraft = this.canCraft(inventorySlots);
 	   if (Minecraft.getInstance().world.getGameTime() > lastTick) {
 		   if (this.crafting) {
 

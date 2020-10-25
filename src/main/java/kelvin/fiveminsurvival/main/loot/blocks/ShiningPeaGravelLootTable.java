@@ -10,7 +10,7 @@ public class ShiningPeaGravelLootTable extends LootTable {
 	public ShiningPeaGravelLootTable(boolean overridesVanillaLoot) {
 		super(overridesVanillaLoot);
 		
-		this.AddLoot(new LootDrop(100, Items.GRAVEL, 1, 1, true));
+		this.AddLoot(new LootDrop(100, ItemRegistry.PEA_GRAVEL.get(), 1, 1, true));
 		this.AddLoot(new LootDrop(100, ItemRegistry.FLINT_SHARD.get(), 1, 1, false));
 		this.AddLoot(new LootDrop(50, Items.FLINT, 1, 2, false));
 		this.AddLoot(new LootDrop(15, ItemRegistry.COPPER_NUGGET.get(), 1, 1, false));

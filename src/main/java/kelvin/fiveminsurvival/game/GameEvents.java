@@ -10,14 +10,16 @@ import kelvin.fiveminsurvival.entity.EntityAttackSquid;
 import kelvin.fiveminsurvival.entity.FeatherItemEntity;
 import kelvin.fiveminsurvival.entity.NewSkeletonEntity;
 import kelvin.fiveminsurvival.entity.goal.EnhancedPanicGoal;
-import kelvin.fiveminsurvival.entity.goal.RunFromPlayerGoal;
+import kelvin.fiveminsurvival.entity.goal.LowHealthPanicGoal;
 import kelvin.fiveminsurvival.game.food.CustomFoodStats;
 import kelvin.fiveminsurvival.game.food.Nutrients;
 import kelvin.fiveminsurvival.game.world.CampfireState;
+import kelvin.fiveminsurvival.game.world.Seasons;
 import kelvin.fiveminsurvival.game.world.WorldStateHolder;
 import kelvin.fiveminsurvival.init.BlockRegistry;
 import kelvin.fiveminsurvival.init.EntityRegistry;
 import kelvin.fiveminsurvival.init.ItemRegistry;
+import kelvin.fiveminsurvival.init.VanillaOverrides;
 import kelvin.fiveminsurvival.items.CustomBowlItem;
 import kelvin.fiveminsurvival.items.CustomEggItem;
 import kelvin.fiveminsurvival.items.HatchetItem;
@@ -33,14 +35,17 @@ import net.minecraft.block.RotatedPillarBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.BackgroundMusicTracks;
+import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.ai.goal.TemptGoal;
 import net.minecraft.entity.boss.WitherEntity;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.merchant.villager.WanderingTraderEntity;
 import net.minecraft.entity.monster.AbstractSkeletonEntity;
 import net.minecraft.entity.monster.BlazeEntity;
 import net.minecraft.entity.monster.CaveSpiderEntity;
@@ -51,6 +56,7 @@ import net.minecraft.entity.monster.MagmaCubeEntity;
 import net.minecraft.entity.monster.PhantomEntity;
 import net.minecraft.entity.monster.SkeletonEntity;
 import net.minecraft.entity.monster.SlimeEntity;
+import net.minecraft.entity.monster.SpiderEntity;
 import net.minecraft.entity.monster.WitchEntity;
 import net.minecraft.entity.monster.ZombieEntity;
 import net.minecraft.entity.monster.ZombieVillagerEntity;
@@ -62,6 +68,8 @@ import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.passive.PigEntity;
 import net.minecraft.entity.passive.SheepEntity;
 import net.minecraft.entity.passive.SquidEntity;
+import net.minecraft.entity.passive.StriderEntity;
+import net.minecraft.entity.passive.TurtleEntity;
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.entity.passive.horse.HorseEntity;
 import net.minecraft.entity.passive.horse.SkeletonHorseEntity;
@@ -83,6 +91,8 @@ import net.minecraft.item.SoupItem;
 import net.minecraft.item.SwordItem;
 import net.minecraft.item.TieredItem;
 import net.minecraft.item.ToolItem;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.FoodStats;
@@ -470,11 +480,13 @@ public class GameEvents {
 	@SubscribeEvent
 	public static void joinWorldEvent(EntityJoinWorldEvent event) {
 		if (event.getEntity() instanceof AnimalEntity) {
-			AnimalEntity animal = (AnimalEntity)event.getEntity();
-			animal.goalSelector.addGoal(0, new EnhancedPanicGoal(animal, 2.0D));
-			if (animal instanceof ChickenEntity) {
-				animal.goalSelector.addGoal(0, new RunFromPlayerGoal(animal, 2.0D));
+			if (!(event.getEntity() instanceof StriderEntity ||
+					event.getEntity() instanceof SpiderEntity ||
+					event.getEntity() instanceof TurtleEntity)) {
+				AnimalEntity animal = (AnimalEntity)event.getEntity();
+				animal.goalSelector.addGoal(0, new EnhancedPanicGoal(animal, 2.0D));
 			}
+			
 		}
 	}
 	
@@ -491,6 +503,26 @@ public class GameEvents {
 			event.getEntityLiving().getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(event.getEntityLiving().getAttribute(Attributes.FOLLOW_RANGE).getBaseValue() * 2.0f);
 		}
 		
+		
+		if (event.getEntity() instanceof ChickenEntity) {
+			ChickenEntity chicken = (ChickenEntity)event.getEntityLiving();
+			chicken.goalSelector.addGoal(3, new TemptGoal(chicken, 1.0D, false, Ingredient.fromItems(VanillaOverrides.WHEAT_SEEDS.get())));
+		}
+		
+		if (event.getEntity() instanceof SpiderEntity) {
+			((SpiderEntity)event.getEntity()).goalSelector.addGoal(0, new LowHealthPanicGoal(((SpiderEntity)event.getEntity()), 2.0D));
+		}
+		
+		if (event.getEntity() instanceof WanderingTraderEntity) {
+			if (event.getEntity().getPosX() < 7000 &&
+					event.getEntity().getPosZ() < 7000 &&
+					!WorldStateHolder.get(event.getWorld()).FoundAllVanillaCrops() &&
+					Seasons.getTrueMonth(((World)event.getWorld()).getDayTime() / 24000L) <= 6) {
+				event.getEntity().remove();
+				event.setResult(Result.DENY);
+				event.getEntity().forceSetPosition(0, -100, 0);
+			}
+		}
 		
 		if (event instanceof LivingSpawnEvent.CheckSpawn) {
 			if (event.getEntity() instanceof AnimalEntity) {
@@ -611,7 +643,18 @@ public class GameEvents {
     public static void livingUpdateEvent(LivingEvent.LivingUpdateEvent event) {
 		Entity entity = event.getEntity();
 		
-		
+		if (entity instanceof CreatureEntity) {
+
+			CreatureEntity creature = (CreatureEntity)entity;
+			if (creature.ticksExisted % (20 * 60 * 5) == 0) {
+				if (creature.getHealth() < creature.getMaxHealth()) {
+					creature.setHealth(creature.getHealth() + 1);
+					creature.getEntityWorld().addParticle(ParticleTypes.HEART, entity.getPosX(), entity.getPosYEye(), entity.getPosZ(), 0, 0.1f, 0);
+					//               worldIn.addParticle(ParticleTypes.LARGE_SMOKE, d3, d8, d13, 0.0D, 0.0D, 0.0D);
+
+				}
+			}
+		}
 		
 		if (entity != null) {
 			if (!entity.isSpectator())
@@ -714,7 +757,7 @@ public class GameEvents {
     			}
     		}
     		
-    		double baseReach = 3.0;
+    		double baseReach = 3.5;
     		
     		if (player.isCreative()) {
     			baseReach = 8.0;

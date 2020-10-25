@@ -48,6 +48,7 @@ import net.minecraftforge.event.TickEvent.WorldTickEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.event.world.BlockEvent.NeighborNotifyEvent;
+import net.minecraftforge.eventbus.api.Event.Result;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -126,7 +127,7 @@ public class FiveMinSurvival
     @SubscribeEvent
 	public static void blockBreak(BreakEvent e) {
     	e.setExpToDrop(0);
-    	
+
     	LootTable loot_table = BlockLootTables.LOOT_TABLES.get(e.getState().getBlock());
     	
     	if (e.getPlayer() != null)
@@ -149,11 +150,10 @@ public class FiveMinSurvival
     					
 			if (loot_table.overridesVanillaLoot) {
 				e.getWorld().setBlockState(e.getPos(), Blocks.AIR.getDefaultState(), 0);
-	        	e.setCanceled(true);
 			}
     		
     	}
-	}
+   	}
 	
     
     @SubscribeEvent

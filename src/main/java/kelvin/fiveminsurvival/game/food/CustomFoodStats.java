@@ -33,6 +33,8 @@ public class CustomFoodStats extends FoodStats implements Serializable {
 	   
 	   public Nutrients nutrients;
 	   
+	   public boolean justAteFood;
+	   
 	   public CustomFoodStats(PlayerEntity player) {
 	      this.foodSaturationLevel = 5.0F;
 	      this.player = player;
@@ -48,6 +50,7 @@ public class CustomFoodStats extends FoodStats implements Serializable {
 
 	   public void consume(Item maybeFood, ItemStack stack) {
 	      if (maybeFood.isFood()) {
+	    	  justAteFood = true;
 	         Food food = maybeFood.getFood();
 	         if (FoodNutrients.list.containsKey(maybeFood)) {
 	        	 if (this.nutrients != null) {

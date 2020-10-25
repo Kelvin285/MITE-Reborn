@@ -10,8 +10,8 @@ public class PeaGravelLootTable extends LootTable {
 	public PeaGravelLootTable(boolean overridesVanillaLoot) {
 		super(overridesVanillaLoot);
 		
-		this.AddLoot(new LootDrop(100, Items.GRAVEL, 1, 1, true));
-		this.AddLoot(new LootDrop(100, Items.GRAVEL, 1, 1, false));
+		this.AddLoot(new LootDrop(100, ItemRegistry.PEA_GRAVEL.get(), 1, 1, true));
+		this.AddLoot(new LootDrop(100, ItemRegistry.PEA_GRAVEL.get(), 1, 1, false));
 		this.AddLoot(new LootDrop(50, ItemRegistry.SMOOTH_STONE.get(), 1, 1, false));
 		this.AddLoot(new LootDrop(75, ItemRegistry.FLINT_SHARD.get(), 1, 1, false));
 		this.AddLoot(new LootDrop(25, ItemRegistry.SMOOTH_STONE.get(), 1, 2, false));
