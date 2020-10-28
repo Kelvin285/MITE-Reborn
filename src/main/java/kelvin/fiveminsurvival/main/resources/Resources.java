@@ -18,7 +18,7 @@ import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 public class Resources {
 	public static final int dayTicks = 24000; //one day is 24000 ticks
 	public static Nutrients clientNutrients = new Nutrients(null);
-	public static int currentTable = 0;
+	public static int currentTable = 10;
 	
 	public static boolean malnourished = false;
 	

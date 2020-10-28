@@ -262,14 +262,15 @@ public class FiveMinSurvival
 		FoodNutrients.init();
 		CraftingIngredients.init();
 		CropTypes.registerCropTypes();
-		VanillaTweaks.blocks();
-		VanillaTweaks.setToolTiers();
-		VanillaTweaks.fixStackSizes();
-		BlockLootTables.RegisterLootTables();
+		
 		
 		event.enqueueWork(
 				() -> {
 					EntityRegistry.RegisterEntityAttributes();
+					VanillaTweaks.blocks();
+					VanillaTweaks.setToolTiers();
+					VanillaTweaks.fixStackSizes();
+					BlockLootTables.RegisterLootTables();
 				}
 				);
     }

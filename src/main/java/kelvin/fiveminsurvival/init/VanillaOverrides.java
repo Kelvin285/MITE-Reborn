@@ -12,9 +12,14 @@ import kelvin.fiveminsurvival.items.MITEBoneMealItem;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.DeadBushBlock;
+import net.minecraft.block.DoublePlantBlock;
+import net.minecraft.block.SeaGrassBlock;
 import net.minecraft.block.SoundType;
+import net.minecraft.block.SugarCaneBlock;
+import net.minecraft.block.TallGrassBlock;
 import net.minecraft.block.material.Material;
-import net.minecraft.enchantment.Enchantment;
+import net.minecraft.block.material.MaterialColor;
 import net.minecraft.item.AirItem;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.BlockNamedItem;
@@ -48,7 +53,11 @@ public class VanillaOverrides {
     public static final RegistryObject<Block> CAKE = BLOCKS.register("cake", () -> new MITECakeBlock(4, 0.3f, 20));
     public static final RegistryObject<Item> EGG = ITEMS.register("egg", () ->  new CustomEggItem((new Item.Properties()).group(ItemGroup.MATERIALS).food(new Food.Builder().saturation(0.2F).hunger(2).build())));
     public static final RegistryObject<Item> BOWL = ITEMS.register("bowl", () ->  new CustomBowlItem((new Item.Properties()).group(ItemGroup.MATERIALS)));
-
+    public static final RegistryObject<Block> GRASS = BLOCKS.register("grass", () -> new TallGrassBlock(AbstractBlock.Properties.create(Material.TALL_PLANTS).doesNotBlockMovement().hardnessAndResistance(0.08f).sound(SoundType.PLANT)));
+    public static final RegistryObject<Block> TALL_GRASS = BLOCKS.register("tall_grass", () -> new DoublePlantBlock(AbstractBlock.Properties.create(Material.TALL_PLANTS).doesNotBlockMovement().hardnessAndResistance(0.08f).sound(SoundType.PLANT)));
+    public static final RegistryObject<Block> DEAD_BUSH = BLOCKS.register("dead_bush", () -> new DeadBushBlock(AbstractBlock.Properties.create(Material.TALL_PLANTS, MaterialColor.WOOD).doesNotBlockMovement().hardnessAndResistance(0.08f).sound(SoundType.PLANT)));
+    public static final RegistryObject<Block> SUGARCANE = BLOCKS.register("sugarcane", () -> new SugarCaneBlock(AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().hardnessAndResistance(0.25f).sound(SoundType.PLANT)));
+    public static final RegistryObject<Block> SEA_GRASS = BLOCKS.register("sea_grass", () -> new SeaGrassBlock(AbstractBlock.Properties.create(Material.SEA_GRASS).doesNotBlockMovement().hardnessAndResistance(0.08f).sound(SoundType.WET_GRASS)));
     
     //Burnable Saplings
     public static final RegistryObject<Item> OAK_SAPLING = ITEMS.register("oak_sapling", () -> new BurnableBlockItem(Blocks.OAK_SAPLING, new Item.Properties().group(ItemGroup.MISC), 110));
