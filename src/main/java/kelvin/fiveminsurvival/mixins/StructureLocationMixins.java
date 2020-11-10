@@ -30,7 +30,7 @@ import net.minecraft.world.gen.settings.StructureSeparationSettings;
 @Mixin(Structure.class)
 public class StructureLocationMixins {
 
-
+//func_236388_a_
 	@Inject(method = "func_236388_a_", at = @At("HEAD"), cancellable = true, remap = false)
 	public void func_236388_a_(IWorldReader world, StructureManager manager, BlockPos pos, int i, boolean j, long k, StructureSeparationSettings settings, CallbackInfoReturnable<BlockPos> info) {
 		boolean cancel = true;		

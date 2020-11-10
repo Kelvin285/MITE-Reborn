@@ -373,73 +373,73 @@ public class GameEvents {
 		World world = event.getWorld();
 		
 		WorldStateHolder stateHolder = WorldStateHolder.get(world);
-		if (event.getEntity() instanceof PlayerEntity) {
-			PlayerEntity player = (PlayerEntity)event.getEntity();
-			if (event.getPlayer().getHeldItem(Hand.MAIN_HAND) != null)
-				if (event.getPlayer().getHeldItem(Hand.MAIN_HAND).getItem() != null)
-		if (player.getCooldownTracker().getCooldown(player.getHeldItem(Hand.MAIN_HAND).getItem(), 0) <= 0)
-			if (state.getBlock() instanceof CampfireBlock && !world.isRemote()) {
-				System.out.println("campfire block click");
-				ItemStack stack = event.getPlayer().getHeldItem(Hand.MAIN_HAND);
-				if (stack != null) {
-					Item item = stack.getItem();
-					if (item != null) {
-						Map<IRegistryDelegate<Item>, Integer> BURNS = null;
-						try {
-							
-							Field VANILLA_BURNS = ForgeHooks.class.getDeclaredField("VANILLA_BURNS");
-							VANILLA_BURNS.setAccessible(true);
-//							Resources.makeFieldAccessible(VANILLA_BURNS);
-							BURNS = (Map<IRegistryDelegate<Item>, Integer>) VANILLA_BURNS.get(null);
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-						int burnTime = stack.getBurnTime();
-						if (BURNS != null) {
-							burnTime = BURNS.getOrDefault(item.delegate, 0);
-						}
-						boolean canDestroy = true;
-	//					if (item == Items.FLINT_AND_STEEL) {
-	//						burnTime = 6000;
-	//						canDestroy = false;
-	//					}
-						if (item == Items.CHARCOAL) {
-							burnTime = 6000;
-						}
-						if (item == Items.COAL || item == Items.LAVA_BUCKET || item == Items.BLAZE_ROD) {
-							burnTime = 0;
-						}
-						if (burnTime > 0) {
-							CampfireState fire = null;
-							for (int i = 0; i < stateHolder.campfires.size(); i++) {
-								CampfireState s = stateHolder.campfires.get(i);
-								if (s.pos.equals(pos)) {
-									fire = s;
-									stateHolder.campfires.remove(i);
-									break;
-								}
-							}
-							if (fire == null) {
-								fire = new CampfireState();
-								fire.pos = pos;
-							}
-							fire.fuel += burnTime * 10;
-							if (fire.fuel > 60 * 20 * 10) {
-								fire.fuel = 60 * 20 * 10;
-							}
-							stateHolder.campfires.add(fire);
-							world.setBlockState(pos, state.with(CampfireBlock.LIT, Boolean.TRUE));
-							
-								player.getCooldownTracker().setCooldown(stack.getItem(), 10);
-							
-							if (canDestroy);
-							stack.setCount(stack.getCount() - 1);
-							
-						}
-					}
-				}
-			}
-		}
+//		if (event.getEntity() instanceof PlayerEntity) {
+//			PlayerEntity player = (PlayerEntity)event.getEntity();
+//			if (event.getPlayer().getHeldItem(Hand.MAIN_HAND) != null)
+//				if (event.getPlayer().getHeldItem(Hand.MAIN_HAND).getItem() != null)
+//		if (player.getCooldownTracker().getCooldown(player.getHeldItem(Hand.MAIN_HAND).getItem(), 0) <= 0)
+//			if (state.getBlock() instanceof CampfireBlock && !world.isRemote()) {
+//				System.out.println("campfire block click");
+//				ItemStack stack = event.getPlayer().getHeldItem(Hand.MAIN_HAND);
+//				if (stack != null) {
+//					Item item = stack.getItem();
+//					if (item != null) {
+//						Map<IRegistryDelegate<Item>, Integer> BURNS = null;
+//						try {
+//							
+//							Field VANILLA_BURNS = ForgeHooks.class.getDeclaredField("VANILLA_BURNS");
+//							VANILLA_BURNS.setAccessible(true);
+////							Resources.makeFieldAccessible(VANILLA_BURNS);
+//							BURNS = (Map<IRegistryDelegate<Item>, Integer>) VANILLA_BURNS.get(null);
+//						} catch (Exception e) {
+//							e.printStackTrace();
+//						}
+//						int burnTime = stack.getBurnTime();
+//						if (BURNS != null) {
+//							burnTime = BURNS.getOrDefault(item.delegate, 0);
+//						}
+//						boolean canDestroy = true;
+//	//					if (item == Items.FLINT_AND_STEEL) {
+//	//						burnTime = 6000;
+//	//						canDestroy = false;
+//	//					}
+//						if (item == Items.CHARCOAL) {
+//							burnTime = 6000;
+//						}
+//						if (item == Items.COAL || item == Items.LAVA_BUCKET || item == Items.BLAZE_ROD) {
+//							burnTime = 0;
+//						}
+//						if (burnTime > 0) {
+//							CampfireState fire = null;
+//							for (int i = 0; i < stateHolder.campfires.size(); i++) {
+//								CampfireState s = stateHolder.campfires.get(i);
+//								if (s.pos.equals(pos)) {
+//									fire = s;
+//									stateHolder.campfires.remove(i);
+//									break;
+//								}
+//							}
+//							if (fire == null) {
+//								fire = new CampfireState();
+//								fire.pos = pos;
+//							}
+//							fire.fuel += burnTime * 10;
+//							if (fire.fuel > 60 * 20 * 10) {
+//								fire.fuel = 60 * 20 * 10;
+//							}
+//							stateHolder.campfires.add(fire);
+//							world.setBlockState(pos, state.with(CampfireBlock.LIT, Boolean.TRUE));
+//							
+//								player.getCooldownTracker().setCooldown(stack.getItem(), 10);
+//							
+//							if (canDestroy);
+//							stack.setCount(stack.getCount() - 1);
+//							
+//						}
+//					}
+//				}
+//			}
+//		}
 		stateHolder.placeTick++;
 		if (stateHolder.placeTick > 3) stateHolder.placeTick = 0;
 		

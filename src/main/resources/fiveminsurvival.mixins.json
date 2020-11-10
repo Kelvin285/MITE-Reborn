@@ -5,12 +5,16 @@
   "refmap": "fiveminsurvival.refmap.json",
   "mixins": [
 	"StructureLocationMixins",
-	"server.ServerPlayerMixins"
+	"CampfireBlockMixins",
+	"FurnaceMixins"
   ],
   "client":[
   ],
+  "server": [
+	"ServerPlayerMixins"
+  ],
   "injectors": {
-    "defaultRequire": 1
+    "defaultRequire": 3
   },
   "minVersion": "0.8"
 }

@@ -206,20 +206,20 @@ public class FiveMinSurvival
 	            e.getWorld().addEntity(fallingblockentity);
 			}
 		}
-		if (state.getBlock() instanceof CampfireBlock)
-		if (!e.getWorld().isRemote()) {
-			WorldStateHolder stateHolder = WorldStateHolder.get(e.getWorld());
-			int fuel = 0;
-			for (int i = 0; i < stateHolder.campfires.size(); i++) {
-				CampfireState s = stateHolder.campfires.get(i);
-				if (s.pos.equals(pos)) {
-					fuel = s.fuel;
-					break;
-				}
-			}
-			if (fuel <= 0)
-				((World)e.getWorld()).setBlockState(pos, state.with(CampfireBlock.LIT, Boolean.FALSE));
-		}
+//		if (state.getBlock() instanceof CampfireBlock)
+//		if (!e.getWorld().isRemote()) {
+//			WorldStateHolder stateHolder = WorldStateHolder.get(e.getWorld());
+//			int fuel = 0;
+//			for (int i = 0; i < stateHolder.campfires.size(); i++) {
+//				CampfireState s = stateHolder.campfires.get(i);
+//				if (s.pos.equals(pos)) {
+//					fuel = s.fuel;
+//					break;
+//				}
+//			}
+//			if (fuel <= 0)
+//				((World)e.getWorld()).setBlockState(pos, state.with(CampfireBlock.LIT, Boolean.FALSE));
+//		}
 		
 		if (state.getBlock() instanceof CropsBlock) {
 			WorldStateHolder stateHolder = WorldStateHolder.get(e.getWorld());

@@ -196,34 +196,34 @@ public class WorldStateHolder extends WorldSavedData {
 				worldState.time++;
 			}
 			
-			for (int i = 0; i < campfires.size(); i++) {
-				CampfireState state = campfires.get(i);
-				BlockPos pos = state.pos;
-								
-				if (!(world.getBlockState(pos).getBlock() instanceof CampfireBlock)) {
-					campfires.remove(i);
-					break;
-				}
-				boolean waterlogged = false;
-				if (world.getBlockState(pos).get(CampfireBlock.WATERLOGGED) != null)
-				if (world.getBlockState(pos).get(CampfireBlock.WATERLOGGED)) {
-					state.fuel = 0;
-					waterlogged = true;
-				}
-				state.fuel--;
-				if (world.isRainingAt(pos)) {
-					state.fuel -= 20;
-				}
-				if (state.fuel <= 20 * 60) {
-					world.setBlockState(pos, BlockRegistry.CAMPFIRE_LOW.get().getDefaultState().with(CampfireBlock.LIT, Boolean.TRUE));
-				} else {
-					world.setBlockState(pos, Blocks.CAMPFIRE.getDefaultState().with(CampfireBlock.LIT, Boolean.TRUE));
-				}
-				if (state.fuel <= 0) {
-					campfires.remove(i);
-					world.setBlockState(pos, Blocks.CAMPFIRE.getDefaultState().with(CampfireBlock.LIT, Boolean.FALSE).with(CampfireBlock.WATERLOGGED, waterlogged));
-				}
-			}
+//			for (int i = 0; i < campfires.size(); i++) {
+//				CampfireState state = campfires.get(i);
+//				BlockPos pos = state.pos;
+//								
+//				if (!(world.getBlockState(pos).getBlock() instanceof CampfireBlock)) {
+//					campfires.remove(i);
+//					break;
+//				}
+//				boolean waterlogged = false;
+//				if (world.getBlockState(pos).get(CampfireBlock.WATERLOGGED) != null)
+//				if (world.getBlockState(pos).get(CampfireBlock.WATERLOGGED)) {
+//					state.fuel = 0;
+//					waterlogged = true;
+//				}
+//				state.fuel--;
+//				if (world.isRainingAt(pos)) {
+//					state.fuel -= 20;
+//				}
+//				if (state.fuel <= 20 * 60) {
+//					world.setBlockState(pos, BlockRegistry.CAMPFIRE_LOW.get().getDefaultState().with(CampfireBlock.LIT, Boolean.TRUE));
+//				} else {
+//					world.setBlockState(pos, Blocks.CAMPFIRE.getDefaultState().with(CampfireBlock.LIT, Boolean.TRUE));
+//				}
+//				if (state.fuel <= 0) {
+//					campfires.remove(i);
+//					world.setBlockState(pos, Blocks.CAMPFIRE.getDefaultState().with(CampfireBlock.LIT, Boolean.FALSE).with(CampfireBlock.WATERLOGGED, waterlogged));
+//				}
+//			}
 			
 		}
 		
