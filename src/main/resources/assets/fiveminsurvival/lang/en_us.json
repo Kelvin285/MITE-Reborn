@@ -80,6 +80,7 @@
 	"item.fiveminsurvival.silver_nugget": "Silver Nugget",
 	"item.fiveminsurvival.gold_arrow": "Gold Arrow",
 	"item.fiveminsurvival.salad": "Salad",
+	"item.fiveminsurvival.down_feather": "Down Feather",
 	"block.fiveminsurvival.unbaked_cake": "Unbaked Cake",
 	"block.fiveminsurvival.copper_ore": "Copper Ore",
 	"block.fiveminsurvival.silver_ore": "Silver Ore",
@@ -102,6 +103,7 @@
 	"block.fiveminsurvival.obsidian_furnace": "Obsidian Furnace",
 	"block.fiveminsurvival.netherrack_furnace": "Netherrack Furnace",
 	"block.fiveminsurvival.cobweb_block": "Cobweb Block",
+	"block.fiveminsurvival.down_feather_block": "Down Feather Block",
 	"entity.fiveminsurvival.zombie": "Zombie",
 	"entity.fiveminsurvival.skeleton": "Skeleton",
 	"entity.fiveminsurvival.creeper": "Creeper"

@@ -6,15 +6,17 @@
   "mixins": [
 	"StructureLocationMixins",
 	"CampfireBlockMixins",
-	"FurnaceMixins"
+	"FurnaceMixins",
+	"CampfireTileEntityMixins",
+	"ChickenMixins"
   ],
   "client":[
   ],
   "server": [
-	"ServerPlayerMixins"
+	"server.ServerPlayerMixins"
   ],
   "injectors": {
-    "defaultRequire": 3
+    "defaultRequire": 1
   },
   "minVersion": "0.8"
 }

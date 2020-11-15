@@ -2,10 +2,12 @@ package kelvin.fiveminsurvival.main.resources;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.HashMap;
 
 import kelvin.fiveminsurvival.entity.RaycastCollision;
 import kelvin.fiveminsurvival.game.food.Nutrients;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.item.Item;
+import net.minecraft.item.Items;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceContext;
@@ -21,6 +23,12 @@ public class Resources {
 	public static int currentTable = 10;
 	
 	public static boolean malnourished = false;
+	
+	public static HashMap<Item, int[]> furnaceInOut = new HashMap<Item, int[]>();
+	
+	public static void SetFurnaceRecipes() {
+		furnaceInOut.put(Items.SANDSTONE, new int[]{4, 1});
+	}
 	
 	public static void makeFieldAccessible(Field field) {
 		Field modifiers = ObfuscationReflectionHelper.findField(Field.class, "modifiers");

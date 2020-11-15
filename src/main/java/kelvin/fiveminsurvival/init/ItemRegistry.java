@@ -124,6 +124,9 @@ public class ItemRegistry {
 	public static final RegistryObject<Item> RAW_WORM = ITEMS.register("worm_raw", () -> new Item((new Item.Properties()).group(ItemGroup.FOOD).maxStackSize(16).food((new Food.Builder()).hunger(1).saturation(0.1F).meat().build())));
 	public static final RegistryObject<Item> COOKED_WORM = ITEMS.register("worm_cooked", () -> new Item((new Item.Properties()).group(ItemGroup.FOOD).maxStackSize(16).food((new Food.Builder()).hunger(3).saturation(0.3F).meat().build())));
 
+	public static final RegistryObject<Item> DOWN_FEATHER = ITEMS.register("down_feather", () -> new Item((new Item.Properties()).group(ItemGroup.MATERIALS).maxStackSize(16)));
+	public static final RegistryObject<Item> DOWN_FEATHER_BLOCK = ITEMS.register("down_feather_block", () -> new BlockItem(BlockRegistry.DOWN_FEATHER_BLOCK.get(), new Item.Properties().group(ItemGroup.BUILDING_BLOCKS).maxStackSize(4)));
+
 //	public static Item COPPER_SHEARS, COPPER_WAR_HAMMER, COPPER_BATTLE_AXE, COPPER_MATTOCK;
 //	public static Item SILVER_SHEARS, SILVER_WAR_HAMMER, SILVER_BATTLE_AXE, SILVER_MATTOCK;
 

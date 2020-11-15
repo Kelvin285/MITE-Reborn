@@ -21,27 +21,29 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeHooks;
 
 @Mixin(CampfireBlock.class)
 public class CampfireBlockMixins {
 //func_225533_a_
 	@Inject(method = "onBlockActivated", at = @At("HEAD"), cancellable = true)
 	public void onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit, CallbackInfoReturnable<ActionResultType> info) {
-		System.out.println("EEEEEEEEE");
 		TileEntity tileentity = worldIn.getTileEntity(pos);
 	      if (tileentity instanceof CampfireTileEntity) {
 	         CampfireTileEntity campfiretileentity = (CampfireTileEntity)tileentity;
 	         ItemStack itemstack = player.getHeldItem(handIn);
-	         
-	         if (itemstack.getBurnTime() > 0) {
-	            if (!worldIn.isRemote && campfiretileentity.addItem(player.abilities.isCreativeMode ? itemstack.copy() : itemstack, itemstack.getBurnTime())) {
+	         // VANILLA_BURNS.getOrDefault(item.delegate, 0)
+	         if (ForgeHooks.getBurnTime(itemstack) > 0) {
+	            if (!worldIn.isRemote && campfiretileentity.addItem(player.abilities.isCreativeMode ? itemstack.copy() : itemstack, ForgeHooks.getBurnTime(itemstack))) {
 	               player.addStat(Stats.INTERACT_WITH_CAMPFIRE);
 	               info.setReturnValue(ActionResultType.SUCCESS);
-		            info.cancel();
+		            //info.cancel();
+	               return;
 	            }
 
 	            info.setReturnValue(ActionResultType.CONSUME);
-	            info.cancel();
+	            //info.cancel();
+	            return;
 	         }
 	      }
 	}

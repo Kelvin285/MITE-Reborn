@@ -23,6 +23,7 @@ import kelvin.fiveminsurvival.main.crafting.CraftingIngredients;
 import kelvin.fiveminsurvival.main.loot.BlockLootTables;
 import kelvin.fiveminsurvival.main.loot.LootTable;
 import kelvin.fiveminsurvival.main.network.NetworkHandler;
+import kelvin.fiveminsurvival.main.resources.Resources;
 import net.minecraft.block.AirBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -271,6 +272,7 @@ public class FiveMinSurvival
 					VanillaTweaks.setToolTiers();
 					VanillaTweaks.fixStackSizes();
 					BlockLootTables.RegisterLootTables();
+					Resources.SetFurnaceRecipes();
 				}
 				);
     }

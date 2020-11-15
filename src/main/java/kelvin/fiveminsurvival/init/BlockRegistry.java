@@ -10,11 +10,10 @@ import kelvin.fiveminsurvival.main.crafting.CraftingIngredient;
 import kelvin.fiveminsurvival.main.gui.MITEFurnaceContainer;
 import net.minecraft.block.Block;
 import net.minecraft.block.GravelBlock;
+import net.minecraft.block.HayBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -67,5 +66,7 @@ public class BlockRegistry {
     public static final RegistryObject<Block> PINK_CAKE = BLOCKS.register("pink_cake", () -> new MITECakeBlock(4, 0.3f, 20));
     public static final RegistryObject<Block> BLACK_CAKE = BLOCKS.register("black_cake", () -> new MITECakeBlock(4, 0.3f, 20));
     public static final RegistryObject<Block> CYAN_CAKE = BLOCKS.register("cyan_cake", () -> new MITECakeBlock(4, 0.3f, 20));
+    
+    public static final RegistryObject<Block> DOWN_FEATHER_BLOCK = BLOCKS.register("down_feather_block", () -> new HayBlock(Block.Properties.create(Material.CARPET).hardnessAndResistance(0.1f)));
 }
 

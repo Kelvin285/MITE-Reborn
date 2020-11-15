@@ -1,14 +1,18 @@
 package kelvin.fiveminsurvival.game.food;
 
+import java.io.Serializable;
+import java.lang.reflect.Field;
+
 import kelvin.fiveminsurvival.game.world.WorldStateHolder;
 import kelvin.fiveminsurvival.main.resources.Resources;
+import net.minecraft.entity.EntityPredicate;
+import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
-
-import java.io.Serializable;
-import java.lang.reflect.Field;
 
 public class Nutrients implements Serializable {
 	
@@ -92,19 +96,19 @@ public class Nutrients implements Serializable {
 	}
 	
 	public double getSicknessModifier() {
-		return 1.0 + sickness / 100.0;
+		return 1.0 + (sickness + (100 - happiness)) / 200.0;
 	}
 	
 	public double getStrengthModifier() {
-		return (protein + phytonutrients) / 200.0;
+		return (protein + phytonutrients + happiness) / 300.0;
 	}
 	
 	public double getRegenModifier() {
-		return (protein + phytonutrients) / 200.0;
+		return (protein + phytonutrients + happiness) / 300.0;
 	}
 	
 	public double getWeaknessResistance() {
-		return (protein + happiness) / 200.0;
+		return (protein) / 100.0;
 	}
 	
 	public double getSlownessResistance() {
@@ -305,6 +309,14 @@ public class Nutrients implements Serializable {
 		}
 		
 		double levelRate = player.experienceLevel * 0.0001;
+		if (player.world.getClosestEntityWithinAABB(AnimalEntity.class, EntityPredicate.DEFAULT, null, player.getPosX(), player.getPosY(), player.getPosZ(), new AxisAlignedBB(-4, -4, -4, 4, 4, 4).offset(player.getPositionVec())) != null) {
+			System.out.println("animal");
+			happiness += levelRate;
+		}
+		if (player.world.getClosestEntityWithinAABB(VillagerEntity.class, EntityPredicate.DEFAULT, null, player.getPosX(), player.getPosY(), player.getPosZ(), new AxisAlignedBB(-4, -4, -4, 4, 4, 4).offset(player.getPositionVec())) != null) {
+			happiness += levelRate;
+		}
+		
 //		System.out.println(getMetabolismRate(player.experienceLevel));
 		protein -= foodRate * getSicknessModifier() * foodMul + levelRate;
 		if (protein > 100) protein -= levelRate * 2.0;

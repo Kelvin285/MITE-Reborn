@@ -210,11 +210,11 @@ public class GameEvents {
 			ItemEntity item = (ItemEntity)entity;
 			
 			if (!(entity instanceof FeatherItemEntity))
-			if (item.getItem().getItem() == Items.FEATHER) {
+			if (item.getItem().getItem() == Items.FEATHER || item.getItem().getItem() == ItemRegistry.DOWN_FEATHER.get()) {
 				
 				FeatherItemEntity feather = new FeatherItemEntity(EntityType.ITEM, event.getEntity().getEntityWorld());
 				feather.setPosition(item.getPositionVec().x, item.getPositionVec().y, item.getPositionVec().z);
-				feather.setItem(new ItemStack(Items.FEATHER, item.getItem().getCount()));
+				feather.setItem(new ItemStack(item.getItem().getItem(), item.getItem().getCount()));
 				feather.setPickupDelay(15);
 				feather.lifespan = item.lifespan;
 				feather.setMotion(item.getMotion());
