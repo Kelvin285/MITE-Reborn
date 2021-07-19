@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+	" F ",
+    "FWF",
+	" F "
+  ],
+  "key": {
+    "F": {
+      "item": "mite:flour"
+    },
+	"W": {
+	  "item": "minecraft:water_bucket"
+	}
+  },
+  "result": {
+    "item": "mite:dough",
+	"count": 4
+  }
+}

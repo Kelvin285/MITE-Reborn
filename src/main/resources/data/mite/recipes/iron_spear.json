@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "  F",
+	" #S",
+	"#  "
+  ],
+  "key": {
+    "F": {
+      "item": "minecraft:iron_nugget"
+    },
+	"#": {
+      "item": "minecraft:stick"
+    },
+	"S": {
+      "item": "mite:sinew"
+    }
+  },
+  "result": {
+    "item": "mite:iron_spear"
+  }
+}

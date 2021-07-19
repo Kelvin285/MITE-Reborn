@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+	"###",
+	"# #",
+	"N N"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:leather"
+    },
+	"N": {
+	  "item": "minecraft:iron_nugget"
+	}
+  },
+  "result": {
+    "item": "minecraft:saddle",
+	"count": 1
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "mite:bacon"
+  },
+  "result": "mite:cooked_bacon",
+  "experience": 0.35,
+  "cookingtime": 200
+}

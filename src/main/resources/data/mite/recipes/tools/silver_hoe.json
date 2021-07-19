@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "XX",
+    "# ",
+    "# "
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:stick"
+    },
+    "X": {
+      "item": "mite:silver_ingot"
+    }
+  },
+  "result": {
+    "item": "mite:silver_hoe"
+  }
+}

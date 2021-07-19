@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "  F",
+	" #S",
+	"#  "
+  ],
+  "key": {
+    "F": {
+      "item": "minecraft:adamantium_nugget"
+    },
+	"#": {
+      "item": "minecraft:stick"
+    },
+	"S": {
+      "item": "mite:sinew"
+    }
+  },
+  "result": {
+    "item": "mite:adamantium_spear"
+  }
+}

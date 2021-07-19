@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "mite:cheese"
+    },
+	{
+	  "item": "minecraft:baked_potato"
+	},
+	{
+	  "item": "mite:bowl_milk"
+	}
+  ],
+  "result": {
+    "item": "mite:mashed_potatoes"
+  }
+}

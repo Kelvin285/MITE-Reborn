@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "##",
+	"##"
+  ],
+  "key": {
+    "#": {
+      "item": "mite:flint_shard"
+    }
+  },
+  "result": {
+    "item": "minecraft:flint"
+  }
+}

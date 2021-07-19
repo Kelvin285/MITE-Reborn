@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:sugar"
+    },
+	{
+	  "item": "minecraft:snowball"
+	},
+	{
+	  "item": "mite:bowl_milk"
+	}
+  ],
+  "result": {
+    "item": "mite:ice_cream",
+	"count": 1
+  }
+}

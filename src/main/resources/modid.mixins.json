@@ -1,0 +1,37 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "kelvin.mite.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+	"BiomeAccessMixin",
+	"ChunkGeneratorMixin",
+	"ZombieEntityMixin",
+	"HungerManagerMixin",
+	"BiomeMixin",
+	"PlantBlockMixin",
+	"PlayerEntityMixin",
+	"ItemEntityMixin",
+	"AnimalEntityMixin",
+	"AbstractFurnaceBlockEntityMixin",
+	"FallingBlockMixin",
+	"BlockMixin",
+	"CraftingScreenHandlerMixin",
+	"SquidEntityMixin",
+	"LivingEntityMixin",
+	"ItemMixin",
+	"MiningToolItemMixin",
+	"SwordItemMixin",
+	"TridentItemMixin"
+  ],
+  "client": [
+	"InGameHudMixin",
+	"InventoryScreenMixin",
+	"BakedModelManagerMixin",
+	"ClientPlayerInteractionManagerMixin",
+	"CraftingScreenMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

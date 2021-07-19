@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:pumpkin"
+    },
+	{
+	  "item": "mite:bowl_water"
+	}
+  ],
+  "result": {
+    "item": "mite:pumpkin_soup"
+  }
+}

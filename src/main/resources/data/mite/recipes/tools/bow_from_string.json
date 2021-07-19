@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+	"#S",
+	"# S",
+	"#S"
+  ],
+  "key": {
+    "#": {
+      "item": "mite:string"
+    },
+	"S": {
+	  "item": "minecraft:stick"
+	}
+  },
+  "result": {
+    "item": "minecraft:bow",
+	"count": 1
+  }
+}
