@@ -1,8 +1,10 @@
 # MITE:Reborn (Fabric 1.17), because Minecraft is Too Easy.
 MITE:Reborn mod for Minecraft, written using the Fabric API
 
-## One does not simply walk into the mountains, and mine iron ore with a stone pickaxe
+### One does not simply walk into the mountains, and mine iron ore with a stone pickaxe
 ### (Avernite, Creator of the original MITE mod for MC 1.6.4)
+
+***
 
 Link to the original mod:
 https://www.minecraftforum.net/forums/mapping-and-modding-java-edition/minecraft-mods/1294284-minecraft-is-too-easy-mite-mod
