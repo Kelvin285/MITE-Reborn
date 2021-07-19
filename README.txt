@@ -1,53 +1,31 @@
--------------------------------------------
-Source installation information for modders
--------------------------------------------
-This code follows the Minecraft Forge installation methodology. It will apply
-some small patches to the vanilla MCP source code, giving you and it access 
-to some of the data and functions you need to build a successful mod.
+# MITE:Reborn (Fabric 1.17), because Minecraft is Too Easy.
+MITE:Reborn mod for Minecraft, written using the Fabric API
 
-Note also that the patches are built against "unrenamed" MCP source code (aka
-srgnames) - this means that you will not be able to read them directly against
-normal code.
+## One does not simply walk into the mountains, and mine iron ore with a stone pickaxe
+### (Avernite, Creator of the original MITE mod for MC 1.6.4)
 
-Source pack installation information:
+Link to the original mod:
+https://www.minecraftforum.net/forums/mapping-and-modding-java-edition/minecraft-mods/1294284-minecraft-is-too-easy-mite-mod
 
-Standalone source installation
-==============================
+## about
+MITE:Reborn is a survival mod for Minecraft that has one goal, and one goal only: to make Minecraft as difficult as possible.
+This is a re-imagined version of the MITE mod, which was released as a mod for Minecraft 1.6.4.  I highly suggest you try out that mod
+before trying MITE:Reborn, as many of the features in this mod will be based off of ones that can be found in the original MITE mod.
 
-See the Forge Documentation online for more detailed instructions:
-http://mcforge.readthedocs.io/en/latest/gettingstarted/
+# license
+https://mit-license.org/
 
-Step 1: Open your command-line and browse to the folder where you extracted the zip file.
 
-Step 2: You're left with a choice.
-If you prefer to use Eclipse:
-1. Run the following command: "gradlew genEclipseRuns" (./gradlew genEclipseRuns if you are on Mac/Linux)
-2. Open Eclipse, Import > Existing Gradle Project > Select Folder 
-   or run "gradlew eclipse" to generate the project.
-(Current Issue)
-4. Open Project > Run/Debug Settings > Edit runClient and runServer > Environment
-5. Edit MOD_CLASSES to show [modid]%%[Path]; 2 times rather then the generated 4.
+## Contributing to the mod:
+In order to contribute to MITE:Reborn you will need to fork the GitHub repository.
+After you do that, download and set up Fabric using the guide from [https://fabricmc.net/wiki/tutorial:setup](https://fabricmc.net/wiki/tutorial:setup)
 
-If you prefer to use IntelliJ:
-1. Open IDEA, and import project.
-2. Select your build.gradle file and have it import.
-3. Run the following command: "gradlew genIntellijRuns" (./gradlew genIntellijRuns if you are on Mac/Linux)
-4. Refresh the Gradle Project in IDEA if required.
+Once you have Fabric installed you can download the source code for MITE:Reborn and place that in your Fabric folder.  Then you can launch your desired workspace (Ecllipse, IntelliJ, etc.  Whatever you use to make mods).
+When you're done adding your changes to the mod, you can upload a pull request.
+If your pull request is approved, it will be added into the mod as a new contribution!
 
-If at any point you are missing libraries in your IDE, or you've run into problems you can run "gradlew --refresh-dependencies" to refresh the local cache. "gradlew clean" to reset everything {this does not affect your code} and then start the processs again.
+Bugs and glitches can be reported on the **Issues** page of the GitHub repository, and things that need to be added to the mod can be found in **Projects**.
+If you have any questions, feel free to ask on the Discord!
 
-Should it still not work, 
-Refer to #ForgeGradle on EsperNet for more information about the gradle environment.
-or the Forge Project Discord discord.gg/UvedJ9m
+[https://discord.gg/KKrp6mp](https://discord.gg/KKrp6mp)
 
-Forge source installation
-=========================
-MinecraftForge ships with this code and installs it as part of the forge
-installation process, no further action is required on your part.
-
-LexManos' Install Video
-=======================
-https://www.youtube.com/watch?v=8VEdtQLuLO0&feature=youtu.be
-
-For more details update more often refer to the Forge Forums:
-http://www.minecraftforge.net/forum/index.php/topic,14048.0.html
