@@ -10,7 +10,7 @@ import net.minecraft.util.math.MathHelper;
 
 public class Resources {
 	
-	public static int MAX_CARRY = 300;
+	public static int MAX_CARRY = 400;
 	
 	public static void makeFieldAccessible(Field field) throws Exception {
 		Field modifiers = Field.class.getDeclaredField("modifiers");

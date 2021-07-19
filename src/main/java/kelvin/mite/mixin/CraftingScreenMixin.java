@@ -1,5 +1,9 @@
 package kelvin.mite.mixin;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.gui.screen.ingame.FurnaceScreen;
+import net.minecraft.text.TranslatableText;
+import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
@@ -18,13 +22,14 @@ import net.minecraft.text.Text;
 
 @Mixin(CraftingScreen.class)
 public abstract class CraftingScreenMixin extends HandledScreen<CraftingScreenHandler> implements RecipeBookProvider {
-	
+	private static final Identifier FURNACE_TEX = new Identifier("textures/gui/container/furnace.png");
+
 	@Shadow
 	private RecipeBookWidget recipeBook;
 
 	@Shadow
 	private boolean narrow;
-	
+
 	public boolean crafting = false;
 	public int crafting_ticks = 0;
 	public int max_crafting_ticks = 0;
@@ -38,22 +43,14 @@ public abstract class CraftingScreenMixin extends HandledScreen<CraftingScreenHa
 		playerInventory = inventory;
 	}
 	
-	public void tick() {
-		super.tick();
+	public void handledScreenTick() {
+		super.handledScreenTick();
 		this.recipeBook.update();
 
 		if (crafting) {
 			if (crafting_slot.hasStack()) {
-				crafting_ticks++;
-				System.out.println("crafting: " + crafting_ticks);
-				if (crafting_ticks > max_crafting_ticks) {
-					crafting_ticks = 0;
-					System.out.println("ding ding ding");
-					super.onMouseClick(crafting_slot, crafting_slot_id, 0, SlotActionType.QUICK_MOVE);
-					this.recipeBook.slotClicked(crafting_slot);
-					if (!crafting_slot.hasStack()) {
-						crafting = false;
-					}
+				if (crafting_ticks < max_crafting_ticks) {
+					crafting_ticks++;
 				}
 			} else {
 				crafting_ticks = 0;
@@ -64,6 +61,8 @@ public abstract class CraftingScreenMixin extends HandledScreen<CraftingScreenHa
 	
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
 		renderBackground(matrices);
+		//89, 35 (top left)
+		//selection: x176, y14, w24, h17
 		if (this.recipeBook.isOpen() && this.narrow) {
 			drawBackground(matrices, delta, mouseX, mouseY);
 			this.recipeBook.render(matrices, mouseX, mouseY, delta);
@@ -72,9 +71,18 @@ public abstract class CraftingScreenMixin extends HandledScreen<CraftingScreenHa
 			super.render(matrices, mouseX, mouseY, delta);
 			this.recipeBook.drawGhostSlots(matrices, this.x, this.y, true, delta);
 		}
+		int tex = RenderSystem.getShaderTexture(0);
+		RenderSystem.setShaderTexture(0, FURNACE_TEX);
+
+		this.drawTexture(matrices, this.x + 89, this.y + 35, 176, 14, (int)(24 * ((float)crafting_ticks / (float)max_crafting_ticks)), 17);
+		RenderSystem.setShaderTexture(0, tex);
+
+		if (crafting) {
+			this.textRenderer.draw(matrices, (int)((crafting_ticks / (float)max_crafting_ticks) * 100) + "%", this.x + 119, this.y + 20, 0xffffff);
+		}
 		drawMouseoverTooltip(matrices, mouseX, mouseY);
 		this.recipeBook.drawTooltip(matrices, this.x, this.y, mouseX, mouseY);
-		
+
 	}
 	
 	public int GetCraftingTicks(int difficulty) {
@@ -87,15 +95,37 @@ public abstract class CraftingScreenMixin extends HandledScreen<CraftingScreenHa
 	}
 
 	public void onMouseClick(Slot slot, int slotId, int button, SlotActionType actionType) {
-		crafting = false;
+
 		if (slot instanceof CraftingResultSlot) {
-			if (slot.hasStack()) {
-				crafting_slot = slot;
-				crafting_slot_id = slotId;
-				crafting_ticks = 0;
-				max_crafting_ticks = GetCraftingTicks(ItemCraftingDifficulty.GetDifficultyFor(slot.getStack().getItem()));
-				crafting = true;
+			if (crafting_ticks >= max_crafting_ticks && crafting == true) {
+				if (actionType == SlotActionType.QUICK_MOVE ||
+				actionType == SlotActionType.QUICK_CRAFT) {
+					actionType = SlotActionType.PICKUP;
+				}
+				if (slot.hasStack() && crafting == false) {
+					System.out.println("craft!");
+					crafting_slot = slot;
+					crafting_slot_id = slotId;
+					crafting_ticks = 0;
+					max_crafting_ticks = GetCraftingTicks(ItemCraftingDifficulty.GetDifficultyFor(slot.getStack().getItem()));
+					crafting = true;
+				} else {
+					crafting = false;
+					crafting_ticks = 0;
+				}
+				super.onMouseClick(slot, slotId, button, actionType);
+				this.recipeBook.slotClicked(slot);
+			} else {
+				if (slot.hasStack() && crafting == false) {
+					System.out.println("craft!");
+					crafting_slot = slot;
+					crafting_slot_id = slotId;
+					crafting_ticks = 0;
+					max_crafting_ticks = GetCraftingTicks(ItemCraftingDifficulty.GetDifficultyFor(slot.getStack().getItem()));
+					crafting = true;
+				}
 			}
+
 			
 		} else {
 			super.onMouseClick(slot, slotId, button, actionType);

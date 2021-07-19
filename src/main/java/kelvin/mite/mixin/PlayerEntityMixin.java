@@ -62,6 +62,9 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 		if (weight > Resources.MAX_CARRY) {
 			move_mult = 0;
 		}
+		if (move_mult < 0.5F) { // adding this temporarily as a test.
+			move_mult = 0.5F;
+		}
 		this.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).setBaseValue(MOVEMENT_SPEED * move_mult);
 		
 		this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue((int)Math.round(experienceLevel / 5) * 2 + 6);
