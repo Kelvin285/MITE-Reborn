@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#X",
+    "#S"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:stick"
+    },
+    "X": {
+      "item": "minecraft:flint"
+    },
+    "S": {
+      "item": "mite:sinew"
+    }
+  },
+  "result": {
+    "item": "mite:flint_hatchet"
+  }
+}

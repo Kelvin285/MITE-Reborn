@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+	"# ",
+	"SG"
+  ],
+  "key": {
+    "#": {
+      "item": "mite:rock"
+    },
+	"S": {
+	  "item": "minecraft:stick"
+	},
+	"G": {
+	  "item": "mite:dry_grass"
+	}
+  },
+  "result": {
+    "item": "minecraft:stone_shovel",
+	"count": 1
+  }
+}

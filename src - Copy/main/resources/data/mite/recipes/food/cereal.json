@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:wheat"
+    },
+	{
+	  "item": "mite:bowl_milk"
+	},
+	{
+	  "item": "minecraft:sugar"
+	}
+  ],
+  "result": {
+    "item": "mite:cereal"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    "#minecraft:dark_oak_logs",
+    "#minecraft:oak_logs",
+    "#minecraft:acacia_logs",
+    "#minecraft:birch_logs",
+    "#minecraft:jungle_logs",
+    "#minecraft:spruce_logs",
+	"mite:thin_oak_log",
+	"mite:thin_birch_log",
+	"mite:thin_spruce_log"
+  ]
+}

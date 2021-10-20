@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "mite:bowl_milk"
+    },
+	{
+	  "item": "minecraft:potato"
+	},
+	{
+	  "item": "mite:onion"
+	},
+	{
+	  "item": "minecraft:carrot"
+	}
+  ],
+  "result": {
+    "item": "mite:vegetable_soup"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "mite:unbaked_cake"
+  },
+  "result": "minecraft:cake",
+  "experience": 0.35,
+  "cookingtime": 200,
+  "count": 4
+}

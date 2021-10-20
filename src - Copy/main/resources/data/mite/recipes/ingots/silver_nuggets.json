@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#"
+  ],
+  "key": {
+    "#": {
+      "item": "mite:silver_ingot"
+    }
+  },
+  "result": {
+    "item": "mite:silver_nugget",
+	"count": 9
+  }
+}

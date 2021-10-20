@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "mite:orange"
+    },
+	{
+	  "item": "minecraft:snowball"
+	},
+	{
+	  "item": "minecraft:sugar"
+	},
+	{
+	  "item": "minecraft:bowl"
+	}
+  ],
+  "result": {
+    "item": "mite:sorbet"
+  }
+}

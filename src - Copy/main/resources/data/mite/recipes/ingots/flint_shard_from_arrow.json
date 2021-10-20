@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+	"X"
+  ],
+  "key": {
+    "X": {
+      "item": "minecraft:arrow"
+    }
+  },
+  "result": {
+    "item": "mite:flint_shard"
+  }
+}

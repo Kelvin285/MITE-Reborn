@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "mite:ice_cream"
+    },
+	{
+	  "item": "mite:chocolate"
+	},
+	{
+	  "item": "mite:cherries"
+	},
+	{
+	  "item": "mite:banana"
+	}
+  ],
+  "result": {
+    "item": "mite:banana_split"
+  }
+}

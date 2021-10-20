@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "mite:dough"
+    },
+	{
+	  "item": "minecraft:sugar"
+	},
+	{
+	  "item": "mite:chocolate"
+	},
+	{
+	  "item": "minecraft:egg"
+	}
+  ],
+  "result": {
+    "item": "mite:cookie_dough"
+  }
+}

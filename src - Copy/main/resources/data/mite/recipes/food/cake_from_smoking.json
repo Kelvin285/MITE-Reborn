@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smoking",
+  "ingredient": {
+    "item": "mite:unbaked_cake"
+  },
+  "result": "minecraft:cake",
+  "experience": 0.35,
+  "cookingtime": 100,
+  "count": 1
+}

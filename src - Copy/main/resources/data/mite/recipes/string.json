@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "mite:flax_fibers"
+    },
+	{
+      "item": "mite:flax_fibers"
+    },
+	{
+      "item": "mite:flax_fibers"
+    },
+	{
+      "item": "mite:flax_fibers"
+    }
+  ],
+  "result": {
+    "item": "minecraft:string"
+  }
+}

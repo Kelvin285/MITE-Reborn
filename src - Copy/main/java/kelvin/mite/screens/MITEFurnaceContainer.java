@@ -1,4 +1,4 @@
-package kelvin.mite.containers;
+package kelvin.mite.screens;
 
 public class MITEFurnaceContainer {
 

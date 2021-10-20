@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:campfire_cooking",
+  "ingredient": {
+    "item": "mite:bacon"
+  },
+  "result": "mite:cooked_bacon",
+  "experience": 0.35,
+  "cookingtime": 3600
+}
