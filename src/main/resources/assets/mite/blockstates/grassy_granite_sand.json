@@ -1,0 +1,24 @@
+{
+  "variants": {
+    "snowy=false": [
+      {
+        "model": "mite:block/grassy_granite_sand"
+      },
+      {
+        "model": "mite:block/grassy_granite_sand",
+        "y": 90
+      },
+      {
+        "model": "mite:block/grassy_granite_sand",
+        "y": 180
+      },
+      {
+        "model": "mite:block/grassy_granite_sand",
+        "y": 270
+      }
+    ],
+    "snowy=true": {
+      "model": "mite:block/grassy_granite_sand_with_snow"
+    }
+  }
+}

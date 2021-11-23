@@ -2,14 +2,17 @@
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "#X",
-    "# "
+    "#S"
   ],
   "key": {
     "#": {
       "item": "minecraft:stick"
     },
     "X": {
-      "item": "mite:copper_ingot"
+      "item": "minecraft:copper_ingot"
+    },
+    "S": {
+      "item": "minecraft:string"
     }
   },
   "result": {

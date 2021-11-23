@@ -1,0 +1,22 @@
+{
+    "textures": {
+        "particle": "mite:block/cakes/black_cake_side",
+        "bottom": "minecraft:block/cakes/cake_bottom",
+        "top": "mite:block/cakes/black_cake_top",
+        "side": "mite:block/cakes/black_cake_side",
+        "inside": "mite:block/cakes/black_cake_inner"
+    },
+    "elements": [
+        {   "from": [ 9, 0, 1 ],
+            "to": [ 15, 8, 15 ],
+            "faces": {
+                "down":  { "texture": "#bottom", "cullface": "down" },
+                "up":    { "texture": "#top" },
+                "north": { "texture": "#side" },
+                "south": { "texture": "#side" },
+                "west":  { "texture": "#inside" },
+                "east":  { "texture": "#side" }
+            }
+        }
+    ]
+}

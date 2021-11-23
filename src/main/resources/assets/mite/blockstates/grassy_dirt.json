@@ -1,0 +1,24 @@
+{
+  "variants": {
+    "snowy=false": [
+      {
+        "model": "mite:block/grassy_dirt"
+      },
+      {
+        "model": "mite:block/grassy_dirt",
+        "y": 90
+      },
+      {
+        "model": "mite:block/grassy_dirt",
+        "y": 180
+      },
+      {
+        "model": "mite:block/grassy_dirt",
+        "y": 270
+      }
+    ],
+    "snowy=true": {
+      "model": "mite:block/grassy_dirt_with_snow"
+    }
+  }
+}

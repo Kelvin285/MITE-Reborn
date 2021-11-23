@@ -2,15 +2,15 @@
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "SS",
-	"##"
+    "##"
   ],
   "key": {
     "#": {
       "item": "mite:rock"
     },
-	"S": {
-	  "item": "minecraft:stick"
-	}
+    "S": {
+      "item": "mite:thin_oak_log"
+    }
   },
   "result": {
     "item": "minecraft:campfire"

@@ -1,0 +1,8 @@
+{
+    "parent": "block/orientable",
+    "textures": {
+        "top": "mite:block/furnace/cobblestone/top",
+        "front": "mite:block/furnace/cobblestone/front_on",
+        "side": "mite:block/furnace/cobblestone/side"
+    }
+}

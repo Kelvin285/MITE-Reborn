@@ -1,0 +1,5 @@
+{
+    "variants": {
+        "": { "model": "mite:block/down_feather_block" }
+    }
+}

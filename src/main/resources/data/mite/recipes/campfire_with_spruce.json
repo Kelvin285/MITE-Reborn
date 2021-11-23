@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SS",
+    "##"
+  ],
+  "key": {
+    "#": {
+      "item": "mite:rock"
+    },
+    "S": {
+      "item": "mite:thin_spruce_log"
+    }
+  },
+  "result": {
+    "item": "minecraft:campfire"
+  }
+}

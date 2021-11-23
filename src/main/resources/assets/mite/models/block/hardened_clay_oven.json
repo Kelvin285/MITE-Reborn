@@ -1,0 +1,8 @@
+{
+    "parent": "block/orientable",
+    "textures": {
+        "top": "mite:block/furnace/hardened_clay/top",
+        "front": "mite:block/furnace/hardened_clay/front",
+        "side": "mite:block/furnace/hardened_clay/side"
+    }
+}

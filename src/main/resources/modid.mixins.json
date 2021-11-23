@@ -24,14 +24,21 @@
 	"MiningToolItemMixin",
 	"CookingRecipeSerializerMixin",
 	"SwordItemMixin",
-	"TridentItemMixin"
+	"TridentItemMixin",
+	"CowEntityMixin",
+	"CreeperEntityMixin",
+	"CreeperIgniteGoalMixin",
+	"DrownedEntityMixin",
+	"CodEntityMixin"
   ],
   "client": [
 	"InGameHudMixin",
 	"InventoryScreenMixin",
 	"BakedModelManagerMixin",
 	"ClientPlayerInteractionManagerMixin",
-	"CraftingScreenMixin"
+	"CraftingScreenMixin",
+	"CreeperEntityRendererMixin",
+	"ClientPlayerEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1

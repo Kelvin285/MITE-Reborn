@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "top": "block/grass_block_top",
+    "bottom": "mite:block/diorite_sand",
+    "side": "mite:block/diorite_sand",
+    "particle": "mite:block/diorite_sand"
+  }
+}

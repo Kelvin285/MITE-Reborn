@@ -1,0 +1,70 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "item/generated",
+	"textures": {
+		"layer0": "mite:item/wooden_shield"
+	},
+	"elements": [
+		{
+			"from": [5, 6, 7.8],
+			"to": [6, 9, 11.8],
+			"faces": {
+				"north": {"uv": [2, 4, 3, 7], "texture": "#layer0"},
+				"east": {"uv": [2, 4, 3, 7], "texture": "#layer0"},
+				"south": {"uv": [2, 4, 3, 7], "texture": "#layer0"},
+				"west": {"uv": [2, 4, 3, 7], "texture": "#layer0"},
+				"up": {"uv": [2, 4, 3, 7], "texture": "#layer0"},
+				"down": {"uv": [2, 4, 3, 7], "texture": "#layer0"}
+			}
+		},
+		{
+			"from": [10, 6, 7.8],
+			"to": [11, 9, 11.8],
+			"faces": {
+				"north": {"uv": [2, 4, 3, 7], "texture": "#layer0"},
+				"east": {"uv": [2, 4, 3, 7], "texture": "#layer0"},
+				"south": {"uv": [2, 4, 3, 7], "texture": "#layer0"},
+				"west": {"uv": [2, 4, 3, 7], "texture": "#layer0"},
+				"up": {"uv": [2, 4, 3, 7], "texture": "#layer0"},
+				"down": {"uv": [2, 4, 3, 7], "texture": "#layer0"}
+			}
+		},
+		{
+			"from": [6, 6, 11.8],
+			"to": [10, 9, 12.8],
+			"faces": {
+				"north": {"uv": [2, 4, 3, 7], "texture": "#layer0"},
+				"east": {"uv": [2, 4, 3, 7], "texture": "#layer0"},
+				"south": {"uv": [2, 4, 3, 7], "texture": "#layer0"},
+				"west": {"uv": [2, 4, 3, 7], "texture": "#layer0"},
+				"up": {"uv": [2, 4, 3, 7], "texture": "#layer0"},
+				"down": {"uv": [2, 4, 3, 7], "texture": "#layer0"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [89, -89, 0],
+			"translation": [1.75, -2, 5]
+		},
+		"thirdperson_lefthand": {
+			"rotation": [1, -91, -92],
+			"translation": [1.75, -2.25, 4.25]
+		},
+		"firstperson_righthand": {
+			"translation": [0, 0, 2]
+		},
+		"firstperson_lefthand": {
+			"translation": [0, 0, 2]
+		},
+		"ground": {
+			"scale": [1, 1, 0.33]
+		},
+		"gui": {
+			"rotation": [0, -180, 0]
+		},
+		"head": {
+			"translation": [0, 0, -6]
+		}
+	}
+}

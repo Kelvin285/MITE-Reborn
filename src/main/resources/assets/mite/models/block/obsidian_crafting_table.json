@@ -1,0 +1,12 @@
+{
+    "parent": "block/cube",
+    "textures": {
+        "particle": "block/oak_log",
+        "down": "block/oak_log_top",
+        "up": "mite:block/crafting_table/obsidian/top",
+        "north": "block/oak_log",
+        "east": "block/oak_log",
+        "south": "block/oak_log",
+        "west": "block/oak_log"
+    }
+}

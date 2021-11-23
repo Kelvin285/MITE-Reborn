@@ -55,7 +55,7 @@ public abstract class ItemEntityMixin extends Entity {
 					this.setStack(new ItemStack(ItemRegistry.WATER_BOWL, count));
 					return;
 				}
-				
+				/*
 				if (item instanceof BlockItem) {
 					Block block = ((BlockItem)item).getBlock();
 					if (BlockRegistry.gravel_variants.contains(block)) {
@@ -68,61 +68,8 @@ public abstract class ItemEntityMixin extends Entity {
 						}
 					}
 				}
+				*/
 			}
-		}
-	}
-	
-	private void DropGravelItem() {
-		// flint chip = 1/3
-		// flint = 1/10
-		// copper = 1/50
-		// silver = 1/50
-		// iron = 1/100
-		// gold = 1/150
-		// obsidian = 1/1000
-		// mithril = 1/1000
-		// adamantium = 1/10000
-		Item drop = Items.AIR;
-		
-		Item adamantium = Items.FLINT;
-		Item obsidian = Items.FLINT;
-		Item mithril = Items.FLINT;
-		
-		if (Math.random() <= 1.0D / 10000.0D) {
-			// adamantium nugget
-			drop = adamantium;
-		}
-		else if (Math.random() <= 1.0D / 1000.0D) {
-			if (Math.random() <= 0.5f) {
-				// obsidian shard
-				drop = obsidian;
-			} else {
-				// mithril nugget
-				drop = mithril;
-			}
-		}
-		else if (Math.random() <= 1.0D / 150.0D) {
-			drop = Items.GOLD_NUGGET;
-		}
-		else if (Math.random() <= 1.0D / 100.0D) {
-			drop = Items.IRON_NUGGET;
-		}
-		else if (Math.random() <= 1.0D / 50.0D) {
-			if (Math.random() <= 0.5f) {
-				drop = ItemRegistry.SILVER_NUGGET;
-			} else {
-				drop = ItemRegistry.COPPER_NUGGET;
-			}
-		}
-		else if (Math.random() <= 1.0D / 10.0D) {
-			drop = Items.FLINT;
-		}
-		else if (Math.random() <= 1.0D / 3.0D) {
-			drop = ItemRegistry.FLINT_SHARD;
-		}
-		
-		if (drop != Items.AIR) { 
-			world.spawnEntity(new ItemEntity(world, getPos().x, getPos().y, getPos().z, new ItemStack(drop)));
 		}
 	}
 	

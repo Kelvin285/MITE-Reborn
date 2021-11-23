@@ -1,0 +1,5 @@
+{
+    "variants": {
+        "": { "model": "mite:block/mithril_crafting_table" }
+    }
+}

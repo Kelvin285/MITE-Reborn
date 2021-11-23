@@ -298,19 +298,19 @@ public class BlockRegistry {
 	public static void RegisterAllBlocks() {
 		Color grass_color = new Color((int)(87 * 1.5), (int)(132 * 1.5), (int)(35 * 1.5));
 		
-		SANDSTONE_GRAVEL = Register(new Identifier("mite:sandstone_gravel"), new FallingBlock(
+		SANDSTONE_GRAVEL = Register(new Identifier("mite:sandstone_gravel"), new GravelBlock(
 				Settings.of(Blocks.GRAVEL.getDefaultState().getMaterial()).ticksRandomly().strength(Blocks.GRAVEL.getDefaultState().getHardness(null, null)).sounds(Blocks.GRAVEL.getDefaultState().getSoundGroup())),
 				"sandstone_gravel");
-		RED_SANDSTONE_GRAVEL = Register(new Identifier("mite:red_sandstone_gravel"), new FallingBlock(
+		RED_SANDSTONE_GRAVEL = Register(new Identifier("mite:red_sandstone_gravel"), new GravelBlock(
 				Settings.of(Blocks.GRAVEL.getDefaultState().getMaterial()).ticksRandomly().strength(Blocks.GRAVEL.getDefaultState().getHardness(null, null)).sounds(Blocks.GRAVEL.getDefaultState().getSoundGroup())),
 				"red_sandstone_gravel");
-		ANDESITE_GRAVEL = Register(new Identifier("mite:andesite_gravel"), new FallingBlock(
+		ANDESITE_GRAVEL = Register(new Identifier("mite:andesite_gravel"), new GravelBlock(
 				Settings.of(Blocks.GRAVEL.getDefaultState().getMaterial()).ticksRandomly().strength(Blocks.GRAVEL.getDefaultState().getHardness(null, null)).sounds(Blocks.GRAVEL.getDefaultState().getSoundGroup())),
 				"andesite_gravel");
-		GRANITE_GRAVEL = Register(new Identifier("mite:granite_gravel"), new FallingBlock(
+		GRANITE_GRAVEL = Register(new Identifier("mite:granite_gravel"), new GravelBlock(
 				Settings.of(Blocks.GRAVEL.getDefaultState().getMaterial()).ticksRandomly().strength(Blocks.GRAVEL.getDefaultState().getHardness(null, null)).sounds(Blocks.GRAVEL.getDefaultState().getSoundGroup())),
 				"granite_gravel");
-		DIORITE_GRAVEL = Register(new Identifier("mite:diorite_gravel"), new FallingBlock(
+		DIORITE_GRAVEL = Register(new Identifier("mite:diorite_gravel"), new GravelBlock(
 				Settings.of(Blocks.GRAVEL.getDefaultState().getMaterial()).ticksRandomly().strength(Blocks.GRAVEL.getDefaultState().getHardness(null, null)).sounds(Blocks.GRAVEL.getDefaultState().getSoundGroup())),
 				"diorite_gravel");
 		ANDESITE_SAND = Register(new Identifier("mite:andesite_sand"), new FallingBlock(

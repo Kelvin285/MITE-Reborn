@@ -217,14 +217,27 @@ public class ChunkGeneratorMixin {
 	
 	private void GenerateRocks(ChunkRegion region, int x, int y, int z, BlockPos.Mutable pos, BlockPos.Mutable placing_pos) {
 		pos.set(x, y, z);
-		if (region.getBlockState(pos).getBlock() instanceof MiteGrassBlock || BlockRegistry.CanSwapWithGrass(region.getBlockState(pos).getBlock()) ||
-				region.getBlockState(pos).getMaterial() == Material.STONE) {
-			if (region.getRandom().nextInt(100) == 0) {
-				placing_pos.set(x, y + 1, z);
-				if (region.isChunkLoaded(placing_pos))
-				if (region.getBlockState(pos.up()).getBlock() instanceof AirBlock) {
-					region.setBlockState(placing_pos, BlockRegistry.ROCK.getDefaultState().with(AbstractButtonBlock.FACE, WallMountLocation.FLOOR), 0);
-				}
+		int probability = 0; //1 out of what?
+
+		if (BlockRegistry.CanSwapWithGrass(region.getBlockState(pos).getBlock())) {
+			probability = 400;
+		}
+		if (region.getBlockState(pos).getBlock() instanceof MiteGrassBlock) {
+			probability = 500;
+		}
+		if (region.getBlockState(pos).getMaterial() == Material.STONE) {
+			probability = 100;
+		}
+
+		if (probability == 0) {
+			return;
+		}
+
+		if (region.getRandom().nextInt(probability) == 0) {
+			placing_pos.set(x, y + 1, z);
+			if (region.isChunkLoaded(placing_pos))
+			if (region.getBlockState(pos.up()).getBlock() instanceof AirBlock) {
+				region.setBlockState(placing_pos, BlockRegistry.ROCK.getDefaultState().with(AbstractButtonBlock.FACE, WallMountLocation.FLOOR), 0);
 			}
 		}
 	}

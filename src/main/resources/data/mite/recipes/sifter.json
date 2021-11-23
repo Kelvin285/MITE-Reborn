@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+	"#S",
+	"#S"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:stick"
+    },
+	"S": {
+	  "item": "mite:dry_grass"
+	}
+  },
+  "result": {
+    "item": "mite:sifter",
+	"count": 1
+  }
+}

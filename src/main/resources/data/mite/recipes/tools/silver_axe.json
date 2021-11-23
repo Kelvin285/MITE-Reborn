@@ -3,7 +3,7 @@
   "pattern": [
     "XX",
     "#X",
-    "# "
+    "#S"
   ],
   "key": {
     "#": {
@@ -11,6 +11,9 @@
     },
     "X": {
       "item": "mite:silver_ingot"
+    },
+    "S": {
+      "item": "mite:string"
     }
   },
   "result": {

@@ -1,7 +1,7 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-	"X",
+	"XS",
     "#",
     "#"
   ],
@@ -11,6 +11,9 @@
     },
     "X": {
       "item": "minecraft:flint"
+    },
+    "S": {
+      "item": "mite:sinew"
     }
   },
   "result": {

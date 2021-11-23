@@ -1,0 +1,12 @@
+{
+    "parent": "block/cube",
+    "textures": {
+        "particle": "mite:block/crafting_table/iron/front",
+        "down": "block/oak_planks",
+        "up": "block/crafting_table_top",
+        "north": "mite:block/crafting_table/iron/front",
+        "east": "mite:block/crafting_table/iron/side",
+        "south": "mite:block/crafting_table/iron/side",
+        "west": "mite:block/crafting_table/iron/front"
+    }
+}

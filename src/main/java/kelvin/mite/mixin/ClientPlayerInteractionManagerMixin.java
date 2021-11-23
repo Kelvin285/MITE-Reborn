@@ -81,6 +81,7 @@ public class ClientPlayerInteractionManagerMixin {
 		if (selectedStack != null) {
 			Item item = selectedStack.getItem();
 			if (item == Items.STICK) reach += 0.5F;
+			if (item == ItemRegistry.BRANCH) reach += 1.0F;
 			else if (item == Items.BONE)reach += 0.5f;
 			else if (item == ItemRegistry.WOODEN_CLUB) reach += 0.5f;
 			else if (item == ItemRegistry.WOODEN_CUDGEL)reach += 0.25f;

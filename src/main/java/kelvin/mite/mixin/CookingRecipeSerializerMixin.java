@@ -6,6 +6,7 @@ import net.minecraft.recipe.CookingRecipeSerializer;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.RecipeSerializer;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -31,7 +32,7 @@ public class CookingRecipeSerializerMixin<T extends AbstractCookingRecipe> imple
     @Shadow
     private int cookingTime;
 
-    @Override
+    @Overwrite
     public T read(Identifier identifier, JsonObject jsonObject) {
 
         String string = JsonHelper.getString(jsonObject, "group", "");
@@ -67,7 +68,7 @@ public class CookingRecipeSerializerMixin<T extends AbstractCookingRecipe> imple
         return recipe;
     }
 
-    @Override
+    @Overwrite
     public T read(Identifier identifier, PacketByteBuf packetByteBuf) {
         String string = packetByteBuf.readString();
         Ingredient ingredient = Ingredient.fromPacket(packetByteBuf);
@@ -112,7 +113,7 @@ public class CookingRecipeSerializerMixin<T extends AbstractCookingRecipe> imple
     protected int cookTime;
      */
 
-    @Override
+    @Overwrite
     public void write(PacketByteBuf packetByteBuf, T recipe) {
         try {
             packetByteBuf.writeString((String)recipe.getClass().getDeclaredFields()[2].get(recipe)); //group

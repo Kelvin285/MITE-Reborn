@@ -3,17 +3,7 @@ package kelvin.mite.registry;
 import java.lang.reflect.Field;
 import java.util.Set;
 
-import kelvin.mite.items.ClubItem;
-import kelvin.mite.items.CudgelItem;
-import kelvin.mite.items.HatchetItem;
-import kelvin.mite.items.ItemBurnable;
-import kelvin.mite.items.ItemManure;
-import kelvin.mite.items.MiteAxeItem;
-import kelvin.mite.items.MiteHoeItem;
-import kelvin.mite.items.MitePickaxeItem;
-import kelvin.mite.items.KnifeItem;
-import kelvin.mite.items.SpearItem;
-import kelvin.mite.items.SurvivalItemTier;
+import kelvin.mite.items.*;
 import kelvin.mite.main.resources.Resources;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
@@ -69,6 +59,7 @@ public class ItemRegistry {
 	public static Item  BACON;// = ITEMS.Register("bacon", () -> new Item((new Settings()).group(ItemGroup.FOOD).maxCount(16).food((new FoodComponent.Builder()).hunger(2).saturationModifier(0.2F).meat().build())));
 	public static Item  COOKED_BACON;// = ITEMS.Register("cooked_bacon", () -> new Item((new Settings()).group(ItemGroup.FOOD).maxCount(16).food((new FoodComponent.Builder()).hunger(5).saturationModifier(0.4F).meat().build())));
 	public static Item  TWIG;// = ITEMS.Register("twig", () -> new ItemBurnable((new Settings()).group(ItemGroup.MISC).maxCount(32), 50));
+	public static Item  BRANCH;// = ITEMS.Register("twig", () -> new ItemBurnable((new Settings()).group(ItemGroup.MISC).maxCount(32), 50));
 	public static Item  CHARRED_FOOD;// = ITEMS.Register("charred_food", () -> new Item((new Settings()).group(ItemGroup.MISC).maxCount(16)));
 	public static Item  CLAY_OVEN;// = ITEMS.Register("clay_oven", () -> new BlockItem(BlockRegistry.CLAY_OVEN.get(), (new Settings()).group(ItemGroup.BUILDING_BLOCKS).maxCount(1)));
 	public static Item  HARDENED_CLAY_OVEN;// = ITEMS.Register("hardened_clay_oven", () -> new BlockItem(BlockRegistry.HARDENED_CLAY_OVEN.get(), (new Settings()).group(ItemGroup.BUILDING_BLOCKS).maxCount(1)));
@@ -143,6 +134,8 @@ public class ItemRegistry {
 	public static Item THIN_OAK_LOG;
 	public static Item THIN_BIRCH_LOG;
 	public static Item THIN_SPRUCE_LOG;
+
+	public static Item SIFTER;
 
 //	public static Item COPPER_SHEARS, COPPER_WAR_HAMMER, COPPER_BATTLE_AXE, COPPER_MATTOCK;
 //	public static Item SILVER_SHEARS, SILVER_WAR_HAMMER, SILVER_BATTLE_AXE, SILVER_MATTOCK;
@@ -249,6 +242,8 @@ public class ItemRegistry {
 		BACON = Register("bacon", new Item((new Settings()).group(ItemGroup.FOOD).food((new FoodComponent.Builder()).hunger(2).saturationModifier(0.2F).meat().build())));
 		COOKED_BACON = Register("cooked_bacon", new Item((new Settings()).group(ItemGroup.FOOD).food((new FoodComponent.Builder()).hunger(5).saturationModifier(0.4F).meat().build())));
 		TWIG = Register("twig", new ItemBurnable((new Settings()).group(ItemGroup.MISC).maxCount(32), 50));
+		SIFTER = Register("sifter", new SifterItem(new Settings().group(ItemGroup.TOOLS).maxCount(1)));
+		BRANCH = Register("branch", new ItemBurnable((new Settings()).group(ItemGroup.MISC).maxCount(32), 100));
 		CHARRED_FOOD = Register("charred_food", new Item((new Settings()).group(ItemGroup.MISC).maxCount(16)));
 		CLAY_OVEN = Register("clay_oven", new BlockItem(BlockRegistry.CLAY_OVEN, (new Settings()).group(ItemGroup.BUILDING_BLOCKS).maxCount(1)));
 		HARDENED_CLAY_OVEN = Register("hardened_clay_oven", new BlockItem(BlockRegistry.HARDENED_CLAY_OVEN, (new Settings()).group(ItemGroup.BUILDING_BLOCKS).maxCount(1)));
