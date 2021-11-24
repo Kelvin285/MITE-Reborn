@@ -35,6 +35,7 @@ import net.minecraft.block.SnowBlock;
 import net.minecraft.block.StainedGlassPaneBlock;
 import net.minecraft.block.TrapdoorBlock;
 import net.minecraft.item.Item;
+import net.minecraft.item.ShovelItem;
 import net.minecraft.item.SwordItem;
 import net.minecraft.item.TridentItem;
 
@@ -67,6 +68,9 @@ public class ToolDecayRates {
 		if (item instanceof SwordItem) {
 			return GetSwordDecayRateAgainstBlock(state);
 		}
+		if (item instanceof ShovelItem) {
+			return GetShovelDecayRateAgainstBlock(state);
+		}
 		return GetDefaultDecayRateAgainstBlock(state);
 	}
 	
@@ -95,6 +99,9 @@ public class ToolDecayRates {
 		}
 		if (item instanceof SwordItem) {
 			return GetSwordDecayRateAgainstEnemy();
+		}
+		if (item instanceof ShovelItem) {
+			return GetShovelDecayRateAgainstEnemy();
 		}
 		return 100;
 	}

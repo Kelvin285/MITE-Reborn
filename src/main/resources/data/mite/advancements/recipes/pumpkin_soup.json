@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "mite:pumpkin_soup"
+    ]
+  },
+  "criteria": {
+    "has_bowl": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item":"minecraft:bowl"
+          }
+        ]
+      }
+    },
+	"has_dandelion": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item":"minecraft:pumpkin"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "mite:pumpkin_soup"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_bowl",
+      "has_the_recipe",
+	  "has_dandelion"
+    ]
+  ]
+}

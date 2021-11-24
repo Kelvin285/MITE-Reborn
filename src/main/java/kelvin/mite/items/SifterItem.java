@@ -101,23 +101,23 @@ public class SifterItem extends ToolItem implements Vanishable {
                 drop = mithril;
             }
         }
-        else if (world.random.nextInt(650) == 0) {
+        else if (world.random.nextInt(500) == 0) {
             drop = Items.GOLD_NUGGET;
         }
-        else if (world.random.nextInt(400) == 0) {
+        else if (world.random.nextInt(350) == 0) {
             drop = Items.IRON_NUGGET;
         }
-        else if (world.random.nextInt(150) == 0) {
+        else if (world.random.nextInt(100) == 0) {
             if (Math.random() <= 0.5f) {
                 drop = ItemRegistry.SILVER_NUGGET;
             } else {
                 drop = ItemRegistry.COPPER_NUGGET;
             }
         }
-        else if (world.random.nextInt(70) == 0) {
+        else if (world.random.nextInt(40) == 0) {
             drop = Items.FLINT;
         }
-        else if (world.random.nextInt(30) == 0) {
+        else if (world.random.nextInt(15) == 0) {
             drop = ItemRegistry.FLINT_SHARD;
         }
 
