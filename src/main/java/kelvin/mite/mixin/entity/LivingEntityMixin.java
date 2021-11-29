@@ -1,5 +1,8 @@
 package kelvin.mite.mixin.entity;
 
+import net.minecraft.entity.attribute.EntityAttribute;
+import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.player.PlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
 
 import net.minecraft.entity.LivingEntity;
@@ -17,6 +20,19 @@ public class LivingEntityMixin {
 		LivingEntity entity = (LivingEntity)(Object)this;
 		if (!entity.hasStatusEffect(StatusEffects.SLOWNESS))
 			entity.setVelocity(entity.getVelocity().add(0.0D, 0.03999999910593033D, 0.0D));
+	}
+
+	@Shadow
+	public double getAttributeValue(EntityAttribute attribute) {
+		return 0;
+	}
+
+	public final float getMaxHealth() {
+		if ((LivingEntity)(Object)this instanceof PlayerEntity) {
+			PlayerEntity player = ((PlayerEntity)(Object)this);
+			return (int)Math.floor(player.experienceLevel / 5) * 2 + 6;
+		}
+		return (float)this.getAttributeValue(EntityAttributes.GENERIC_MAX_HEALTH);
 	}
 
 	@Shadow

@@ -1,0 +1,81 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.unknown",
+				"texture_width": 64,
+				"texture_height": 64,
+				"visible_bounds_width": 3,
+				"visible_bounds_height": 2.5,
+				"visible_bounds_offset": [0, 0.75, 0]
+			},
+			"bones": [
+				{
+					"name": "body_bone",
+					"pivot": [0, 0, 0],
+					"cubes": [
+						{"origin": [-3, 3, -3], "size": [6, 7, 7], "uv": [11, 24]},
+						{"origin": [-1, 1, -6], "size": [2, 4, 0], "pivot": [-2, 4, 2], "rotation": [-22.5, 0, 0], "uv": [11, 39]},
+						{"origin": [-2, 2.8, -5.7], "size": [4, 6, 7], "pivot": [0, 0, 0], "rotation": [-5, 0, 0], "uv": [12, 24]}
+					]
+				},
+				{
+					"name": "right_wing_bone",
+					"parent": "body_bone",
+					"pivot": [-3, 10, 1],
+					"cubes": [
+						{"origin": [-4, 4, -2], "size": [1, 6, 6], "pivot": [-3, 10, 1], "rotation": [10, 0, 10], "uv": [31, 11]}
+					]
+				},
+				{
+					"name": "left_wing_bone",
+					"parent": "body_bone",
+					"pivot": [3, 10, 1],
+					"cubes": [
+						{"origin": [3, 4, -2], "size": [1, 6, 6], "pivot": [3, 10, 1], "rotation": [10, 0, -10], "uv": [31, 11]}
+					]
+				},
+				{
+					"name": "tail_bone",
+					"parent": "body_bone",
+					"pivot": [0, 10, 4],
+					"cubes": [
+						{"origin": [-3, 9, 4], "size": [6, 1, 8], "pivot": [0, 10, 4], "rotation": [-25, 0, 0], "uv": [36, 30]},
+						{"origin": [-2.6, 6, 3], "size": [5, 3, 5], "pivot": [0, 10, 4], "rotation": [-25, 0, 0], "uv": [36, 40]}
+					]
+				},
+				{
+					"name": "left_leg_bone",
+					"parent": "body_bone",
+					"pivot": [2, 4, 2],
+					"cubes": [
+						{"origin": [1, 0, 0], "size": [2, 0, 2], "uv": [26, 44]},
+						{"origin": [1, 0, 2], "size": [2, 4, 0], "uv": [28, 39]}
+					]
+				},
+				{
+					"name": "right_leg_bone",
+					"parent": "body_bone",
+					"pivot": [-2, 4, 2],
+					"cubes": [
+						{"origin": [-3, 0, 2], "size": [2, 4, 0], "uv": [16, 39]},
+						{"origin": [-3, 0, 0], "size": [2, 0, 2], "uv": [14, 44]}
+					]
+				},
+				{
+					"name": "neck_bone",
+					"parent": "body_bone",
+					"pivot": [0, 10, -3],
+					"cubes": [
+						{"origin": [-2, 12, -7], "size": [4, 3, 4], "uv": [9, 6]},
+						{"origin": [-1, 12, -9], "size": [2, 1, 2], "uv": [0, 11]},
+						{"origin": [-1, 8.9, -4], "size": [2, 6, 2], "uv": [13, 15]},
+						{"origin": [-1, 11, -6], "size": [2, 3, 2], "uv": [6, 19]},
+						{"origin": [-1, 8, -2], "size": [2, 3, 2], "uv": [33, 18]}
+					]
+				}
+			]
+		}
+	]
+}

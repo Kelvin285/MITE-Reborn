@@ -1,8 +1,16 @@
 package kelvin.mite.mixin.entity;
 
+import kelvin.mite.structures.MiteVillageStructure;
 import net.minecraft.SharedConstants;
+import net.minecraft.entity.EntityData;
+import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.player.HungerManager;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.world.LocalDifficulty;
+import net.minecraft.world.ServerWorldAccess;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -38,6 +46,8 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 	
 	@Shadow
 	private int experienceLevel;
+	@Shadow
+	private HungerManager hungerManager;
 	
 	
 	protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
@@ -51,7 +61,19 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 			this.setPos(getX(), getY() + 1, getZ());
 		}
 	}
-	
+
+	public void baseTick() {
+		this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue((int)Math.floor(experienceLevel / 5) * 2 + 6);
+
+		super.baseTick();
+
+		if (!MiteVillageStructure.CanGenerateVillage && MiteVillageStructure.canGenerate(world)) {
+			MiteVillageStructure.CanGenerateVillage = true;
+		}
+	}
+
+
+
 	@Shadow
 	private PlayerInventory getInventory() {
 		return null;
@@ -59,7 +81,6 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 	
 	@Inject(at = @At("HEAD"), method = "tick")
 	public void tick(CallbackInfo info) {
-		
 		int weight = Resources.GetInventoryWeight(this.getInventory());
 		double move_mult = 1;
 		if (weight > Resources.MAX_CARRY * 0.65) {
@@ -72,8 +93,9 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 			move_mult = 0.5F;
 		}
 		this.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).setBaseValue(MOVEMENT_SPEED * move_mult);
-		
-		this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue((int)Math.round(experienceLevel / 5) * 2 + 6);
+		this.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE).setBaseValue((hungerManager.getFoodLevel() + hungerManager.getSaturationLevel()) > 0 ? 1 : 0);
+
+		this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue((int)Math.floor(experienceLevel / 5) * 2 + 6);
 
 		if (this.getInventory().count(Items.IRON_INGOT) > 0) {
 			acquired_iron = true;
@@ -138,7 +160,6 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 				BlockRegistry.gravel_variants.contains(state.getBlock())) {
 			speed *= 0.75f;
 		}
-		
 		info.setReturnValue(speed);
 	}
 
@@ -148,6 +169,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 	public void readCustomDataFromNbt(NbtCompound nbt, CallbackInfo info) {
 		super.readCustomDataFromNbt(nbt);
 		acquired_iron = nbt.getBoolean("AcquiredIron");
+		this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue((int)Math.round(experienceLevel / 5) * 2 + 6);
 	}
 
 	@Inject(at = @At("RETURN"), method = "writeCustomDataToNbt", cancellable = true)

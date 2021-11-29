@@ -1,8 +1,13 @@
 package kelvin.mite.registry;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.Locale;
 
 import kelvin.mite.blocks.MITELogBlock;
+import kelvin.mite.main.Mite;
+import kelvin.mite.main.resources.Resources;
+import kelvin.mite.structures.MiteVillageStructure;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.AbstractBlock.AbstractBlockState;
 import net.minecraft.block.AbstractBlock.Settings;
@@ -22,8 +27,12 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.DyeItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
-import net.minecraft.item.MushroomStewItem;
+import net.minecraft.item.StewItem;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.world.gen.GenerationStep;
+import net.minecraft.world.gen.feature.StructureFeature;
+import net.minecraft.world.gen.feature.StructurePoolFeatureConfig;
+import org.spongepowered.tools.obfuscation.service.ObfuscationServices;
 
 public class VanillaTweaks {
 
@@ -212,7 +221,7 @@ public class VanillaTweaks {
 						item == Items.GLOWSTONE_DUST ||
 						item == Items.COD ||
 						item == Items.COOKED_COD ||
-						item.isFood() && !(item instanceof MushroomStewItem)||
+						item.isFood() && !(item instanceof StewItem)||
 						item instanceof DyeItem ||
 						item == Items.BLAZE_ROD ||
 						item == Items.GHAST_TEAR ||
@@ -302,10 +311,11 @@ public class VanillaTweaks {
 		ChangeMaxDamage(Items.STONE_AXE, 900);
 		ChangeMaxDamage(Items.STONE_SHOVEL, 900);
 	}
-	
+
 	public static void ApplyChanges() {
 		ChangeBlockStrength();
 		ChangeStackSizes();
 		ChangeItemDurability();
+		System.out.println("DONE!");
 	}
 }

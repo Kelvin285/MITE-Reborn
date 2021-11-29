@@ -33,12 +33,16 @@
 	"item.ToolMaterialsMixin",
 	"structures.DesertTempleGeneratorMixin",
 	"structures.ShipwreckGeneratorMixin",
-	"structures.VillageGeneratorMixin",
+	"structures.StructureFeatureMixin",
+	"ServerWorldMixin",
+	"RecipeBookMixin",
 	"item.DyeItemMixin",
 	"block.LeavesBlockMixin",
 	"entity.WolfEntityMixin",
 	"item.BoneMealItemMixin",
-	"block.CropBlockMixin"
+	"block.CropBlockMixin",
+	"entity.EscapeDangerGoalMixin",
+	"entity.HostileEntityMixin"
   ],
   "client": [
 	"client.InGameHudMixin",

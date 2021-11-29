@@ -7,6 +7,7 @@ import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.block.entity.LockableContainerBlockEntity;
+import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.ItemStack;
@@ -18,6 +19,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -76,8 +78,18 @@ public abstract class AbstractFurnaceBlockEntityMixin extends LockableContainerB
 		if (output_count == 0) output_count = 1;
 	}
 
-	@Inject(at = @At("HEAD"), method = "writeNbt", cancellable = true)
-	public void writeNbt(NbtCompound nbt, CallbackInfoReturnable<NbtCompound> info) {
+	@Overwrite
+	public void writeNbt(NbtCompound nbt) {
+		super.writeNbt(nbt);
+		nbt.putShort("BurnTime", (short)this.burnTime);
+		nbt.putShort("CookTime", (short)this.cookTime);
+		nbt.putShort("CookTimeTotal", (short)this.cookTimeTotal);
+		Inventories.writeNbt(nbt, this.inventory);
+		NbtCompound nbtCompound = new NbtCompound();
+		this.recipesUsed.forEach((identifier, count) -> {
+			nbtCompound.putInt(identifier.toString(), count);
+		});
+		nbt.put("RecipesUsed", nbtCompound);
 		nbt.putInt("InputCount", this.input_count);
 		nbt.putInt("OutputCount", this.output_count);
 	}

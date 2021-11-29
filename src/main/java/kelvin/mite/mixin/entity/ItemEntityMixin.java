@@ -1,5 +1,6 @@
 package kelvin.mite.mixin.entity;
 
+import net.minecraft.item.*;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -12,11 +13,6 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.MushroomStewItem;
 import net.minecraft.world.World;
 
 @Mixin(ItemEntity.class)
@@ -50,8 +46,7 @@ public abstract class ItemEntityMixin extends Entity {
 			if (this.getStack() != null) {
 				Item item = this.getStack().getItem();
 				int count = this.getStack().getCount();
-				
-				if (item == Items.BOWL || item instanceof MushroomStewItem) {
+				if (item == Items.BOWL || item instanceof StewItem) {
 					this.setStack(new ItemStack(ItemRegistry.WATER_BOWL, count));
 					return;
 				}

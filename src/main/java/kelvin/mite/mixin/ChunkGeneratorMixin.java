@@ -2,6 +2,9 @@ package kelvin.mite.mixin;
 
 import java.util.Random;
 
+import net.minecraft.world.StructureWorldAccess;
+import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.gen.random.SimpleRandom;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -27,7 +30,6 @@ import net.minecraft.util.math.noise.DoublePerlinNoiseSampler;
 import net.minecraft.world.ChunkRegion;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biome.Category;
-import net.minecraft.world.gen.SimpleRandom;
 import net.minecraft.world.gen.StructureAccessor;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
 
@@ -38,26 +40,20 @@ public class ChunkGeneratorMixin {
 	private DoublePerlinNoiseSampler terrainNoise2;
 
 	private Random random;
-	
-	
-	@Inject(at = @At("HEAD"), method = "getWorldHeight", cancellable = true)
-	public void getWorldHeight(CallbackInfoReturnable<Integer> info) {
-		info.setReturnValue(512);
-	}
-	
+
 	@Inject(at = @At("RETURN"), method = "generateFeatures", cancellable = true)
-	public void generateFeatures(ChunkRegion region, StructureAccessor accessor, CallbackInfo info) {
+	public void generateFeatures(StructureWorldAccess world, Chunk chunk, StructureAccessor structureAccessor, CallbackInfo info) {
 		if (terrainNoise == null) {
-			terrainNoise = DoublePerlinNoiseSampler.create(new SimpleRandom(region.getRandom().nextLong()), -8,
+			terrainNoise = DoublePerlinNoiseSampler.create(new SimpleRandom(world.getRandom().nextLong()), -8,
 					new double[]{1.0D});
-			terrainNoise2 = DoublePerlinNoiseSampler.create(new SimpleRandom(region.getRandom().nextLong()), -4,
+			terrainNoise2 = DoublePerlinNoiseSampler.create(new SimpleRandom(world.getRandom().nextLong()), -4,
 					new double[]{2.0D});
-			random = new Random(region.getRandom().nextLong());
-			VoronoiNoise.SetSeed(region.getRandom().nextLong());
+			random = new Random(world.getRandom().nextLong());
+			VoronoiNoise.SetSeed(world.getRandom().nextLong());
 		}
 		
 		
-		ChunkPos chunkPos = region.getCenterPos();
+		ChunkPos chunkPos = chunk.getPos();
 		BlockPos.Mutable pos = new BlockPos.Mutable();
 		BlockPos.Mutable placing_pos = new BlockPos.Mutable();
 
@@ -71,47 +67,47 @@ public class ChunkGeneratorMixin {
 				MiteSurfaceConfig surface = SurfaceBuilderRegistry.configs.get(biome_id);
 				
 				
-				for (int y = region.getBottomY(); y <= region.getTopY(); y++) {
+				for (int y = world.getBottomY(); y <= world.getTopY(); y++) {
 					
 					
 					placing_pos.set(x, y, z);
-					if (region.isChunkLoaded(placing_pos)) {
+					if (world.isChunkLoaded(placing_pos)) {
 						
 						if (surface.surface == MiteSurfaceConfig.SurfaceType.SAND_GRASS) { 
-							if (region.getBlockState(placing_pos).getBlock() == Blocks.STONE) {
-								region.setBlockState(placing_pos, surface.stone_config.stone.getDefaultState(), 0);
-							} else if (region.getBlockState(placing_pos).getBlock() == Blocks.GRASS_BLOCK) {
-								region.setBlockState(placing_pos, BlockRegistry.TrySwapWithGrass(surface.stone_config.sand).getDefaultState(), 0);
-							} else if (region.getBlockState(placing_pos).getBlock() == Blocks.DIRT) {
-								region.setBlockState(placing_pos, surface.stone_config.sand.getDefaultState(), 0);
-							} else if (region.getBlockState(placing_pos).getBlock() == Blocks.GRAVEL) {
-								region.setBlockState(placing_pos, surface.stone_config.gravel.getDefaultState(), 0);
-							} else if (region.getBlockState(placing_pos).getBlock() == Blocks.SAND) {
-								region.setBlockState(placing_pos, surface.stone_config.sand.getDefaultState(), 0);
+							if (world.getBlockState(placing_pos).getBlock() == Blocks.STONE) {
+								world.setBlockState(placing_pos, surface.stone_config.stone.getDefaultState(), 0);
+							} else if (world.getBlockState(placing_pos).getBlock() == Blocks.GRASS_BLOCK) {
+								world.setBlockState(placing_pos, BlockRegistry.TrySwapWithGrass(surface.stone_config.sand).getDefaultState(), 0);
+							} else if (world.getBlockState(placing_pos).getBlock() == Blocks.DIRT) {
+								world.setBlockState(placing_pos, surface.stone_config.sand.getDefaultState(), 0);
+							} else if (world.getBlockState(placing_pos).getBlock() == Blocks.GRAVEL) {
+								world.setBlockState(placing_pos, surface.stone_config.gravel.getDefaultState(), 0);
+							} else if (world.getBlockState(placing_pos).getBlock() == Blocks.SAND) {
+								world.setBlockState(placing_pos, surface.stone_config.sand.getDefaultState(), 0);
 							}
 						} else if (surface.surface == MiteSurfaceConfig.SurfaceType.DIRT_GRASS) {
-							if (region.getBlockState(placing_pos).getBlock() == Blocks.STONE) {
-								region.setBlockState(placing_pos, surface.stone_config.stone.getDefaultState(), 0);
-							} else if (region.getBlockState(placing_pos).getBlock() == Blocks.GRASS_BLOCK) {
-								region.setBlockState(placing_pos, BlockRegistry.TrySwapWithGrass(Blocks.DIRT).getDefaultState(), 0);
-							} else if (region.getBlockState(placing_pos).getBlock() == Blocks.DIRT) {
-								region.setBlockState(placing_pos, Blocks.DIRT.getDefaultState(), 0);
-							} else if (region.getBlockState(placing_pos).getBlock() == Blocks.GRAVEL) {
-								region.setBlockState(placing_pos, surface.stone_config.gravel.getDefaultState(), 0);
-							} else if (region.getBlockState(placing_pos).getBlock() == Blocks.SAND) {
-								region.setBlockState(placing_pos, surface.stone_config.sand.getDefaultState(), 0);
+							if (world.getBlockState(placing_pos).getBlock() == Blocks.STONE) {
+								world.setBlockState(placing_pos, surface.stone_config.stone.getDefaultState(), 0);
+							} else if (world.getBlockState(placing_pos).getBlock() == Blocks.GRASS_BLOCK) {
+								world.setBlockState(placing_pos, BlockRegistry.TrySwapWithGrass(Blocks.DIRT).getDefaultState(), 0);
+							} else if (world.getBlockState(placing_pos).getBlock() == Blocks.DIRT) {
+								world.setBlockState(placing_pos, Blocks.DIRT.getDefaultState(), 0);
+							} else if (world.getBlockState(placing_pos).getBlock() == Blocks.GRAVEL) {
+								world.setBlockState(placing_pos, surface.stone_config.gravel.getDefaultState(), 0);
+							} else if (world.getBlockState(placing_pos).getBlock() == Blocks.SAND) {
+								world.setBlockState(placing_pos, surface.stone_config.sand.getDefaultState(), 0);
 							}
 						}
 						if (y <= 62) {
-							if (region.getBlockState(placing_pos).getBlock() == Blocks.GRASS_BLOCK) {
-								region.setBlockState(placing_pos, surface.stone_config.gravel.getDefaultState(), 0);
-							} else if (region.getBlockState(placing_pos).getBlock() == Blocks.DIRT) {
-								region.setBlockState(placing_pos, surface.stone_config.gravel.getDefaultState(), 0);
+							if (world.getBlockState(placing_pos).getBlock() == Blocks.GRASS_BLOCK) {
+								world.setBlockState(placing_pos, surface.stone_config.gravel.getDefaultState(), 0);
+							} else if (world.getBlockState(placing_pos).getBlock() == Blocks.DIRT) {
+								world.setBlockState(placing_pos, surface.stone_config.gravel.getDefaultState(), 0);
 							}
 						}
 						
-						GenerateTrees(region, x, y, z, pos, placing_pos, surface);
-						GenerateRocks(region, x, y, z, pos, placing_pos);
+						GenerateTrees(world, x, y, z, pos, placing_pos, surface);
+						GenerateRocks(world, x, y, z, pos, placing_pos);
 						//GenerateOakTrees(region, x, y, z, pos, placing_pos);
 					}
 					
@@ -124,7 +120,7 @@ public class ChunkGeneratorMixin {
 	
 	
 	
-	private void GenerateTrees(ChunkRegion region, int x, int y, int z, BlockPos.Mutable pos, BlockPos.Mutable placing_pos, MiteSurfaceConfig surface) {
+	private void GenerateTrees(StructureWorldAccess region, int x, int y, int z, BlockPos.Mutable pos, BlockPos.Mutable placing_pos, MiteSurfaceConfig surface) {
 		//ConfiguredFeatures.TREES_BIRCH.generate(region.toServerWorld(), null, random, placing_pos);
 		Biome biome = region.getBiome(placing_pos);
 		int oak = -1;
@@ -162,7 +158,7 @@ public class ChunkGeneratorMixin {
 
 	}
 	
-	private boolean GenerateTree(int chance, BlockState log, BlockState leaf, ChunkRegion region, int x, int y, int z, BlockPos.Mutable pos, BlockPos.Mutable placing_pos, MiteSurfaceConfig surface) {
+	private boolean GenerateTree(int chance, BlockState log, BlockState leaf, StructureWorldAccess region, int x, int y, int z, BlockPos.Mutable pos, BlockPos.Mutable placing_pos, MiteSurfaceConfig surface) {
 		if (chance == -1) return false;
 		if (region.getRandom().nextInt(chance) == 0) {
 			placing_pos.set(x, y, z);
@@ -215,7 +211,7 @@ public class ChunkGeneratorMixin {
 		return false;
 	}
 	
-	private void GenerateRocks(ChunkRegion region, int x, int y, int z, BlockPos.Mutable pos, BlockPos.Mutable placing_pos) {
+	private void GenerateRocks(StructureWorldAccess region, int x, int y, int z, BlockPos.Mutable pos, BlockPos.Mutable placing_pos) {
 		pos.set(x, y, z);
 		int probability = 0; //1 out of what?
 

@@ -4,6 +4,7 @@ import com.mojang.authlib.GameProfile;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.input.Input;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.HungerManager;
 import net.minecraft.entity.player.PlayerEntity;
@@ -48,5 +49,11 @@ public abstract class ClientPlayerEntityMixin extends PlayerEntity  {
     @Inject(at = @At("RETURN"), method = "tickMovement")
     public void tickMovementReturn(CallbackInfo info) {
         this.hungerManager.setFoodLevel(tick_hunger);
+    }
+
+    public void baseTick() {
+        this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue((int)Math.floor(experienceLevel / 5) * 2 + 6);
+
+        super.baseTick();
     }
 }

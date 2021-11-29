@@ -15,7 +15,7 @@ import net.minecraft.item.HoeItem;
 import net.minecraft.item.HorseArmorItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
-import net.minecraft.item.MushroomStewItem;
+import net.minecraft.item.StewItem;
 import net.minecraft.item.ShovelItem;
 import net.minecraft.item.ToolItem;
 import net.minecraft.util.registry.Registry;
@@ -173,39 +173,39 @@ public class WeightRegistry {
 			}
 			
 			else if (item == Items.WATER_BUCKET) {
-				w = 10;
+				w = 5;
 			}
 			
 			else if (item == Items.MILK_BUCKET) {
-				w = 13;
+				w = 5;
 			}
 			
 			else if (item == Items.LAVA_BUCKET) {
-				w = 15;
+				w = 5;
 			}
 			
 			else if (item == Items.BOWL) {
 				w = 1;
 			}
 			
-			else if (item instanceof MushroomStewItem) {
-				w = 3;
+			else if (item instanceof StewItem) {
+				w = 1;
 			}
 			
 			else if (item == Items.ELYTRA) { 
-				w = 4;
+				w = 3;
 			}
 			
 			else if (item instanceof BowItem) {
-				w = 10;
+				w = 3;
 			}
 			
 			else if (item == Items.TRIDENT) {
-				w = 15;
+				w = 5;
 			}
 			
 			else if (item == Items.NAUTILUS_SHELL) {
-				w = 3;
+				w = 1;
 			}
 			
 			else if (item instanceof BookItem) {
@@ -225,19 +225,19 @@ public class WeightRegistry {
 			}
 			
 			else if (item == Items.GOLDEN_APPLE) {
-				w = 50;
+				w = 15;
 			}
 			
 			else if (item == Items.ENCHANTED_GOLDEN_APPLE) {
-				w = 100;
+				w = 20;
 			}
 			
 			else if (item instanceof FishingRodItem) {
-				w = 8;
+				w = 4;
 			} else if (item == Items.CARROT_ON_A_STICK) {
-				w = 10;
+				w = 5;
 			} else if (item == Items.WARPED_FUNGUS_ON_A_STICK) {
-				w = 10;
+				w = 5;
 			} else if (item == Items.SADDLE) {
 				w = 5;
 			} else if (item instanceof HorseArmorItem) {

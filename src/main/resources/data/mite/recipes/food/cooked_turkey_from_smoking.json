@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smoking",
+  "ingredient": {
+    "item": "mite:turkey_raw"
+  },
+  "result": "mite:turkey_cooked",
+  "experience": 0.35,
+  "cookingtime": 100
+}

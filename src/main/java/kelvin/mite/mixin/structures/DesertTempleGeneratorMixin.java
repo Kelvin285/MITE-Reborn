@@ -28,7 +28,7 @@ import java.util.Optional;
 import java.util.Random;
 
 @Mixin(DesertTempleGenerator.class)
-public abstract class DesertTempleGeneratorMixin extends StructurePieceWithDimensions {
+public abstract class DesertTempleGeneratorMixin extends ShiftableStructurePiece {
 
     protected DesertTempleGeneratorMixin(StructurePieceType type, int x, int y, int z, int width, int height, int depth, Direction orientation) {
         super(type, x, y, z, width, height, depth, orientation);
@@ -49,7 +49,7 @@ public abstract class DesertTempleGeneratorMixin extends StructurePieceWithDimen
     */
 
     @Override
-    public boolean generate(StructureWorldAccess world, StructureAccessor structureAccessor, ChunkGenerator chunkGenerator, Random random, BlockBox boundingBox, ChunkPos chunkPos, BlockPos pos) {
+    public void generate(StructureWorldAccess world, StructureAccessor structureAccessor, ChunkGenerator chunkGenerator, Random random, BlockBox chunkBox, ChunkPos chunkPos, BlockPos pos) {
         if (!world.isClient()) {
             Identifier structureName = new Identifier("mite:desert_temple");
 
@@ -61,7 +61,7 @@ public abstract class DesertTempleGeneratorMixin extends StructurePieceWithDimen
             try {
                 optional2 = structureManager.getStructure(structureName);
             } catch (InvalidIdentifierException var6) {
-                return false;
+                return;
             }
 
             Structure structure = (Structure)optional2.get();
@@ -225,10 +225,7 @@ public abstract class DesertTempleGeneratorMixin extends StructurePieceWithDimen
             this.addBlock(world, Blocks.LADDER.getDefaultState().with(LadderBlock.FACING, Direction.EAST), 13, -1, 7);
 
 
-            return true;
-
         }
-        return false;
     }
 
     public void addBlock(StructureWorldAccess world, BlockState block, int x, int y, int z) {

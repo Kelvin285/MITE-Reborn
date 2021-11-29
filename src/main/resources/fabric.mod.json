@@ -4,13 +4,13 @@
   "version": "${version}",
 
   "name": "Mite-Reborn",
-  "description": "A Re-imagining of a 1.6.4 survival mod called MITE",
+  "description": "A Re-imagining of a 1.6.4 survival mod called MITE.  Original mod is found here: https://www.minecraftforum.net/forums/mapping-and-modding-java-edition/minecraft-mods/1294284-minecraft-is-too-easy-mite-mod",
   "authors": [
-    "Kelvin285"
+    "MITE Reborn: Kelvin285"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/mite-reborn",
+    "sources": "https://github.com/Kelvin285/mite-reborn"
   },
 
   "license": "CC0-1.0",
@@ -27,9 +27,10 @@
   ],
 
   "depends": {
-    "fabricloader": ">=0.7.4",
+    "fabricloader": ">=0.11.3",
     "fabric": "*",
-    "minecraft": "1.17.x"
+    "minecraft": "1.18.x",
+    "java": ">=17"
   },
   "suggests": {
     "another-mod": "*"

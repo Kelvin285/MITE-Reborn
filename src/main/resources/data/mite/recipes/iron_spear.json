@@ -7,13 +7,13 @@
   ],
   "key": {
     "F": {
-      "item": "minecraft:iron_nugget"
+      "item": "minecraft:iron_ingot"
     },
 	"#": {
       "item": "minecraft:stick"
     },
 	"S": {
-      "item": "mite:sinew"
+      "item": "minecraft:string"
     }
   },
   "result": {

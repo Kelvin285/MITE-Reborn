@@ -1,5 +1,7 @@
 package kelvin.mite.mixin.entity;
 
+import net.minecraft.entity.ai.goal.ActiveTargetGoal;
+import net.minecraft.entity.ai.goal.FollowMobGoal;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -9,7 +11,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.FollowTargetGoal;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -36,8 +37,9 @@ public abstract class SquidEntityMixin extends WaterCreatureEntity {
 	@Inject(at = @At("HEAD"), method = "initGoals", cancellable = true)
 	protected void initGoals(CallbackInfo info) {
 		this.goalSelector.add(0, new SwimGoal((SquidEntity)(Object)this));
-		this.goalSelector.add(1, new FollowTargetGoal((SquidEntity)(Object)this, PlayerEntity.class, true));
-		this.goalSelector.add(2, new FollowTargetGoal((SquidEntity)(Object)this, AnimalEntity.class, true));
+
+		this.goalSelector.add(1, new ActiveTargetGoal((SquidEntity)(Object)this, PlayerEntity.class, true));
+		this.goalSelector.add(2, new ActiveTargetGoal((SquidEntity)(Object)this, AnimalEntity.class, true));
 		info.cancel();
 	}
 

@@ -1,13 +1,13 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-	"#S",
+	"#S ",
 	"# S",
-	"#S"
+	"#S "
   ],
   "key": {
     "#": {
-      "item": "mite:string"
+      "item": "minecraft:string"
     },
 	"S": {
 	  "item": "minecraft:stick"

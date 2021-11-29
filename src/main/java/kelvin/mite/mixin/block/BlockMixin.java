@@ -18,6 +18,7 @@ import net.minecraft.state.property.Properties;
 import net.minecraft.state.property.Property;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.tick.OrderedTick;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
@@ -40,7 +41,7 @@ public class BlockMixin extends AbstractBlock {
 		SignBlock block;
 		if ((Block)(Object)this == Blocks.DIRT ||
 				(Block)(Object)this == Blocks.COBBLESTONE) {
-			world.getBlockTickScheduler().schedule(pos, (Block)(Object)this, 2);
+			world.createAndScheduleBlockTick(pos, (Block)(Object)this, 2);
 		}
 	}
 	
@@ -59,16 +60,25 @@ public class BlockMixin extends AbstractBlock {
 	public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState,
 			WorldAccess world, BlockPos pos, BlockPos neighborPos) {
 		if ((Block)(Object)this == Blocks.DIRT ||
-				(Block)(Object)this == Blocks.COBBLESTONE) world.getBlockTickScheduler().schedule(pos, (Block)(Object)this, 2);
+				(Block)(Object)this == Blocks.COBBLESTONE) {
+
+			world.createAndScheduleBlockTick(pos, (Block)(Object)this, 2);
+		}
 		return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
 	}
 	
 	public void onLandedUpon(World world, BlockState state, BlockPos pos, Entity entity, float fallDistance) {
-		if ((Block)(Object)this == Blocks.DIRT || (Block)(Object)this == Blocks.COBBLESTONE || (Block)(Object)this instanceof FallingBlock) world.getBlockTickScheduler().schedule(pos, (Block)(Object)this, 2);
+		if ((Block)(Object)this == Blocks.DIRT || (Block)(Object)this == Blocks.COBBLESTONE || (Block)(Object)this instanceof FallingBlock) {
+
+			world.createAndScheduleBlockTick(pos, (Block)(Object)this, 2);
+		}
 		entity.handleFallDamage(fallDistance, 1.0F, DamageSource.FALL);
 	}
 	public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
-		if ((Block)(Object)this == Blocks.DIRT || (Block)(Object)this instanceof FallingBlock) world.getBlockTickScheduler().schedule(pos, (Block)(Object)this, 2);
+		if ((Block)(Object)this == Blocks.DIRT || (Block)(Object)this instanceof FallingBlock) {
+
+			world.createAndScheduleBlockTick(pos, (Block)(Object)this, 2);
+		}
 	}
 
 

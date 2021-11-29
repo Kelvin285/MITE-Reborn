@@ -1,28 +1,21 @@
 package kelvin.mite.main.resources;
 
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.VarHandle;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
 import kelvin.mite.registry.WeightRegistry;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.resource.Resource;
 import net.minecraft.util.math.MathHelper;
 
 public class Resources {
 	
 	public static int MAX_CARRY = 400;
-	
-	public static void makeFieldAccessible(Field field) throws Exception {
-		Field modifiers = Field.class.getDeclaredField("modifiers");
-		modifiers.setAccessible(true);
-		try {
-			modifiers.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-			modifiers.setInt(field, field.getModifiers() & ~Modifier.PROTECTED);
-			modifiers.setInt(field, field.getModifiers() | Modifier.PUBLIC);
-		} catch (IllegalArgumentException | IllegalAccessException e) {
-			e.printStackTrace();
-		}
-	}
+
 	
 	public static float getDistanceFromDeltas(double dx, double dy, double dz)
     {

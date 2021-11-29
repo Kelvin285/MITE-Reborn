@@ -7,13 +7,13 @@
   ],
   "key": {
     "F": {
-      "item": "minecraft:ancient_metal_nugget"
+      "item": "mite:ancient_metal_ingot"
     },
 	"#": {
       "item": "minecraft:stick"
     },
 	"S": {
-      "item": "mite:sinew"
+      "item": "minecraft:string"
     }
   },
   "result": {

@@ -11,7 +11,7 @@ import net.minecraft.item.FoodComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.Item.Settings;
 import net.minecraft.item.ItemGroup;
-import net.minecraft.item.MushroomStewItem;
+import net.minecraft.item.StewItem;
 import net.minecraft.item.ShieldItem;
 import net.minecraft.item.ShovelItem;
 import net.minecraft.item.SwordItem;
@@ -58,6 +58,8 @@ public class ItemRegistry {
 	public static Item  OBSIDIAN_CRAFTING_TABLE;// = ITEMS.Register("obsidian_crafting_table", () -> new BlockItem(BlockRegistry.OBSIDIAN_CRAFTING_TABLE.get(), (new Settings()).group(ItemGroup.BUILDING_BLOCKS).maxCount(1)));
 	public static Item  BACON;// = ITEMS.Register("bacon", () -> new Item((new Settings()).group(ItemGroup.FOOD).maxCount(16).food((new FoodComponent.Builder()).hunger(2).saturationModifier(0.2F).meat().build())));
 	public static Item  COOKED_BACON;// = ITEMS.Register("cooked_bacon", () -> new Item((new Settings()).group(ItemGroup.FOOD).maxCount(16).food((new FoodComponent.Builder()).hunger(5).saturationModifier(0.4F).meat().build())));
+	public static Item TURKEY_RAW;
+	public static Item TURKEY_COOKED;
 	public static Item  TWIG;// = ITEMS.Register("twig", () -> new ItemBurnable((new Settings()).group(ItemGroup.MISC).maxCount(32), 50));
 	public static Item  BRANCH;// = ITEMS.Register("twig", () -> new ItemBurnable((new Settings()).group(ItemGroup.MISC).maxCount(32), 50));
 	public static Item  CHARRED_FOOD;// = ITEMS.Register("charred_food", () -> new Item((new Settings()).group(ItemGroup.MISC).maxCount(16)));
@@ -241,6 +243,10 @@ public class ItemRegistry {
 		OBSIDIAN_CRAFTING_TABLE = Register("obsidian_crafting_table", new BlockItem(BlockRegistry.OBSIDIAN_CRAFTING_TABLE, (new Settings()).group(ItemGroup.BUILDING_BLOCKS).maxCount(1)));
 		BACON = Register("bacon", new Item((new Settings()).group(ItemGroup.FOOD).food((new FoodComponent.Builder()).hunger(2).saturationModifier(0.2F).meat().build())));
 		COOKED_BACON = Register("cooked_bacon", new Item((new Settings()).group(ItemGroup.FOOD).food((new FoodComponent.Builder()).hunger(5).saturationModifier(0.4F).meat().build())));
+
+		TURKEY_RAW = Register("turkey_raw", new Item((new Settings()).group(ItemGroup.FOOD).food(new FoodComponent.Builder().hunger(4).saturationModifier(2).meat().build())));
+		TURKEY_RAW = Register("turkey_cooked", new Item((new Settings()).group(ItemGroup.FOOD).food(new FoodComponent.Builder().hunger(6).saturationModifier(4).meat().build())));
+
 		TWIG = Register("twig", new ItemBurnable((new Settings()).group(ItemGroup.MISC).maxCount(32), 50));
 		SIFTER = Register("sifter", new SifterItem(new Settings().group(ItemGroup.TOOLS).maxCount(1)));
 		BRANCH = Register("branch", new ItemBurnable((new Settings()).group(ItemGroup.MISC).maxCount(32), 100));
@@ -276,22 +282,22 @@ public class ItemRegistry {
 		SILVER_HOE = Register("silver_hoe", new MiteHoeItem(SurvivalItemTier.COPPER_SHORTSWORD, 1, -1.0F, new Settings().group(ItemGroup.COMBAT)));
 		SILVER_HATCHET = Register("silver_hatchet", new MiteAxeItem(SurvivalItemTier.COPPER_HATCHET, 3, -2.5f, new Settings().group(ItemGroup.TOOLS)));
 		
-		SALAD = Register("salad", new MushroomStewItem((new Settings()).maxCount(1).group(ItemGroup.FOOD).food(buildStew(1, 0.1f))));
-		BANANA_SPLIT = Register("banana_split", new MushroomStewItem((new Settings()).maxCount(1).group(ItemGroup.FOOD).food(buildStew(7, 0.5f))));
-		MILK_BOWL = Register("bowl_milk", new MushroomStewItem((new Settings()).maxCount(1).group(ItemGroup.FOOD).food(buildStew(1, 0))));
-		WATER_BOWL = Register("bowl_water", new MushroomStewItem((new Settings()).maxCount(1).group(ItemGroup.FOOD).food(buildStew(0, 0))));
-		CEREAL = Register("cereal", new MushroomStewItem((new Settings()).maxCount(1).group(ItemGroup.FOOD).food(buildStew(5, 0.5f))));
-		CHICKEN_SOUP = Register("chicken_soup", new MushroomStewItem((new Settings()).maxCount(1).group(ItemGroup.FOOD).food(buildStew(8, 1))));
-		CREAM_OF_MUSHROOM_SOUP = Register("cream_of_mushroom_soup", new MushroomStewItem((new Settings()).maxCount(1).group(ItemGroup.FOOD).food(buildStew(4, 0.3f))));
-		CREAM_OF_VEGETABLE_SOUP = Register("cream_of_vegetable_soup", new MushroomStewItem((new Settings()).maxCount(1).group(ItemGroup.FOOD).food(buildStew(6, 0.5f))));
-		ICE_CREAM = Register("ice_cream", new MushroomStewItem((new Settings()).maxCount(1).group(ItemGroup.FOOD).food(buildStew(3, 0.4f))));
-		MASHED_POTATOES = Register("mashed_potatoes", new MushroomStewItem((new Settings()).maxCount(1).group(ItemGroup.FOOD).food(buildStew(5, 0.5f))));
-		PORRIDGE = Register("porridge", new MushroomStewItem((new Settings()).maxCount(1).group(ItemGroup.FOOD).food(buildStew(5, 0.5f))));
-		PUMPKIN_SOUP = Register("pumpkin_soup", new MushroomStewItem((new Settings()).maxCount(1).group(ItemGroup.FOOD).food(buildStew(2, 0.2f))));
-		SORBET = Register("sorbet", new MushroomStewItem((new Settings()).maxCount(1).group(ItemGroup.FOOD).food(buildStew(5, 0.6f))));
-		VEGETABLE_SOUP = Register("vegetable_soup", new MushroomStewItem((new Settings()).maxCount(1).group(ItemGroup.FOOD).food(buildStew(7, 0.7f))));
-		BEEF_STEW = Register("beef_stew", new MushroomStewItem((new Settings()).maxCount(1).group(ItemGroup.FOOD).food(buildStew(11, 1f))));
-		CHOCOLATE_ICE_CREAM = Register("chocolate_ice_cream", new MushroomStewItem((new Settings()).maxCount(1).group(ItemGroup.FOOD).food(buildStew(4, 0.5f))));
+		SALAD = Register("salad", new StewItem((new Settings()).maxCount(1).group(ItemGroup.FOOD).food(buildStew(1, 0.1f))));
+		BANANA_SPLIT = Register("banana_split", new StewItem((new Settings()).maxCount(1).group(ItemGroup.FOOD).food(buildStew(7, 0.5f))));
+		MILK_BOWL = Register("bowl_milk", new StewItem((new Settings()).maxCount(1).group(ItemGroup.FOOD).food(buildStew(1, 0))));
+		WATER_BOWL = Register("bowl_water", new StewItem((new Settings()).maxCount(1).group(ItemGroup.FOOD).food(buildStew(0, 0))));
+		CEREAL = Register("cereal", new StewItem((new Settings()).maxCount(1).group(ItemGroup.FOOD).food(buildStew(5, 0.5f))));
+		CHICKEN_SOUP = Register("chicken_soup", new StewItem((new Settings()).maxCount(1).group(ItemGroup.FOOD).food(buildStew(8, 1))));
+		CREAM_OF_MUSHROOM_SOUP = Register("cream_of_mushroom_soup", new StewItem((new Settings()).maxCount(1).group(ItemGroup.FOOD).food(buildStew(4, 0.3f))));
+		CREAM_OF_VEGETABLE_SOUP = Register("cream_of_vegetable_soup", new StewItem((new Settings()).maxCount(1).group(ItemGroup.FOOD).food(buildStew(6, 0.5f))));
+		ICE_CREAM = Register("ice_cream", new StewItem((new Settings()).maxCount(1).group(ItemGroup.FOOD).food(buildStew(3, 0.4f))));
+		MASHED_POTATOES = Register("mashed_potatoes", new StewItem((new Settings()).maxCount(1).group(ItemGroup.FOOD).food(buildStew(5, 0.5f))));
+		PORRIDGE = Register("porridge", new StewItem((new Settings()).maxCount(1).group(ItemGroup.FOOD).food(buildStew(5, 0.5f))));
+		PUMPKIN_SOUP = Register("pumpkin_soup", new StewItem((new Settings()).maxCount(1).group(ItemGroup.FOOD).food(buildStew(2, 0.2f))));
+		SORBET = Register("sorbet", new StewItem((new Settings()).maxCount(1).group(ItemGroup.FOOD).food(buildStew(5, 0.6f))));
+		VEGETABLE_SOUP = Register("vegetable_soup", new StewItem((new Settings()).maxCount(1).group(ItemGroup.FOOD).food(buildStew(7, 0.7f))));
+		BEEF_STEW = Register("beef_stew", new StewItem((new Settings()).maxCount(1).group(ItemGroup.FOOD).food(buildStew(11, 1f))));
+		CHOCOLATE_ICE_CREAM = Register("chocolate_ice_cream", new StewItem((new Settings()).maxCount(1).group(ItemGroup.FOOD).food(buildStew(4, 0.5f))));
 
 		COOKED_EGG = Register("cooked_egg", new Item((new Settings()).group(ItemGroup.FOOD).maxCount(16).food((new FoodComponent.Builder()).hunger(4).saturationModifier(0.3F).meat().build())));
 		BANANA = Register("banana", new Item((new Settings()).group(ItemGroup.FOOD).food((new FoodComponent.Builder()).hunger(2).saturationModifier(0.2F).build())));

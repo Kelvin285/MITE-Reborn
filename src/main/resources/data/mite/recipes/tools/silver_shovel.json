@@ -2,8 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "XS",
-    "#",
-    "#"
+    "# ",
+    "# "
   ],
   "key": {
     "#": {
@@ -13,7 +13,7 @@
       "item": "mite:silver_ingot"
     },
     "S": {
-      "item": "mite:string"
+      "item": "minecraft:string"
     }
   },
   "result": {

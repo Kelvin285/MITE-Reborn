@@ -189,6 +189,9 @@
   "item.mite.thin_birch_log": "Thin Birch Log",
   "item.mite.thin_spruce_log": "Thin Spruce Log",
   "item.mite.rock": "Rock",
+  "item.mite.turkey_raw": "Raw Turkey",
+  "item.mite.turkey_cooked": "Cooked Turkey",
   "block.minecraft.stone": "Limestone",
-  "block.minecraft.gravel": "Limestone Gravel"
+  "block.minecraft.gravel": "Limestone Gravel",
+  "entity.mite.turkey": "Turkey"
 }
