@@ -1,6 +1,7 @@
 package kelvin.mite.mixin.client;
 
 import com.mojang.authlib.GameProfile;
+import kelvin.mite.main.resources.MiteHungerManager;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.input.Input;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -8,6 +9,8 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.HungerManager;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.Fluid;
+import net.minecraft.tag.Tag;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
@@ -37,7 +40,7 @@ public abstract class ClientPlayerEntityMixin extends PlayerEntity  {
         return false;
     }
 
-    private int tick_hunger = 0;
+    private int tick_hunger = 0; // controls the hunger bar in the GUI
     @Inject(at = @At("HEAD"), method = "tickMovement")
     public void tickMovement(CallbackInfo info) {
         tick_hunger = this.hungerManager.getFoodLevel();
@@ -55,5 +58,12 @@ public abstract class ClientPlayerEntityMixin extends PlayerEntity  {
         this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue((int)Math.floor(experienceLevel / 5) * 2 + 6);
 
         super.baseTick();
+    }
+
+    @Override
+    public void swimUpward(Tag<Fluid> fluid) {
+        if (!this.hasStatusEffect(StatusEffects.SLOWNESS)) {
+            super.swimUpward(fluid);
+        }
     }
 }

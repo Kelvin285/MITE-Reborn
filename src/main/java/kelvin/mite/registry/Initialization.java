@@ -11,7 +11,9 @@ import java.util.UUID;
 
 import com.google.common.collect.ImmutableMap;
 
+import kelvin.mite.main.Mite;
 import kelvin.mite.main.resources.Resources;
+import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.EntityType;
@@ -39,6 +41,11 @@ public class Initialization {
 		ItemRegistry.RegisterItems();
 		SurfaceBuilderRegistry.RegisterSurfaceBuilders();
 		EntityRegistry.Register();
+		NutrientsRegistry.RegisterNutrients();
+		BlockEntityRegistry.RegisterBlockEntities();
+		if (Mite.client) {
+			EntityRendererRegistry.Register();
+		}
 		BiomeFeatureRegistry.RegisterFeatures();
 		VanillaTweaks.ApplyChanges();
 

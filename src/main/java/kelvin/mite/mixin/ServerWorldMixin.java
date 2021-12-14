@@ -1,6 +1,8 @@
 package kelvin.mite.mixin;
 
+import kelvin.mite.main.Mite;
 import kelvin.mite.main.resources.MiteSaveData;
+import kelvin.mite.main.resources.SaveableVec3;
 import kelvin.mite.structures.MiteVillageStructure;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.WorldGenerationProgressListener;
@@ -22,6 +24,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.io.*;
 import java.nio.file.Path;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.Executor;
 
@@ -51,18 +54,22 @@ public class ServerWorldMixin {
 
     @Inject(at=@At("HEAD"), method="save")
     public void save(@Nullable ProgressListener progressListener, boolean flush, boolean savingDisabled, CallbackInfo info) {
-        try {
-            Path save_path = ((ServerWorld)(Object)this).getServer().getSavePath(WorldSavePath.ROOT);
-            String path = save_path.toFile().getPath();
-            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(path+"\\"+"mite_settings.txt"));
 
-            MiteSaveData save = new MiteSaveData();
-            save.village_spawns = MiteVillageStructure.CanGenerateVillage;
-            oos.writeObject(save);
-            oos.close();
+        if (!savingDisabled) {
+            try {
+                Path save_path = ((ServerWorld)(Object)this).getServer().getSavePath(WorldSavePath.ROOT);
+                String path = save_path.toFile().getPath();
+                ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(path+"\\"+"mite_settings.txt"));
 
-        } catch (Exception e) {
-            e.printStackTrace();
+                MiteSaveData save = new MiteSaveData();
+                save.village_spawns = MiteVillageStructure.CanGenerateVillage;
+                oos.writeObject(save);
+
+                oos.close();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }

@@ -1,19 +1,13 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-	"#G",
-	"S#"
+	"##",
+	"##"
   ],
   "key": {
     "#": {
-      "item": "mite:rock"
-    },
-	"S": {
-	  "item": "minecraft:stick"
-	},
-	"G": {
-	  "item": "mite:dry_grass"
-	}
+      "item": "minecraft:bedrock"
+    }
   },
   "result": {
     "item": "minecraft:stone_pickaxe",

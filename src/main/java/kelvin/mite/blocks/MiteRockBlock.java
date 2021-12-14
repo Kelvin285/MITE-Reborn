@@ -1,5 +1,6 @@
 package kelvin.mite.blocks;
 
+import kelvin.mite.main.Mite;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.minecraft.block.AbstractButtonBlock;
 import net.minecraft.block.BlockRenderType;
@@ -18,7 +19,7 @@ public class MiteRockBlock extends AbstractButtonBlock {
 
 	public MiteRockBlock(Settings settings) {
 		super(false, settings);
-		BlockRenderLayerMap.INSTANCE.putBlock(this, RenderLayer.getCutout());
+		if (Mite.client) BlockRenderLayerMap.INSTANCE.putBlock(this, RenderLayer.getCutout());
 	}
 
 	@Override

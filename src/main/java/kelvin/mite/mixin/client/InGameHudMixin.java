@@ -1,5 +1,6 @@
 package kelvin.mite.mixin.client;
 
+import kelvin.mite.main.Mite;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -173,5 +174,9 @@ public abstract class InGameHudMixin extends DrawableHelper {
 
     private int getHungerCount(PlayerEntity playerEntity) {
         return 3 + (int)Math.floor(playerEntity.experienceLevel / 5.0);
+    }
+
+    static {
+        Mite.client = true;
     }
 }

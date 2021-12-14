@@ -18,15 +18,10 @@ import net.minecraft.recipe.Ingredient;
 import net.minecraft.tag.ItemTags;
 
 public enum SurvivalItemTier implements ToolMaterial {
-    SIFTER(0, 15, 0.0F, 0.0F, 0, () -> {
+    SIFTER(0, 35, 0.0F, 0.0F, 0, () -> {
         return Ingredient.fromTag(ItemTags.PLANKS);
     }, SwordItem.class),
-    STICK(0, 25, 0.0F, 0.0F, 0, () -> {
-        return Ingredient.fromTag(ItemTags.PLANKS);
-    }, SwordItem.class),
-    BRANCH(0, 35, 0.0F, 0.0F, 0, () -> {
-        return Ingredient.fromTag(ItemTags.PLANKS);
-    }, SwordItem.class),
+
     WOOD_PICKAXE(0, 10, 2.0F, 0.0F, 15, () -> {
         return Ingredient.fromTag(ItemTags.PLANKS);
     }, PickaxeItem.class),

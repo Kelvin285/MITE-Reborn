@@ -19,7 +19,7 @@ import net.minecraft.world.World;
 
 public class SifterItem extends ToolItem implements Vanishable {
     public SifterItem(Settings settings) {
-        super(SurvivalItemTier.WOOD_SWORD, settings);
+        super(SurvivalItemTier.COPPER_SHOVEL, settings);
     }
     @Override
     public int getMaxUseTime(ItemStack stack) {
@@ -44,7 +44,7 @@ public class SifterItem extends ToolItem implements Vanishable {
         TODO: ITEM STACK COOLDOWNS
          */
 
-        boolean use_flag = System.currentTimeMillis() > current_time + 1000;
+        boolean use_flag = System.currentTimeMillis() > current_time + 3000;
 
         if (!world.isClient() && use_flag && user.isTouchingWaterOrRain()) {
             ServerPlayerEntity player = (ServerPlayerEntity)user;

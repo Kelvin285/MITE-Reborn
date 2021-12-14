@@ -22,12 +22,14 @@
 	"entity.LivingEntityMixin",
 	"item.ItemMixin",
 	"item.MiningToolItemMixin",
+
 	"CookingRecipeSerializerMixin",
+
 	"item.SwordItemMixin",
 	"item.TridentItemMixin",
 	"entity.CowEntityMixin",
 	"entity.CreeperEntityMixin",
-	"entity.CreeperIgniteGoalMixin",
+	"entity.goal.CreeperIgniteGoalMixin",
 	"entity.DrownedEntityMixin",
 	"entity.CodEntityMixin",
 	"item.ToolMaterialsMixin",
@@ -41,18 +43,36 @@
 	"entity.WolfEntityMixin",
 	"item.BoneMealItemMixin",
 	"block.CropBlockMixin",
-	"entity.EscapeDangerGoalMixin",
-	"entity.HostileEntityMixin"
+	"entity.goal.EscapeDangerGoalMixin",
+	"entity.HostileEntityMixin",
+	"entity.goal.ActiveTargetGoalMixin",
+	"item.HoeItemMixin",
+	  "block.BeetrootsBlockMixin",
+	  "block.SweetBerryBushBlockMixin",
+	  "block.CactusBlockMixin",
+	  "block.KelpBlockMixin",
+	  "block.SugarCaneBlockMixin",
+	  "block.BambooBlockMixin",
+	  "item.MilkBucketItemMixin",
+	  "item.EggItemMixin"
   ],
   "client": [
 	"client.InGameHudMixin",
 	"client.InventoryScreenMixin",
-	"client.BakedModelManagerMixin",
 	"client.ClientPlayerInteractionManagerMixin",
 	"client.CraftingScreenMixin",
 	"client.CreeperEntityRendererMixin",
 	"client.ClientPlayerEntityMixin",
-	"client.WolfEntityRendererMixin"
+	"client.WolfEntityRendererMixin",
+	"client.rendering.BlockModelRendererMixin",
+	"client.rendering.BufferBuilderMixin",
+	"client.rendering.FluidRendererMixin",
+	"client.rendering.OverlayVertexConsumerMixin",
+	"client.rendering.VertexFormatsMixin",
+	"client.rendering.WorldRendererMixin",
+	  "client.rendering.MutableQuadViewImplMixin",
+	  "client.rendering.AbstractQuadRendererMixin",
+	  "client.rendering.DebugHudMixin"
   ],
   "injectors": {
     "defaultRequire": 1

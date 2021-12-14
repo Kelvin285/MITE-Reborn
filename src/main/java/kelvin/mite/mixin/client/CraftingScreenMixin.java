@@ -1,7 +1,10 @@
 package kelvin.mite.mixin.client;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import kelvin.mite.main.resources.MiteHungerManager;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.FurnaceScreen;
+import net.minecraft.entity.player.HungerManager;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
@@ -107,6 +110,11 @@ public abstract class CraftingScreenMixin extends HandledScreen<CraftingScreenHa
 					crafting_slot_id = slotId;
 					crafting_ticks = 0;
 					max_crafting_ticks = GetCraftingTicks(ItemCraftingDifficulty.GetDifficultyFor(slot.getStack().getItem()));
+					MiteHungerManager manager = (MiteHungerManager)MinecraftClient.getInstance().player.getHungerManager();
+					max_crafting_ticks -= max_crafting_ticks * 0.25 * ((manager.getMaxSaturation() - manager.getSaturation(MiteHungerManager.HungerCategory.DAIRY)) / manager.getMaxSaturation());
+					if (max_crafting_ticks < 20) {
+						max_crafting_ticks = 20;
+					}
 					crafting = true;
 				} else {
 					crafting = false;
@@ -121,6 +129,11 @@ public abstract class CraftingScreenMixin extends HandledScreen<CraftingScreenHa
 					crafting_slot_id = slotId;
 					crafting_ticks = 0;
 					max_crafting_ticks = GetCraftingTicks(ItemCraftingDifficulty.GetDifficultyFor(slot.getStack().getItem()));
+					MiteHungerManager manager = (MiteHungerManager) MinecraftClient.getInstance().player.getHungerManager();
+					max_crafting_ticks -= max_crafting_ticks * 0.25 * ((manager.getMaxSaturation() - manager.getSaturation(MiteHungerManager.HungerCategory.DAIRY)) / manager.getMaxSaturation());
+					if (max_crafting_ticks < 20) {
+						max_crafting_ticks = 20;
+					}
 					crafting = true;
 				}
 			}

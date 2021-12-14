@@ -1,7 +1,12 @@
 package kelvin.mite.mixin;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
+import kelvin.mite.blocks.entity.CropBlockEntity;
+import net.minecraft.block.*;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.world.StructureWorldAccess;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.random.SimpleRandom;
@@ -16,13 +21,6 @@ import kelvin.mite.main.resources.VoronoiNoise;
 import kelvin.mite.registry.BlockRegistry;
 import kelvin.mite.registry.SurfaceBuilderRegistry;
 import kelvin.mite.world.MiteSurfaceConfig;
-import net.minecraft.block.AbstractButtonBlock;
-import net.minecraft.block.AirBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.LeavesBlock;
-import net.minecraft.block.Material;
 import net.minecraft.block.enums.WallMountLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -108,6 +106,7 @@ public class ChunkGeneratorMixin {
 						
 						GenerateTrees(world, x, y, z, pos, placing_pos, surface);
 						GenerateRocks(world, x, y, z, pos, placing_pos);
+						GenerateCrops(world, x, y, z, pos, placing_pos);
 						//GenerateOakTrees(region, x, y, z, pos, placing_pos);
 					}
 					
@@ -210,7 +209,65 @@ public class ChunkGeneratorMixin {
 		}
 		return false;
 	}
-	
+
+	private void GenerateCrops(StructureWorldAccess region, int x, int y, int z, BlockPos.Mutable pos, BlockPos.Mutable placing_pos) {
+		pos.set(x, y, z);
+		placing_pos.set(x, y + 1, z);
+		if (region.getBlockState(placing_pos).isAir() && (region.getBlockState(pos).getBlock() instanceof MiteGrassBlock || BlockRegistry.CanSwapWithGrass(region.getBlockState(pos).getBlock()))) {
+			List<Block> crops = new ArrayList<Block>();
+
+			float temp = region.getBiome(pos).getTemperature();
+
+			float max_temp = 30.0f;
+			if (temp <= 13.0f / max_temp + 0.5f) {
+				crops.add(Blocks.POTATOES);
+			}
+
+			if (temp <= 20 + max_temp - 0.5f) {
+				crops.add(Blocks.BEETROOTS);
+			}
+
+			if (temp >= 23.0f / max_temp - 0.5f && temp <= 1.75f) {
+				crops.add(Blocks.CARROTS);
+				crops.add(Blocks.WHEAT);
+			}
+
+			if (random.nextInt(800) == 0) {
+				if (crops.size() > 0) {
+					Block crop = crops.get(region.getRandom().nextInt(crops.size()));
+					int plants = region.getRandom().nextInt(4) + 1;
+
+
+					for (int i = 0; i < plants; i++) {
+						int X = random.nextInt(3) - 1;
+						int Z = random.nextInt(3) - 1;
+						for (int Y = -2; Y <= 2; Y++) {
+							placing_pos.set(x + X, y + Y, z + Z);
+							if (BlockRegistry.grass_variants.containsKey(region.getBlockState(placing_pos).getBlock()) ||
+									BlockRegistry.grass_variants.containsValue(region.getBlockState(placing_pos).getBlock())) {
+								placing_pos.set(placing_pos.getX(), placing_pos.getY() + 1, placing_pos.getZ());
+								if (region.getBlockState(placing_pos).isAir()) {
+									region.setBlockState(placing_pos, crop.getDefaultState(), 0);
+
+									BlockEntity blockEntity = region.getBlockEntity(placing_pos);
+									if (blockEntity instanceof CropBlockEntity) {
+										CropBlockEntity entity = (CropBlockEntity)blockEntity;
+										entity.ticks = random.nextInt((int)(entity.time_until_grown * 1.25f));
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+
+
+
+	}
+
+
 	private void GenerateRocks(StructureWorldAccess region, int x, int y, int z, BlockPos.Mutable pos, BlockPos.Mutable placing_pos) {
 		pos.set(x, y, z);
 		int probability = 0; //1 out of what?

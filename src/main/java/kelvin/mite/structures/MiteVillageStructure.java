@@ -41,7 +41,6 @@ public class MiteVillageStructure extends JigsawFeature {
 
     public MiteVillageStructure(Codec<StructurePoolFeatureConfig> configCodec) {
         super(configCodec, 0, true, true, (context) -> {
-            HeightLimitView world = context.world();
             return CanGenerateVillage;
         });
     }

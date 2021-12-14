@@ -116,7 +116,10 @@ public class VanillaTweaks {
 						item == Items.DEAD_BUSH ||
 						//witherwood bush ||
 						item == Items.SNOW ||
-						item == Items.LILY_PAD) {
+						item == Items.LILY_PAD ||
+						item == Items.KELP ||
+						item == Items.DRIED_KELP ||
+						item == Items.HONEYCOMB) {
 					LowerStackSize(item, 32);
 				}
 				if (item == Items.COBBLESTONE ||
@@ -309,7 +312,7 @@ public class VanillaTweaks {
 
 		ChangeMaxDamage(Items.STONE_PICKAXE, 900);
 		ChangeMaxDamage(Items.STONE_AXE, 900);
-		ChangeMaxDamage(Items.STONE_SHOVEL, 900);
+		ChangeMaxDamage(Items.STONE_SHOVEL, 100);
 	}
 
 	public static void ApplyChanges() {

@@ -10,12 +10,8 @@ import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 
-import kelvin.mite.blocks.MITECraftingTableBlock;
-import kelvin.mite.blocks.MITEFurnaceBlock;
-import kelvin.mite.blocks.MiteCakeBlock;
-import kelvin.mite.blocks.MiteGrassBlock;
-import kelvin.mite.blocks.MitePlantBlock;
-import kelvin.mite.blocks.MiteRockBlock;
+import kelvin.mite.blocks.*;
+import kelvin.mite.main.Mite;
 import kelvin.mite.screens.MITEFurnaceContainer;
 import kelvin.mite.crafting.CraftingIngredient;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
@@ -39,16 +35,17 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.world.BlockView;
 
 public class BlockRegistry {
 	
 	public static String src = "resourcepacks/mite/";
-	
-	public static HashMap<BlockState, BakedModel> models = new HashMap<BlockState, BakedModel>();
-	
+
 	public static HashMap<Block, Block> grass_variants = new HashMap<Block, Block>();
-	
+	public static HashMap<Block, Block> farmland_variants = new HashMap<Block, Block>();
+
 	public static Block SANDSTONE_GRAVEL, RED_SANDSTONE_GRAVEL, ANDESITE_GRAVEL, DIORITE_GRAVEL, GRANITE_GRAVEL;
 	public static Block ANDESITE_SAND, DIORITE_SAND, GRANITE_SAND, LIMESTONE_SAND;
 	
@@ -104,7 +101,10 @@ public class BlockRegistry {
     public static Block THIN_SPRUCE_LOG;
 
     public static Block ROCK;
-    
+
+    public static Block FARMLAND_DIRT, FARMLAND_SANDSTONE, FARMLAND_RED_SANDSTONE,
+	FARMLAND_ANDESITE, FARMLAND_GRANITE, FARMLAND_DIORITE, FARMLAND_LIMESTONE;
+
 	public static ArrayList<Block> gravel_variants = new ArrayList<Block>();
 	public static ArrayList<Block> sand_variants = new ArrayList<Block>();
 
@@ -128,9 +128,17 @@ public class BlockRegistry {
 	public static boolean CanSwapWithGrass(Block block) {
 		return grass_variants.containsKey(block);
 	}
-	
+
+	public static boolean CanSwapWithFarmland(Block block) {
+		return farmland_variants.containsKey(block);
+	}
+
 	public static Block TrySwapWithGrass(Block block) {
 		return grass_variants.getOrDefault(block, block);
+	}
+
+	public static Block TrySwapWithFarmland(Block block) {
+		return farmland_variants.getOrDefault(block, block);
 	}
 	
 	public static Block TrySwapFromGrass(Block block) {
@@ -294,6 +302,10 @@ public class BlockRegistry {
 			e.printStackTrace();
 		}
 	}
+
+	public static boolean always(BlockState state, BlockView world, BlockPos pos) {
+		return true;
+	}
 	
 	public static void RegisterAllBlocks() {
 		Color grass_color = new Color((int)(87 * 1.5), (int)(132 * 1.5), (int)(35 * 1.5));
@@ -325,6 +337,29 @@ public class BlockRegistry {
 		LIMESTONE_SAND = Register(new Identifier("mite:limestone_sand"), new FallingBlock(
 				Settings.of(Blocks.SAND.getDefaultState().getMaterial()).ticksRandomly().strength(Blocks.SAND.getDefaultState().getHardness(null, null)).sounds(Blocks.SAND.getDefaultState().getSoundGroup())),
 				"limestone_sand");
+
+		//        FARMLAND = register("farmland", new FarmlandBlock(Settings.of(Material.SOIL).ticksRandomly().strength(0.6F).sounds(BlockSoundGroup.GRAVEL).blockVision(Blocks::always).suffocates(Blocks::always)));
+		FARMLAND_DIRT = Register(new Identifier("mite:farmland_dirt"), new MiteFarmlandBlock(
+				Settings.of(Blocks.FARMLAND.getDefaultState().getMaterial()).ticksRandomly().strength(0.6F).sounds(BlockSoundGroup.GRAVEL).blockVision(BlockRegistry::always).suffocates(BlockRegistry::always), Blocks.DIRT),
+				"dirt_farmland");
+		FARMLAND_LIMESTONE = Register(new Identifier("mite:farmland_limestone"), new MiteFarmlandBlock(
+						Settings.of(Blocks.FARMLAND.getDefaultState().getMaterial()).ticksRandomly().strength(0.6F).sounds(BlockSoundGroup.GRAVEL).blockVision(BlockRegistry::always).suffocates(BlockRegistry::always), LIMESTONE_SAND),
+				"limestone_farmland");
+		FARMLAND_ANDESITE = Register(new Identifier("mite:farmland_andesite"), new MiteFarmlandBlock(
+						Settings.of(Blocks.FARMLAND.getDefaultState().getMaterial()).ticksRandomly().strength(0.6F).sounds(BlockSoundGroup.GRAVEL).blockVision(BlockRegistry::always).suffocates(BlockRegistry::always), ANDESITE_SAND),
+				"andesite_farmland");
+		FARMLAND_GRANITE = Register(new Identifier("mite:farmland_granite"), new MiteFarmlandBlock(
+						Settings.of(Blocks.FARMLAND.getDefaultState().getMaterial()).ticksRandomly().strength(0.6F).sounds(BlockSoundGroup.GRAVEL).blockVision(BlockRegistry::always).suffocates(BlockRegistry::always), GRANITE_SAND),
+				"granite_farmland");
+		FARMLAND_DIORITE = Register(new Identifier("mite:farmland_diorite"), new MiteFarmlandBlock(
+						Settings.of(Blocks.FARMLAND.getDefaultState().getMaterial()).ticksRandomly().strength(0.6F).sounds(BlockSoundGroup.GRAVEL).blockVision(BlockRegistry::always).suffocates(BlockRegistry::always), DIORITE_SAND),
+				"diorite_farmland");
+		FARMLAND_SANDSTONE = Register(new Identifier("mite:farmland_sandstone"), new MiteFarmlandBlock(
+						Settings.of(Blocks.FARMLAND.getDefaultState().getMaterial()).ticksRandomly().strength(0.6F).sounds(BlockSoundGroup.GRAVEL).blockVision(BlockRegistry::always).suffocates(BlockRegistry::always), Blocks.SAND),
+				"sandstone_farmland");
+		FARMLAND_RED_SANDSTONE = Register(new Identifier("mite:farmland_red_sandstone"), new MiteFarmlandBlock(
+						Settings.of(Blocks.FARMLAND.getDefaultState().getMaterial()).ticksRandomly().strength(0.6F).sounds(BlockSoundGroup.GRAVEL).blockVision(BlockRegistry::always).suffocates(BlockRegistry::always), Blocks.RED_SAND),
+				"red_sandstone_farmland");
 		
 		 FLAX = Register("mite:flax", new MitePlantBlock(Block.Settings.of(Material.PLANT).noCollision().strength(0.5f).sounds(Blocks.GRASS.getDefaultState().getSoundGroup())));
 	     FLINT_CRAFTING_TABLE = Register("mite:flint_crafting_table", new MITECraftingTableBlock((Block.Settings.of(Material.WOOD).strength(0.2F).sounds(BlockSoundGroup.WOOD)), CraftingIngredient.FLINT_CRAFTING_TABLE));
@@ -382,6 +417,7 @@ public class BlockRegistry {
 		Block[] soil_blocks = new Block[] {Blocks.DIRT, Blocks.ROOTED_DIRT, Blocks.COARSE_DIRT, Blocks.GRAVEL, Blocks.SAND, Blocks.CLAY, Blocks.RED_SAND,
 				SANDSTONE_GRAVEL, RED_SANDSTONE_GRAVEL, ANDESITE_GRAVEL, DIORITE_GRAVEL, GRANITE_GRAVEL,
 				ANDESITE_SAND, DIORITE_SAND, GRANITE_SAND, LIMESTONE_SAND};
+
 		
 		for (int i = 0; i < soil_blocks.length; i++) {
 			String raw_name = soil_blocks[i].getName().toString().split("'")[1];
@@ -398,18 +434,44 @@ public class BlockRegistry {
 			Block snow = Register(new Identifier(grass_name+"_with_snow"), new MiteGrassBlock(
 					Settings.of(soil_blocks[i].getDefaultState().getMaterial()).ticksRandomly().strength(soil_blocks[i].getDefaultState().getHardness(null, null)).dropsLike(soil_blocks[i]).sounds(soil_blocks[i].getDefaultState().getSoundGroup()), soil_blocks[i]),
 					"grassy_"+block_name+"_with_snow");
-			
-			ColorProviderRegistry.BLOCK.register((state, view, pos, tintIndex) -> ColorProviderRegistry.BLOCK.get(Blocks.GRASS_BLOCK).getColor(state, view, pos, tintIndex), grass);
-			ColorProviderRegistry.BLOCK.register((state, view, pos, tintIndex) -> 0xffffff, snow);
-			
+			if (Mite.client) {
+				ColorProviderRegistry.BLOCK.register((state, view, pos, tintIndex) -> ColorProviderRegistry.BLOCK.get(Blocks.GRASS_BLOCK).getColor(state, view, pos, tintIndex), grass);
+				ColorProviderRegistry.BLOCK.register((state, view, pos, tintIndex) -> 0xffffff, snow);
+			}
 			Item grass_item = ItemRegistry.Register(grass, new BlockItem(grass, new net.minecraft.item.Item.Settings().group(ItemGroup.BUILDING_BLOCKS)));
-			ColorProviderRegistry.ITEM.register((stack, tintIndex) -> grass_color.getRGB(), grass_item);
-			BlockRenderLayerMap.INSTANCE.putBlock(grass, RenderLayer.getCutout());
-			BlockRenderLayerMap.INSTANCE.putBlock(snow, RenderLayer.getCutout());
-			
+			if (Mite.client) {
+				ColorProviderRegistry.ITEM.register((stack, tintIndex) -> grass_color.getRGB(), grass_item);
+
+				BlockRenderLayerMap.INSTANCE.putBlock(grass, RenderLayer.getCutout());
+				BlockRenderLayerMap.INSTANCE.putBlock(snow, RenderLayer.getCutout());
+			}
+
 			grass_variants.put(soil_blocks[i], grass);
 		}
-		
+
+
+
+		farmland_variants.put(Blocks.DIRT, FARMLAND_DIRT);
+		farmland_variants.put(grass_variants.get(Blocks.DIRT), FARMLAND_DIRT);
+
+		farmland_variants.put(Blocks.SAND, FARMLAND_SANDSTONE);
+		farmland_variants.put(grass_variants.get(Blocks.SAND), FARMLAND_SANDSTONE);
+
+		farmland_variants.put(Blocks.RED_SAND, FARMLAND_RED_SANDSTONE);
+		farmland_variants.put(grass_variants.get(Blocks.RED_SAND), FARMLAND_RED_SANDSTONE);
+
+		farmland_variants.put(BlockRegistry.ANDESITE_SAND, FARMLAND_ANDESITE);
+		farmland_variants.put(grass_variants.get(BlockRegistry.ANDESITE_SAND), FARMLAND_ANDESITE);
+
+		farmland_variants.put(BlockRegistry.DIORITE_SAND, FARMLAND_DIORITE);
+		farmland_variants.put(grass_variants.get(BlockRegistry.DIORITE_SAND), FARMLAND_DIORITE);
+
+		farmland_variants.put(BlockRegistry.GRANITE_SAND, FARMLAND_GRANITE);
+		farmland_variants.put(grass_variants.get(BlockRegistry.GRANITE_SAND), FARMLAND_GRANITE);
+
+		farmland_variants.put(BlockRegistry.LIMESTONE_SAND, FARMLAND_LIMESTONE);
+		farmland_variants.put(grass_variants.get(BlockRegistry.LIMESTONE_SAND), FARMLAND_LIMESTONE);
+
 		gravel_variants.add(Blocks.GRAVEL);
 		gravel_variants.add(ANDESITE_GRAVEL);
 		gravel_variants.add(GRANITE_GRAVEL);
@@ -423,11 +485,14 @@ public class BlockRegistry {
 		sand_variants.add(GRANITE_SAND);
 		sand_variants.add(DIORITE_SAND);
 		sand_variants.add(Blocks.RED_SAND);
-		
-		BlockRenderLayerMap.INSTANCE.putBlock(CHICKEN_NEST, RenderLayer.getCutout());
-		BlockRenderLayerMap.INSTANCE.putBlock(CAMPFIRE_LOW, RenderLayer.getCutout());
-		BlockRenderLayerMap.INSTANCE.putBlock(FLAX, RenderLayer.getCutout());
-		ColorProviderRegistry.BLOCK.register((state, view, pos, tintIndex) -> ColorProviderRegistry.BLOCK.get(Blocks.GRASS).getColor(state, view, pos, tintIndex), FLAX);
+
+		if (Mite.client) {
+			BlockRenderLayerMap.INSTANCE.putBlock(CHICKEN_NEST, RenderLayer.getCutout());
+			BlockRenderLayerMap.INSTANCE.putBlock(CAMPFIRE_LOW, RenderLayer.getCutout());
+			BlockRenderLayerMap.INSTANCE.putBlock(FLAX, RenderLayer.getCutout());
+
+			ColorProviderRegistry.BLOCK.register((state, view, pos, tintIndex) -> ColorProviderRegistry.BLOCK.get(Blocks.GRASS).getColor(state, view, pos, tintIndex), FLAX);
+		}
 	}
 	
 	public static void StartRegisteringBlocks() {

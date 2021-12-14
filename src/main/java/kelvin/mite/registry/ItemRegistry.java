@@ -144,6 +144,8 @@ public class ItemRegistry {
 
 	public static Item UNBAKED_CAKE;// = ITEMS.Register("unbaked_cake", () -> new BlockItem(BlockRegistry.UNBAKED_CAKE.get(), new Settings().group(ItemGroup.FOOD).maxCount(1)));
 
+	public static Item COMPOST;
+
 	private static FoodComponent buildStew(int hunger, float saturation) {
         return (new FoodComponent.Builder()).hunger(hunger).saturationModifier(saturation).build();
      }
@@ -258,7 +260,8 @@ public class ItemRegistry {
 		OBSIDIAN_FURNACE = Register("obsidian_furnace", new BlockItem(BlockRegistry.OBSIDIAN_FURNACE, (new Settings()).group(ItemGroup.BUILDING_BLOCKS).maxCount(1)));
 		NETHERRACK_FURNACE = Register("netherrack_furnace", new BlockItem(BlockRegistry.NETHERRACK_FURNACE, (new Settings()).group(ItemGroup.BUILDING_BLOCKS).maxCount(1)));
 		PEA_GRAVEL = Register("pea_gravel", new BlockItem(BlockRegistry.PEA_GRAVEL, (new Settings()).group(ItemGroup.BUILDING_BLOCKS)));
-		MANURE = Register("manure", new ItemManure((new Settings()).group(ItemGroup.MISC).maxCount(16)));
+		MANURE = Register("manure", new ManureItem((new Settings()).group(ItemGroup.MISC).maxCount(16)));
+		COMPOST = Register("compost", new CompostItem((new Settings()).group(ItemGroup.MISC).maxCount(16)));
 		COBWEB_BLOCK = Register("cobweb_block", new BlockItem(BlockRegistry.COBWEB_BLOCK, new Settings().group(ItemGroup.BUILDING_BLOCKS)));
 		SHINING_GRAVEL = Register("shining_gravel", new BlockItem(BlockRegistry.SHINING_GRAVEL, new Settings().group(ItemGroup.BUILDING_BLOCKS)));
 		SHINING_PEA_GRAVEL = Register("shining_pea_gravel", new BlockItem(BlockRegistry.SHINING_PEA_GRAVEL, new Settings().group(ItemGroup.BUILDING_BLOCKS)));

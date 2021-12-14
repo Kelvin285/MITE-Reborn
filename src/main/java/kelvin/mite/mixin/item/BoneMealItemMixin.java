@@ -1,9 +1,11 @@
 package kelvin.mite.mixin.item;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Fertilizable;
-import net.minecraft.block.GrassBlock;
-import net.minecraft.block.MushroomPlantBlock;
+import kelvin.mite.blocks.MiteFarmlandBlock;
+import kelvin.mite.blocks.entity.FarmlandBlockEntity;
+import kelvin.mite.main.Mite;
+import kelvin.mite.main.resources.SaveableVec3;
+import net.minecraft.block.*;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.item.BoneMealItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
@@ -20,10 +22,9 @@ public class BoneMealItemMixin {
     @Inject(at = @At("HEAD"), method = "useOnFertilizable", cancellable = true)
     private static void useOnFertilizable(ItemStack stack, World world, BlockPos pos, CallbackInfoReturnable<Boolean> info) {
         BlockState blockState = world.getBlockState(pos);
-        if (blockState.getBlock() instanceof Fertilizable && (
-                blockState.getBlock() instanceof MushroomPlantBlock ||
-                        blockState.getBlock() instanceof GrassBlock
-                )) {
+
+        boolean return_value = false;
+        if (blockState.getBlock() instanceof GrassBlock) {
             Fertilizable fertilizable = (Fertilizable)blockState.getBlock();
             if (fertilizable.isFertilizable(world, pos, blockState, world.isClient)) {
                 if (world instanceof ServerWorld) {
@@ -34,10 +35,32 @@ public class BoneMealItemMixin {
                     stack.decrement(1);
                 }
 
-                info.setReturnValue(true);
+                return_value = true;
             }
         }
+        else if (blockState.getBlock() instanceof CropBlock) {
 
-        info.setReturnValue(false);
+            BlockEntity blockEntity = world.getBlockEntity(pos.down());
+            if (blockEntity instanceof FarmlandBlockEntity) {
+                FarmlandBlockEntity farmland = (FarmlandBlockEntity) blockEntity;
+                if (farmland.phosphorus < 15) {
+                    farmland.phosphorus++;
+                    stack.decrement(1);
+
+                    return_value = true;
+                }
+            }
+        } else if (blockState.getBlock() instanceof MiteFarmlandBlock) {
+            BlockEntity blockEntity = world.getBlockEntity(pos);
+            if (blockEntity instanceof FarmlandBlockEntity) {
+                FarmlandBlockEntity farmland = (FarmlandBlockEntity) blockEntity;
+                if (farmland.phosphorus < 15) {
+                    farmland.phosphorus++;
+                    stack.decrement(1);
+                    return_value = true;
+                }
+            }
+        }
+        info.setReturnValue(return_value);
     }
 }

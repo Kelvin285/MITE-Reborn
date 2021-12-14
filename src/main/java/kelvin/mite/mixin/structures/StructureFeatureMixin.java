@@ -32,6 +32,7 @@ import net.minecraft.world.gen.StructureAccessor;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
 import net.minecraft.world.gen.chunk.StructureConfig;
 import net.minecraft.world.gen.feature.*;
+import net.minecraft.world.gen.feature.VillageFeature;
 import net.minecraft.world.gen.random.AtomicSimpleRandom;
 import net.minecraft.world.gen.random.ChunkRandom;
 import org.spongepowered.asm.mixin.Mixin;
@@ -43,10 +44,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.lang.reflect.Field;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Random;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
 import java.util.function.Predicate;
 
 
@@ -62,6 +61,8 @@ public abstract class StructureFeatureMixin<C extends FeatureConfig>  {
     @Shadow
     private static Map<StructureFeature<?>, GenerationStep.Feature> STRUCTURE_TO_GENERATION_STEP;
 
+    //private static StructureFeature<StructurePoolFeatureConfig> MITE_VILLAGE = set("Village", 15, "Village", VILLAGE, new MiteVillageStructure(StructurePoolFeatureConfig.CODEC), GenerationStep.Feature.SURFACE_STRUCTURES);
+
     @Shadow
     private static <F extends StructureFeature<?>> F register(String name, F structureFeature, GenerationStep.Feature step) {
         return null;
@@ -72,73 +73,31 @@ public abstract class StructureFeatureMixin<C extends FeatureConfig>  {
         STRUCTURE_TO_GENERATION_STEP.remove(remove_feature);
         STRUCTURES.put(name.toLowerCase(Locale.ROOT), structureFeature);
         STRUCTURE_TO_GENERATION_STEP.put(structureFeature, step);
-        var feature = (StructureFeature)((MutableRegistry)Registry.STRUCTURE_FEATURE).set(index, Registry.STRUCTURE_FEATURE_KEY, structureFeature, Lifecycle.stable());
+        var feature = (StructureFeature)((MutableRegistry)Registry.STRUCTURE_FEATURE).replace(OptionalInt.of(index), Registry.STRUCTURE_FEATURE_KEY, structureFeature, Lifecycle.stable());
         return feature;
     }
 
-    static {
-        VILLAGE = set("Village", 15, "Village", VILLAGE, new MiteVillageStructure(StructurePoolFeatureConfig.CODEC), GenerationStep.Feature.SURFACE_STRUCTURES);
-    }
-
-
-    public boolean shouldStartAt(ChunkGenerator chunkGenerator, BiomeSource biomeSource, long worldSeed, ChunkPos pos, C config, HeightLimitView w) {
-        if (w instanceof World && (StructureFeature)(Object)this instanceof VillageFeature) {
-            World world = (World)w;
-            if (!world.isClient()) {
-                List<? extends PlayerEntity> players = world.getPlayers();
-                Field iron = null;
-                try {
-                    iron = PlayerEntity.class.getDeclaredField("acquired_iron");
-                    boolean can_spawn = false;
-                    for (PlayerEntity p : players) {
-                        if (iron.getBoolean(p)) {
-                            can_spawn = true;
-                            break;
-                        }
-                    }
-                    if (!can_spawn) {
-                        return false;
-                    }
-                }catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-            }
-        }
-
-        return true;
-    }
-
-    @Inject(at=@At("HEAD"),method="tryPlaceStart",cancellable = true)
-    public void tryPlaceStart(DynamicRegistryManager registryManager, ChunkGenerator chunkGenerator, BiomeSource biomeSource, StructureManager structureManager, long worldSeed, ChunkPos pos, int structureReferences, StructureConfig structureConfig, C config, HeightLimitView world, Predicate<Biome> biomeLimit, CallbackInfoReturnable<StructureStart<?>> info) {
-        //ChunkGenerator chunkGenerator, BiomeSource biomeSource, long worldSeed, ChunkPos pos, C config, HeightLimitView w
-        if (!shouldStartAt(chunkGenerator, biomeSource, worldSeed, pos, config, world)) {
-            info.setReturnValue(StructureStart.DEFAULT);
+    @Inject(at=@At("HEAD"), method="tryPlaceStart", cancellable = true)
+    public void tryPlaceStart(DynamicRegistryManager registryManager, ChunkGenerator chunkGenerator, BiomeSource biomeSource, StructureManager structureManager, long worldSeed, ChunkPos pos, int structureReferences, StructureConfig structureConfig, C config, HeightLimitView world, Predicate<Biome> biomePredicate, CallbackInfoReturnable<StructureStart<?>> info) {
+        if ((StructureFeature)(Object)this instanceof VillageFeature) {
+            if (!MiteVillageStructure.CanGenerateVillage) info.setReturnValue(StructureStart.DEFAULT);
         }
     }
+
+    @Inject(at=@At("HEAD"), method="canGenerate", cancellable = true)
+    public void canGenerate(DynamicRegistryManager registryManager, ChunkGenerator chunkGenerator, BiomeSource biomeSource, StructureManager structureManager, long worldSeed, ChunkPos pos, C config, HeightLimitView world, Predicate<Biome> biomePredicate, CallbackInfoReturnable<Boolean> info) {
+        if ((StructureFeature)(Object)this instanceof VillageFeature) {
+            info.setReturnValue(MiteVillageStructure.CanGenerateVillage);
+        }
+    }
+
     /*
-    @Inject(at = @At("HEAD"), method = "generate", cancellable = true)
-    public void generate(StructureWorldAccess world, StructureAccessor structureAccessor, ChunkGenerator chunkGenerator, Random random, BlockBox boundingBox, ChunkPos chunkPos, BlockPos pos, CallbackInfoReturnable<Boolean> info) {
-        if (!world.isClient()) {
-            List<? extends PlayerEntity> players = world.getPlayers();
-            Field iron = null;
-            try {
-                iron = PlayerEntity.class.getDeclaredField("acquired_iron");
-                boolean can_spawn = false;
-                for (PlayerEntity p : players) {
-                    if (iron.getBoolean(p)) {
-                        can_spawn = true;
-                        break;
-                    }
-                }
-                if (!can_spawn) {
-                    info.setReturnValue(false);
-                }
-            }catch (Exception e) {
-                e.printStackTrace();
-            }
+            VILLAGE = register("Village", new VillageFeature(StructurePoolFeatureConfig.CODEC), Feature.SURFACE_STRUCTURES);
 
-        }
-    }
+            private static <F extends StructureFeature<?>> F register(String name, F structureFeature, Feature step) {
+                STRUCTURES.put(name.toLowerCase(Locale.ROOT), structureFeature);
+                STRUCTURE_TO_GENERATION_STEP.put(structureFeature, step);
+                return (StructureFeature)Registry.register(Registry.STRUCTURE_FEATURE, name.toLowerCase(Locale.ROOT), structureFeature);
+            }
      */
 }

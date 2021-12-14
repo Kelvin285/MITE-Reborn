@@ -1,10 +1,8 @@
 package kelvin.mite.mixin;
 
+import kelvin.mite.crafting.MiteCookingRecipe;
 import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.AbstractCookingRecipe;
-import net.minecraft.recipe.CookingRecipeSerializer;
-import net.minecraft.recipe.Ingredient;
-import net.minecraft.recipe.RecipeSerializer;
+import net.minecraft.recipe.*;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -27,14 +25,13 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 
 @Mixin(CookingRecipeSerializer.class)
-public class CookingRecipeSerializerMixin<T extends AbstractCookingRecipe> implements RecipeSerializer<T> {
+public abstract class CookingRecipeSerializerMixin<T extends AbstractCookingRecipe> implements RecipeSerializer<T> {
 
     @Shadow
     private int cookingTime;
 
     @Overwrite
     public T read(Identifier identifier, JsonObject jsonObject) {
-
         String string = JsonHelper.getString(jsonObject, "group", "");
         JsonElement jsonElement = JsonHelper.hasArray(jsonObject, "ingredient") ? JsonHelper.getArray(jsonObject, "ingredient") : JsonHelper.getObject(jsonObject, "ingredient");
         Ingredient ingredient = Ingredient.fromJson((JsonElement)jsonElement);
@@ -66,6 +63,7 @@ public class CookingRecipeSerializerMixin<T extends AbstractCookingRecipe> imple
             e.printStackTrace();
         }
         return recipe;
+
     }
 
     @Overwrite
@@ -80,49 +78,39 @@ public class CookingRecipeSerializerMixin<T extends AbstractCookingRecipe> imple
         T recipe = null;
         try {
             recipeFactory.setAccessible(true);
-            System.out.println("Test 3: " + this);
             var factory = recipeFactory.get(this);
-            System.out.println("Factory class type : " + factory);
             var result = factory.getClass().getDeclaredMethods()[0].invoke(factory, identifier, string, ingredient, itemStack, f, i);
-            System.out.println("Result class type : " + result);
             recipe = (T) result;
-            AbstractCookingRecipe.class.getDeclaredFields()[7].set(recipe, packetByteBuf.readVarInt()); //inputCount
-            AbstractCookingRecipe.class.getDeclaredFields()[8].set(recipe, packetByteBuf.readVarInt()); //outputCount
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
+
+            if ((Object)recipe instanceof MiteCookingRecipe) {
+                MiteCookingRecipe r = (MiteCookingRecipe)(Object) recipe;
+               try {
+                   r.setInputCount(packetByteBuf.readVarInt());
+                   r.setOutputCount(packetByteBuf.readVarInt());
+               } catch (Exception e) {
+                   r.setInputCount(1);
+                   r.setOutputCount(1);
+               }
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return recipe;
     }
 
-    /*
-    @Shadow
-    protected RecipeType<?> type;
-    @Shadow
-    protected Identifier id;
-    @Shadow
-    protected String group;
-    @Shadow
-    protected Ingredient input;
-    @Shadow
-    protected ItemStack output;
-    @Shadow
-    protected float experience;
-    @Shadow
-    protected int cookTime;
-     */
-
     @Overwrite
     public void write(PacketByteBuf packetByteBuf, T recipe) {
         try {
-            packetByteBuf.writeString((String)recipe.getClass().getDeclaredFields()[2].get(recipe)); //group
-            ((Ingredient)recipe.getClass().getDeclaredFields()[3].get(recipe)).write(packetByteBuf); //input
-            packetByteBuf.writeItemStack((ItemStack)recipe.getClass().getDeclaredFields()[4].get(recipe)); //output
-            packetByteBuf.writeFloat((float)recipe.getClass().getDeclaredFields()[5].get(recipe)); //experience
-            packetByteBuf.writeVarInt((int)recipe.getClass().getDeclaredFields()[6].get(recipe)); //cookTime
-            packetByteBuf.writeVarInt((int)recipe.getClass().getDeclaredFields()[7].get(recipe)); //inputCount
-            packetByteBuf.writeVarInt((int)recipe.getClass().getDeclaredFields()[8].get(recipe)); //outputCount
+            packetByteBuf.writeString(recipe.getGroup()); //group
+            recipe.getIngredients().get(0).write(packetByteBuf); // input
+            packetByteBuf.writeItemStack(recipe.getOutput()); //output
+            packetByteBuf.writeFloat(recipe.getExperience()); //experience
+            packetByteBuf.writeVarInt(recipe.getCookTime()); //cookTime
+            if ((Object)recipe instanceof MiteCookingRecipe) {
+                MiteCookingRecipe r = (MiteCookingRecipe)(Object) recipe;
+                packetByteBuf.writeVarInt(r.getInputCount()); //inputCount
+                packetByteBuf.writeVarInt(r.getOutputCount()); //outputCount
+            }
         }catch (Exception e) {
             e.printStackTrace();
         }

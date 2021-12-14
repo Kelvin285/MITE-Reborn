@@ -1,5 +1,6 @@
 package kelvin.mite.mixin.entity;
 
+import kelvin.mite.main.resources.MiteHungerManager;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.player.PlayerEntity;
@@ -44,9 +45,23 @@ public class LivingEntityMixin {
 	@Inject(at = @At("HEAD"), method = "tick")
 	public void tick(CallbackInfo info) {
 		healing_ticks++;
-		if (healing_ticks > 20 * 60 * 5) {
-			healing_ticks = 0;
-			this.heal(1);
+		if ((Object)this instanceof PlayerEntity) {
+			PlayerEntity player = (PlayerEntity)(Object)this;
+			MiteHungerManager hungerManager = (MiteHungerManager)player.getHungerManager();
+			float fruits = hungerManager.getSaturation(MiteHungerManager.HungerCategory.FRUITS) / hungerManager.getMaxSaturation();
+
+
+
+			if (healing_ticks > 20 * 60 * (5 - (1.0f - fruits) * 2.5f)) {
+				healing_ticks = 0;
+				this.heal(1);
+			}
+		} else {
+			if (healing_ticks > 20 * 60 * 5) {
+				healing_ticks = 0;
+				this.heal(1);
+			}
 		}
+
 	}
 }

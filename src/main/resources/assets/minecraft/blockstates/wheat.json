@@ -1,0 +1,53 @@
+{
+  "variants": {
+    "age=0,blighted=false": {
+      "model": "minecraft:block/wheat_stage0"
+    },
+    "age=1,blighted=false": {
+      "model": "minecraft:block/wheat_stage1"
+    },
+    "age=2,blighted=false": {
+      "model": "minecraft:block/wheat_stage2"
+    },
+    "age=3,blighted=false": {
+      "model": "minecraft:block/wheat_stage3"
+    },
+    "age=4,blighted=false": {
+      "model": "minecraft:block/wheat_stage4"
+    },
+    "age=5,blighted=false": {
+      "model": "minecraft:block/wheat_stage5"
+    },
+    "age=6,blighted=false": {
+      "model": "minecraft:block/wheat_stage6"
+    },
+    "age=7,blighted=false": {
+      "model": "minecraft:block/wheat_stage7"
+    },
+	
+	"age=0,blighted=true": {
+      "model": "minecraft:block/blighted_wheat_stage0"
+    },
+    "age=1,blighted=true": {
+      "model": "minecraft:block/blighted_wheat_stage1"
+    },
+    "age=2,blighted=true": {
+      "model": "minecraft:block/blighted_wheat_stage2"
+    },
+    "age=3,blighted=true": {
+      "model": "minecraft:block/blighted_wheat_stage3"
+    },
+    "age=4,blighted=true": {
+      "model": "minecraft:block/blighted_wheat_stage4"
+    },
+    "age=5,blighted=true": {
+      "model": "minecraft:block/blighted_wheat_stage5"
+    },
+    "age=6,blighted=true": {
+      "model": "minecraft:block/blighted_wheat_stage6"
+    },
+    "age=7,blighted=true": {
+      "model": "minecraft:block/blighted_wheat_stage7"
+    }
+  }
+}

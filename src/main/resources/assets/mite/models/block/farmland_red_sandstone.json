@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/template_farmland",
+  "textures": {
+    "dirt": "minecraft:block/red_sand",
+    "top": "mite:block/farmland/red_sandstone_farmland"
+  }
+}

@@ -5,14 +5,12 @@ import java.util.Map;
 
 import kelvin.mite.entity.TurkeyEntity;
 import kelvin.mite.entity.rendering.turkey.TurkeyRenderer;
+import kelvin.mite.main.Mite;
 import kelvin.mite.main.resources.Resources;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
-import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.entity.FabricEntityTypeBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
-import net.minecraft.client.render.entity.EntityRendererFactory;
-import net.minecraft.client.render.entity.EntityRenderers;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
@@ -41,7 +39,6 @@ public class EntityRegistry {
 //				);
 		
 		RegisterAttributes();
-		RegisterModels();
 		RegisterSpawns();
 	}
 	
@@ -50,16 +47,6 @@ public class EntityRegistry {
 		FabricDefaultAttributeRegistry.register(TURKEY, TurkeyEntity.createChickenAttributes());
 	}
 	
-	public static void RegisterModels() {
-		EntityRendererRegistry.INSTANCE.register(TURKEY,
-				(context) -> {
-					return new TurkeyRenderer<TurkeyEntity>(context);
-				});
-//		EntityRendererRegistry.INSTANCE.register(BASIC_TREE,
-//				(context) -> {
-//					return new BasicTreeRenderer(context);
-//				});
-	}
 
 	public static void RegisterSpawns() {
 		BiomeModifications.addSpawn(BiomeSelectors.categories(Biome.Category.FOREST, Biome.Category.TAIGA), TURKEY.getSpawnGroup(), TURKEY, 1, 2, 4);

@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/template_farmland",
+  "textures": {
+    "dirt": "mite:block/andesite_sand",
+    "top": "mite:block/farmland/andesite_farmland_moist"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "variants": {
+    "moisture=0": {
+      "model": "mite:block/farmland_limestone"
+    },
+    "moisture=1": {
+      "model": "mite:block/farmland_limestone"
+    },
+    "moisture=2": {
+      "model": "mite:block/farmland_limestone"
+    },
+    "moisture=3": {
+      "model": "mite:block/farmland_limestone"
+    },
+    "moisture=4": {
+      "model": "mite:block/farmland_limestone"
+    },
+    "moisture=5": {
+      "model": "mite:block/farmland_limestone"
+    },
+    "moisture=6": {
+      "model": "mite:block/farmland_limestone"
+    },
+    "moisture=7": {
+      "model": "mite:block/farmland_limestone_moist"
+    }
+  }
+}

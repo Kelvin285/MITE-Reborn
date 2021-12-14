@@ -1,0 +1,28 @@
+{
+  "variants": {
+    "moisture=0": {
+      "model": "mite:block/farmland_dirt"
+    },
+    "moisture=1": {
+      "model": "mite:block/farmland_dirt"
+    },
+    "moisture=2": {
+      "model": "mite:block/farmland_dirt"
+    },
+    "moisture=3": {
+      "model": "mite:block/farmland_dirt"
+    },
+    "moisture=4": {
+      "model": "mite:block/farmland_dirt"
+    },
+    "moisture=5": {
+      "model": "mite:block/farmland_dirt"
+    },
+    "moisture=6": {
+      "model": "mite:block/farmland_dirt"
+    },
+    "moisture=7": {
+      "model": "mite:block/farmland_dirt_moist"
+    }
+  }
+}

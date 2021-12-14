@@ -1,22 +1,20 @@
 package kelvin.mite.mixin;
 
+import kelvin.mite.main.resources.MiteHungerManager;
+import kelvin.mite.registry.NutrientsRegistry;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.item.FoodComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.world.Difficulty;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import net.minecraft.entity.player.HungerManager;
 import net.minecraft.entity.player.PlayerEntity;
 
 @Mixin(HungerManager.class)
-public class HungerManagerMixin {
+public class HungerManagerMixin implements MiteHungerManager {
 
 	@Shadow
 	private int foodLevel = 20;
@@ -28,6 +26,22 @@ public class HungerManagerMixin {
 	private int foodTickTimer;
 	@Shadow
 	private int prevFoodLevel = 20;
+
+	private float fruits = 12.0f;
+	private float fruitsExhaustion = 0;
+
+	private float vegetables = 12.0f;
+	private float vegetablesExhaustion = 0;
+
+	private float dairy = 12.0f;
+	private float dairyExhaustion = 0;
+
+	private float protein = 12.0f;
+	private float proteinExhaustion = 0;
+
+	private float grains = 12.0f;
+	private float grainsExhaustion = 0;
+
 
 	@Shadow
 	public void add(int food, float saturationModifier) {
@@ -46,13 +60,62 @@ public class HungerManagerMixin {
 
 	private int ticks = 0;
 
+	private float max_saturation = 8;
+
+
+
 	public void update(PlayerEntity player) {
 		int max_food_level = (player.experienceLevel / 5 + 3) * 2;
-		int max_saturation = 5;
+		max_saturation = 8 + (player.experienceLevel / 5) * 3;
 
 		if (ticks > 20 * 60 * 30) { // subtract food level by 1 every 30 minutes
 			ticks = 0;
 			foodLevel--;
+		}
+
+		if (fruitsExhaustion > 4.0f) {
+			fruitsExhaustion -= 4.0f;
+			if (fruits > 0) {
+				fruits --;
+			} else {
+				exhaustion = 4;
+			}
+		}
+
+		if (vegetablesExhaustion > 4.0f) {
+			vegetablesExhaustion -= 4.0f;
+			if (vegetables > 0) {
+				vegetables --;
+			} else {
+				exhaustion = 4;
+			}
+		}
+
+		if (dairyExhaustion > 4.0f) {
+			dairyExhaustion -= 4.0f;
+			if (dairy > 0) {
+				dairy --;
+			} else {
+				exhaustion = 4;
+			}
+		}
+
+		if (proteinExhaustion > 4.0f) {
+			proteinExhaustion -= 4.0f;
+			if (protein > 0) {
+				protein --;
+			} else {
+				exhaustion = 4;
+			}
+		}
+
+		if (grainsExhaustion > 4.0f) {
+			grainsExhaustion -= 4.0f;
+			if (grains > 0) {
+				grains --;
+			} else {
+				exhaustion = 4;
+			}
 		}
 
 		if (exhaustion > 4.0f) {
@@ -72,6 +135,10 @@ public class HungerManagerMixin {
 		foodSaturationLevel = (float)Math.max(Math.min(foodSaturationLevel, max_saturation), 0);
 	}
 
+	public float getMaxSaturation() {
+		return max_saturation;
+	}
+
 	public void readNbt(NbtCompound nbt) {
 		if (nbt.contains("foodLevel", 99)) {
 			this.foodLevel = nbt.getInt("foodLevel");
@@ -82,6 +149,8 @@ public class HungerManagerMixin {
 
 	}
 
+
+
 	public void writeNbt(NbtCompound nbt) {
 		nbt.putInt("foodLevel", this.foodLevel);
 		nbt.putInt("foodTickTimer", this.foodTickTimer);
@@ -91,48 +160,141 @@ public class HungerManagerMixin {
 
 	@Shadow
 	public int getFoodLevel() {
-		return this.foodLevel;
+
+		return 0;
 	}
 
 	@Shadow
 	public int getPrevFoodLevel() {
-		return this.prevFoodLevel;
+		return 0;
 	}
 
-	@Shadow
 	public boolean isNotFull() {
 		return this.foodSaturationLevel < 5;
 	}
 
 	@Shadow
 	public void addExhaustion(float exhaustion) {
-		this.exhaustion = Math.min(this.exhaustion + exhaustion, 40.0F);
+
 	}
 
 	@Shadow
 	public float getExhaustion() {
-		return this.exhaustion;
+		return 0;
 	}
 
 	@Shadow
 	public float getSaturationLevel() {
-		return this.foodSaturationLevel;
+		return 0;
 	}
 
 	@Shadow
 	public void setFoodLevel(int foodLevel) {
-		this.foodLevel = foodLevel;
-	}
 
+	}
 
 	@Shadow
 	public void setSaturationLevel(float saturationLevel) {
-		this.foodSaturationLevel = saturationLevel;
+
 	}
 
 	@Shadow
 	public void setExhaustion(float exhaustion) {
-		this.exhaustion = exhaustion;
+
 	}
-	
+
+	@Override
+	public void eatFood(Item food) {
+		NutrientsRegistry.Nutrients n = NutrientsRegistry.GetNutrientsFor(food);
+		addSaturation(HungerCategory.FRUITS, n.fruits);
+		addSaturation(HungerCategory.VEGETABLES, n.vegetables);
+		addSaturation(HungerCategory.GRAIN, n.grains);
+		addSaturation(HungerCategory.DAIRY, n.dairy);
+		addSaturation(HungerCategory.PROTEIN, n.protein);
+	}
+
+	@Override
+	public void addSaturation(HungerCategory category, int value) {
+		switch (category) {
+			case DAIRY:
+				dairy += value;
+				if (dairy > getMaxSaturation()) dairy = getMaxSaturation();
+				break;
+			case GRAIN:
+				grains += value;
+				if (grains > getMaxSaturation()) grains = getMaxSaturation();
+				break;
+			case FRUITS:
+				fruits += value;
+				if (fruits > getMaxSaturation()) fruits = getMaxSaturation();
+				break;
+			case VEGETABLES:
+				vegetables += value;
+				if (vegetables > getMaxSaturation()) vegetables = getMaxSaturation();
+				break;
+			case PROTEIN:
+				protein += value;
+				if (protein > getMaxSaturation()) protein = getMaxSaturation();
+				break;
+		}
+	}
+
+	@Override
+	public float getSaturation(HungerCategory category) {
+		switch (category) {
+			case DAIRY:
+				return dairy;
+			case GRAIN:
+				return grains;
+			case FRUITS:
+				return fruits;
+			case VEGETABLES:
+				return vegetables;
+			case PROTEIN:
+				return protein;
+		}
+		return 0;
+	}
+
+	@Override
+	public void setSaturation(HungerCategory category, float value) {
+		switch (category) {
+			case DAIRY:
+				dairy = value;
+				break;
+			case GRAIN:
+				grains = value;
+				break;
+			case FRUITS:
+				fruits = value;
+				break;
+			case VEGETABLES:
+				vegetables = value;
+				break;
+			case PROTEIN:
+				protein = value;
+				break;
+		}
+	}
+
+	@Override
+	public void addExhaustion(HungerCategory category, float value) {
+		switch (category) {
+			case DAIRY:
+				dairyExhaustion += value;
+				break;
+			case GRAIN:
+				grainsExhaustion += value;
+				break;
+			case FRUITS:
+				fruitsExhaustion += value;
+				break;
+			case VEGETABLES:
+				vegetablesExhaustion += value;
+				break;
+			case PROTEIN:
+				proteinExhaustion += value;
+				break;
+		}
+	}
 }

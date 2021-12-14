@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/crop",
+  "textures": {
+    "crop": "minecraft:block/blighted_potatoes_stage1"
+  }
+}

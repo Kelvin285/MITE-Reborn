@@ -1,0 +1,53 @@
+{
+  "variants": {
+    "age=0,blighted=false": {
+      "model": "minecraft:block/carrots_stage0"
+    },
+    "age=1,blighted=false": {
+      "model": "minecraft:block/carrots_stage0"
+    },
+    "age=2,blighted=false": {
+      "model": "minecraft:block/carrots_stage1"
+    },
+    "age=3,blighted=false": {
+      "model": "minecraft:block/carrots_stage1"
+    },
+    "age=4,blighted=false": {
+      "model": "minecraft:block/carrots_stage2"
+    },
+    "age=5,blighted=false": {
+      "model": "minecraft:block/carrots_stage2"
+    },
+    "age=6,blighted=false": {
+      "model": "minecraft:block/carrots_stage3"
+    },
+    "age=7,blighted=false": {
+      "model": "minecraft:block/carrots_stage3"
+    },
+	
+	"age=0,blighted=true": {
+      "model": "minecraft:block/blighted_carrots_stage0"
+    },
+    "age=1,blighted=true": {
+      "model": "minecraft:block/blighted_carrots_stage0"
+    },
+    "age=2,blighted=true": {
+      "model": "minecraft:block/blighted_carrots_stage1"
+    },
+    "age=3,blighted=true": {
+      "model": "minecraft:block/blighted_carrots_stage1"
+    },
+    "age=4,blighted=true": {
+      "model": "minecraft:block/blighted_carrots_stage2"
+    },
+    "age=5,blighted=true": {
+      "model": "minecraft:block/blighted_carrots_stage2"
+    },
+    "age=6,blighted=true": {
+      "model": "minecraft:block/blighted_carrots_stage3"
+    },
+    "age=7,blighted=true": {
+      "model": "minecraft:block/blighted_carrots_stage3"
+    }
+  }
+}

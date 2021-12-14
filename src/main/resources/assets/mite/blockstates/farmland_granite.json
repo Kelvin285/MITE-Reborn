@@ -1,0 +1,28 @@
+{
+  "variants": {
+    "moisture=0": {
+      "model": "mite:block/farmland_granite"
+    },
+    "moisture=1": {
+      "model": "mite:block/farmland_granite"
+    },
+    "moisture=2": {
+      "model": "mite:block/farmland_granite"
+    },
+    "moisture=3": {
+      "model": "mite:block/farmland_granite"
+    },
+    "moisture=4": {
+      "model": "mite:block/farmland_granite"
+    },
+    "moisture=5": {
+      "model": "mite:block/farmland_granite"
+    },
+    "moisture=6": {
+      "model": "mite:block/farmland_granite"
+    },
+    "moisture=7": {
+      "model": "mite:block/farmland_granite_moist"
+    }
+  }
+}

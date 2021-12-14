@@ -1,0 +1,28 @@
+{
+  "variants": {
+    "moisture=0": {
+      "model": "mite:block/farmland_andesite"
+    },
+    "moisture=1": {
+      "model": "mite:block/farmland_andesite"
+    },
+    "moisture=2": {
+      "model": "mite:block/farmland_andesite"
+    },
+    "moisture=3": {
+      "model": "mite:block/farmland_andesite"
+    },
+    "moisture=4": {
+      "model": "mite:block/farmland_andesite"
+    },
+    "moisture=5": {
+      "model": "mite:block/farmland_andesite"
+    },
+    "moisture=6": {
+      "model": "mite:block/farmland_andesite"
+    },
+    "moisture=7": {
+      "model": "mite:block/farmland_andesite_moist"
+    }
+  }
+}
