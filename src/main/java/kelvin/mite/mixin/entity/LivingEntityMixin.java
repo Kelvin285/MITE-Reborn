@@ -3,7 +3,9 @@ package kelvin.mite.mixin.entity;
 import kelvin.mite.main.resources.MiteHungerManager;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.math.MathHelper;
 import org.spongepowered.asm.mixin.Mixin;
 
 import net.minecraft.entity.LivingEntity;
@@ -51,8 +53,8 @@ public class LivingEntityMixin {
 			float fruits = hungerManager.getSaturation(MiteHungerManager.HungerCategory.FRUITS) / hungerManager.getMaxSaturation();
 
 
-
-			if (healing_ticks > 20 * 60 * (5 - (1.0f - fruits) * 2.5f)) {
+			float mult = MathHelper.lerp(fruits, 5, 2.5f);
+			if (healing_ticks > 20 * 60 * mult) {
 				healing_ticks = 0;
 				this.heal(1);
 			}

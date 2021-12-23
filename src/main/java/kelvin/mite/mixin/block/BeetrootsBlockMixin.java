@@ -29,6 +29,6 @@ public class BeetrootsBlockMixin extends CropBlock {
     }
 
     public void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-        builder.add(new Property[]{AGE, MiteBlockProperties.BLIGHTED});
+        builder.add(new Property[]{BeetrootsBlock.AGE, MiteBlockProperties.BLIGHTED});
     }
 }

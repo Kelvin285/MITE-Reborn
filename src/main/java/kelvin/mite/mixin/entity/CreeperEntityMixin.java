@@ -3,6 +3,7 @@ package kelvin.mite.mixin.entity;
 import kelvin.mite.entity.CreeperData;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.EntityAttributeInstance;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -13,7 +14,9 @@ import net.minecraft.entity.mob.CreeperEntity;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.mob.ZombieEntity;
+import net.minecraft.entity.passive.CatEntity;
 import net.minecraft.entity.passive.ChickenEntity;
+import net.minecraft.entity.passive.OcelotEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -58,6 +61,19 @@ public abstract class CreeperEntityMixin extends HostileEntity {
 
     protected CreeperEntityMixin(EntityType<? extends CreeperEntity> entityType, World world) {
         super(entityType, world);
+    }
+
+    public void initGoals() {
+        this.goalSelector.add(1, new SwimGoal(this));
+        this.goalSelector.add(2, new CreeperIgniteGoal((CreeperEntity)(Object)this));
+        this.goalSelector.add(3, new FleeEntityGoal(this, OcelotEntity.class, 6.0F, 1.0D, 1.2D));
+        this.goalSelector.add(3, new FleeEntityGoal(this, CatEntity.class, 6.0F, 1.0D, 1.2D));
+        this.goalSelector.add(4, new MeleeAttackGoal(this, 1.0D, false));
+        this.goalSelector.add(5, new WanderAroundFarGoal(this, 0.8D));
+        this.goalSelector.add(6, new LookAtEntityGoal(this, PlayerEntity.class, 48.0F));
+        this.goalSelector.add(6, new LookAroundGoal(this));
+        this.targetSelector.add(1, new ActiveTargetGoal(this, PlayerEntity.class, true));
+        this.targetSelector.add(2, new RevengeGoal(this, new Class[0]));
     }
 
     @Override
@@ -130,6 +146,29 @@ public abstract class CreeperEntityMixin extends HostileEntity {
 
         setBaby(nbt.getBoolean("IsBaby"));
     }
+
+    @Shadow
+    public void spawnEffectsCloud() {
+
+    }
+
+    @Shadow
+    public boolean shouldRenderOverlay() {
+        return false;
+    }
+
+    private void explode() {
+        if (!this.world.isClient) {
+            Explosion.DestructionType destructionType = this.world.getGameRules().getBoolean(GameRules.DO_MOB_GRIEFING) ? Explosion.DestructionType.DESTROY : Explosion.DestructionType.NONE;
+            float f = this.shouldRenderOverlay() ? 2.0F : 1.0F;
+            this.dead = true;
+            this.world.createExplosion(this, this.getX(), this.getY(), this.getZ(), (float)this.explosionRadius * f, destructionType);
+            this.discard();
+            this.spawnEffectsCloud();
+        }
+
+    }
+
     @Override
     public double getHeightOffset() {
         return isBaby() ? 0.0D : -0.45D;

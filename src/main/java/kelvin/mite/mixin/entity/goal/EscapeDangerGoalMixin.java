@@ -1,12 +1,15 @@
 package kelvin.mite.mixin.entity.goal;
 
+import kelvin.mite.main.Mite;
+import kelvin.mite.main.resources.MoonHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.Tameable;
 import net.minecraft.entity.ai.NoPenaltyTargeting;
 import net.minecraft.entity.ai.TargetPredicate;
 import net.minecraft.entity.ai.goal.EscapeDangerGoal;
 import net.minecraft.entity.mob.PathAwareEntity;
-import net.minecraft.entity.passive.AnimalEntity;
+import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tag.FluidTags;
 import net.minecraft.util.math.BlockPos;
@@ -41,10 +44,21 @@ public class EscapeDangerGoalMixin {
 
     @Inject(at=@At("HEAD"), method="canStart")
     public void canStart(CallbackInfoReturnable<Boolean> info) {
+
         World world = this.mob.world;
-        PlayerEntity close = world.getClosestPlayer(mob.getX(), mob.getY(), mob.getZ(), 4, (p) -> {
+        PlayerEntity close = world.getClosestPlayer(mob.getX(), mob.getY(), mob.getZ(), 8, (p) -> {
             PlayerEntity player = (PlayerEntity) p;
-            return !player.isCreative() && !player.isSneaking();
+            if (this.mob instanceof HorseBaseEntity) {
+                if (((HorseBaseEntity)mob).isTame()) {
+                    return false;
+                }
+            }
+            if (this.mob instanceof TameableEntity) {
+                if (((TameableEntity)mob).isTamed()) {
+                    return false;
+                }
+            }
+            return !player.isCreative() && !player.isSneaking() && !(MoonHelper.IsBlueMoon(Mite.day_time) && mob.world.isNight());
         });
         List<LivingEntity> scared = world.<LivingEntity>getEntitiesByClass(
                 LivingEntity.class,
@@ -55,7 +69,21 @@ public class EscapeDangerGoalMixin {
         );
         if (close != null) {
             this.mob.setAttacker(close);
+        } else {
+            if (!(MoonHelper.IsBlueMoon(Mite.day_time) && mob.world.isNight())) {
+                for (int i = 0; i < scared.size(); i++) {
+                    if (scared.get(i).getAttacker() != null) {
+                        this.mob.setAttacker(scared.get(i).getAttacker());
+                        break;
+                    }
+                }
+            }
         }
+    }
+
+    public void start() {
+        this.mob.getNavigation().startMovingTo(this.targetX, this.targetY, this.targetZ, this.speed * 1.15f);
+        this.active = true;
     }
 
     @Overwrite
@@ -64,7 +92,7 @@ public class EscapeDangerGoalMixin {
         LivingEntity attacker = this.mob.getAttacker();
         if (attacker != null) {
             Vec3d direction = mob.getPos().subtract(attacker.getPos()).normalize();
-            vec3d = NoPenaltyTargeting.findTo(this.mob, 5, 4, direction.add(this.mob.getPos()), 15.0D);
+            vec3d = NoPenaltyTargeting.findTo(this.mob, 10, 4, direction.multiply(4).add(this.mob.getPos()), 15.0D);
         }
 
         if (vec3d == null) {

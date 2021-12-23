@@ -47,21 +47,23 @@ public class MiteGrassBlock extends GrassBlock {
 	
 	@Override
 	public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-		if (!canSurvive(state, world, pos)) {
-			world.setBlockState(pos, base.getDefaultState());
-		} else {
-			if (world.getLightLevel(pos.up()) >= 9) {
-				BlockState blockState = this.getDefaultState();
+		if (random.nextInt((int)(10 * (2.0 - world.getBiome(pos).getTemperature())) + 5) == 0) {
+			if (!canSurvive(state, world, pos)) {
+				world.setBlockState(pos, base.getDefaultState());
+			} else {
+				if (world.getLightLevel(pos.up()) >= 9) {
+					BlockState blockState = this.getDefaultState();
 
-				for (int i = 0; i < 4; ++i) {
-					BlockPos blockPos = pos.add(random.nextInt(3) - 1, random.nextInt(5) - 3, random.nextInt(3) - 1);
-					if (BlockRegistry.CanSwapWithGrass(world.getBlockState(blockPos).getBlock()) && canSpread(blockState, world, blockPos)) {
-						world.setBlockState(blockPos, BlockRegistry.TrySwapWithGrass(world.getBlockState(blockPos).getBlock()).getDefaultState().with(SNOWY,
-								world.getBlockState(blockPos.up()).isOf(Blocks.SNOW)));
+					for (int i = 0; i < 4; ++i) {
+						BlockPos blockPos = pos.add(random.nextInt(3) - 1, random.nextInt(5) - 3, random.nextInt(3) - 1);
+						if (BlockRegistry.CanSwapWithGrass(world.getBlockState(blockPos).getBlock()) && canSpread(blockState, world, blockPos)) {
+							world.setBlockState(blockPos, BlockRegistry.TrySwapWithGrass(world.getBlockState(blockPos).getBlock()).getDefaultState().with(SNOWY,
+									world.getBlockState(blockPos.up()).isOf(Blocks.SNOW)));
+						}
 					}
 				}
-			}
 
+			}
 		}
 	}
 

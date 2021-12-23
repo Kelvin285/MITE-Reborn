@@ -45,7 +45,6 @@ public class BlockModelRendererMixin {
     //Entry entry, VertexConsumer vertexConsumer, float f, float g, float h, List<BakedQuad> list, int i, int j
     @Overwrite
     private static void renderQuad(MatrixStack.Entry entry, VertexConsumer vertexConsumer, float f, float g, float h, List<BakedQuad> list, int i, int j) {
-        System.out.println("EARRRRR");
         BakedQuad bakedQuad;
         float n;
         float o;

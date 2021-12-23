@@ -6,8 +6,13 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import org.apache.logging.log4j.core.jmx.Server;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Random;
 
@@ -24,18 +29,11 @@ public class BambooBlockMixin {
         return 0;
     }
 
-
-    public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-        if (world.random.nextInt(50) == 0) {
-            if ((Integer)state.get(BambooBlock.STAGE) == 0) {
-                if (random.nextInt(3) == 0 && world.isAir(pos.up()) && world.getBaseLightLevel(pos.up(), 0) >= 9) {
-                    int i = this.countBambooBelow(world, pos) + 1;
-                    if (i < 16) {
-                        this.updateLeaves(state, world, pos, random, i);
-                    }
-                }
-
-            }
+    @Inject(at=@At("HEAD"), method="randomTick", cancellable = true)
+    public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random, CallbackInfo info) {
+        if (random.nextInt((int)(5 * (2.0 - world.getBiome(pos).getTemperature())) + 5) != 0) {
+            info.cancel();
         }
     }
+
 }

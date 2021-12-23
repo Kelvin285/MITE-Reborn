@@ -1,8 +1,14 @@
 package kelvin.mite.entity;
 
 import kelvin.mite.entity.rendering.CustomAnimationController;
+import net.minecraft.block.GrassBlock;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.passive.ChickenEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemConvertible;
+import net.minecraft.item.Items;
+import net.minecraft.recipe.Ingredient;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -21,6 +27,11 @@ public class TurkeyEntity extends ChickenEntity implements IAnimatable {
         super(entityType, world);
     }
 
+
+    public void tick()
+    {
+        super.tick();
+    }
 
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event)
     {
@@ -66,4 +77,5 @@ public class TurkeyEntity extends ChickenEntity implements IAnimatable {
     public AnimationFactory getFactory() {
         return this.factory;
     }
+
 }

@@ -28,15 +28,13 @@ public class MiteVillageStructure extends JigsawFeature {
                         break;
                     }
                 }
-                if (!can_spawn) {
-                    return false;
-                }
+                return can_spawn;
             }catch (Exception e) {
                 e.printStackTrace();
             }
 
         }
-        return true;
+        return false;
     }
 
     public MiteVillageStructure(Codec<StructurePoolFeatureConfig> configCodec) {

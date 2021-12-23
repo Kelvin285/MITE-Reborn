@@ -24,6 +24,9 @@ import net.minecraft.world.chunk.WorldChunk;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +47,8 @@ public class DebugHudMixin extends DrawableHelper {
     @Shadow
     private WorldChunk chunk;
 
-    public void renderLeftText(MatrixStack matrices) {
+    @Inject(at=@At("HEAD"), method="renderLeftText", cancellable = true)
+    public void renderLeftText(MatrixStack matrices, CallbackInfo info) {
         List<String> list = new ArrayList<String>();
         if (client.player != null) {
 
@@ -143,10 +147,11 @@ public class DebugHudMixin extends DrawableHelper {
                 this.textRenderer.draw(matrices, string, 2.0F, (float)m, 14737632);
             }
         }
-
+        info.cancel();
     }
 
-    public void renderRightText(MatrixStack matrices) {
-
+    @Inject(at=@At("HEAD"), method="renderRightText", cancellable = true)
+    public void renderRightText(MatrixStack matrices, CallbackInfo info) {
+        info.cancel();
     }
 }

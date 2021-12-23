@@ -1,7 +1,10 @@
 package kelvin.mite.blocks.entity;
 
+import kelvin.mite.main.Mite;
 import kelvin.mite.main.resources.FastNoiseLite;
+import kelvin.mite.main.resources.MoonHelper;
 import kelvin.mite.registry.BlockEntityRegistry;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -13,6 +16,8 @@ import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Random;
 
 public class FarmlandBlockEntity extends BlockEntity implements BlockEntityProvider {
 
@@ -45,6 +50,12 @@ public class FarmlandBlockEntity extends BlockEntity implements BlockEntityProvi
         if (potassium > 15) potassium = 15;
     }
 
+    public void notifyListeners() {
+        this.markDirty();
+
+        if(world != null && !world.isClient())
+            world.updateListeners(getPos(), getCachedState(), getCachedState(), Block.NOTIFY_ALL);
+    }
     @Nullable
     @Override
     public Packet<ClientPlayPacketListener> toUpdatePacket() {
@@ -78,7 +89,32 @@ public class FarmlandBlockEntity extends BlockEntity implements BlockEntityProvi
         return new FarmlandBlockEntity(pos, state);
     }
 
+    private int ticks = 0;
     public static <T extends BlockEntity> void tick(World world, BlockPos blockPos, BlockState blockState, T t) {
+        if (t instanceof FarmlandBlockEntity) {
+            FarmlandBlockEntity farmland = (FarmlandBlockEntity) t;
+
+            if (MoonHelper.IsHarvestMoon(Mite.day_time) && world.isNight()) {
+                Random random = t.getWorld().getRandom();
+                if (random.nextInt(15 * 20) == 0) {
+                    farmland.nitrogen++;
+                }
+                if (random.nextInt(15 * 20) == 0) {
+                    farmland.phosphorus++;
+                }
+                if (random.nextInt(15 * 20) == 0) {
+                    farmland.potassium++;
+                }
+            }
+
+            farmland.ticks++;
+
+            if (farmland.ticks>20) {
+                farmland.ticks=0;
+                farmland.notifyListeners();
+            }
+
+        }
 
     }
 }

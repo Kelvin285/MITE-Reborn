@@ -17,6 +17,8 @@ public class Mite implements ModInitializer {
 	public static final int StartingDay = 24000 * 20; // sometime in spring
 	public static long season_time = StartingDay;
 
+	public static long day_time = 0;
+
 	@Override
 	public void onInitialize() {
 		// This code runs as soon as Minecraft is in a mod-load-ready state.

@@ -12,6 +12,9 @@ import org.spongepowered.asm.mixin.Shadow;
 
 import net.minecraft.entity.player.HungerManager;
 import net.minecraft.entity.player.PlayerEntity;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(HungerManager.class)
 public class HungerManagerMixin implements MiteHungerManager {
@@ -27,19 +30,19 @@ public class HungerManagerMixin implements MiteHungerManager {
 	@Shadow
 	private int prevFoodLevel = 20;
 
-	private float fruits = 12.0f;
+	private float fruits = 8.0f;
 	private float fruitsExhaustion = 0;
 
-	private float vegetables = 12.0f;
+	private float vegetables = 8.0f;
 	private float vegetablesExhaustion = 0;
 
-	private float dairy = 12.0f;
+	private float dairy = 8.0f;
 	private float dairyExhaustion = 0;
 
-	private float protein = 12.0f;
+	private float protein = 8.0f;
 	private float proteinExhaustion = 0;
 
-	private float grains = 12.0f;
+	private float grains = 8.0f;
 	private float grainsExhaustion = 0;
 
 
@@ -64,9 +67,14 @@ public class HungerManagerMixin implements MiteHungerManager {
 
 
 
-	public void update(PlayerEntity player) {
+	@Inject(at=@At("HEAD"),method="update",cancellable = true)
+	public void update(PlayerEntity player, CallbackInfo info) {
 		int max_food_level = (player.experienceLevel / 5 + 3) * 2;
 		max_saturation = 8 + (player.experienceLevel / 5) * 3;
+
+		if (this.foodSaturationLevel > 5) {
+			this.foodSaturationLevel = 5;
+		}
 
 		if (ticks > 20 * 60 * 30) { // subtract food level by 1 every 30 minutes
 			ticks = 0;
@@ -78,7 +86,7 @@ public class HungerManagerMixin implements MiteHungerManager {
 			if (fruits > 0) {
 				fruits --;
 			} else {
-				exhaustion = 4;
+				exhaustion = 5;
 			}
 		}
 
@@ -87,7 +95,7 @@ public class HungerManagerMixin implements MiteHungerManager {
 			if (vegetables > 0) {
 				vegetables --;
 			} else {
-				exhaustion = 4;
+				exhaustion = 5;
 			}
 		}
 
@@ -96,7 +104,7 @@ public class HungerManagerMixin implements MiteHungerManager {
 			if (dairy > 0) {
 				dairy --;
 			} else {
-				exhaustion = 4;
+				exhaustion = 5;
 			}
 		}
 
@@ -105,7 +113,7 @@ public class HungerManagerMixin implements MiteHungerManager {
 			if (protein > 0) {
 				protein --;
 			} else {
-				exhaustion = 4;
+				exhaustion = 5;
 			}
 		}
 
@@ -114,7 +122,7 @@ public class HungerManagerMixin implements MiteHungerManager {
 			if (grains > 0) {
 				grains --;
 			} else {
-				exhaustion = 4;
+				exhaustion = 5;
 			}
 		}
 
@@ -133,6 +141,7 @@ public class HungerManagerMixin implements MiteHungerManager {
 
 		foodLevel = (int)Math.max(Math.min(foodLevel, max_food_level), 0);
 		foodSaturationLevel = (float)Math.max(Math.min(foodSaturationLevel, max_saturation), 0);
+		info.cancel();
 	}
 
 	public float getMaxSaturation() {
@@ -173,9 +182,10 @@ public class HungerManagerMixin implements MiteHungerManager {
 		return this.foodSaturationLevel < 5;
 	}
 
-	@Shadow
 	public void addExhaustion(float exhaustion) {
-
+		this.exhaustion += exhaustion * 1.5f;
+		if (this.exhaustion > 40) this.exhaustion = 40;
+		if (this.exhaustion < 0) this.exhaustion = 0;
 	}
 
 	@Shadow

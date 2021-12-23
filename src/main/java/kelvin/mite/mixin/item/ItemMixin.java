@@ -37,6 +37,7 @@ public class ItemMixin {
 	private static final FoodComponent FOOD_BROWN_MUSHROOM = new FoodComponent.Builder().hunger(1).saturationModifier(1.0f).build();
 	private static final FoodComponent FOOD_EGG = new FoodComponent.Builder().hunger(2).saturationModifier(1.0f).meat().build();
 	private static final FoodComponent FOOD_HONEYCOMB = new FoodComponent.Builder().hunger(3).saturationModifier(1.0f).build();
+	private static final FoodComponent FOOD_SUGAR = new FoodComponent.Builder().hunger(0).saturationModifier(1.0f).build();
 
 	public FoodComponent getFoodComponent() {
 		Item item = ((Item)(Object)this);
@@ -52,6 +53,8 @@ public class ItemMixin {
 			return FOOD_EGG;
 		} else if (item == Items.HONEYCOMB) {
 			return FOOD_HONEYCOMB;
+		} else if (item == Items.SUGAR) {
+			return FOOD_SUGAR;
 		}
 		return this.foodComponent;
 	}

@@ -232,7 +232,7 @@ public class ChunkGeneratorMixin {
 				crops.add(Blocks.WHEAT);
 			}
 
-			if (random.nextInt(800) == 0) {
+			if (random.nextInt(10000) == 0) {
 				if (crops.size() > 0) {
 					Block crop = crops.get(region.getRandom().nextInt(crops.size()));
 					int plants = region.getRandom().nextInt(4) + 1;

@@ -1,5 +1,7 @@
 package kelvin.mite.mixin.entity;
 
+import kelvin.mite.main.Mite;
+import kelvin.mite.main.resources.MoonHelper;
 import net.minecraft.entity.ai.goal.ActiveTargetGoal;
 import net.minecraft.entity.ai.goal.FollowMobGoal;
 import org.spongepowered.asm.mixin.Mixin;
@@ -71,6 +73,11 @@ public abstract class SquidEntityMixin extends WaterCreatureEntity {
 					target = null;
 				}
 			}
+
+			if (MoonHelper.IsBlueMoon(Mite.day_time) && world.isNight()) {
+				target = null;
+			}
+
 			if (target != null) {
 				
 				if (target.distanceTo(squid) <= 1.25f) {

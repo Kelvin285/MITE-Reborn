@@ -1,24 +1,20 @@
 package kelvin.mite.mixin.entity;
 
+import kelvin.mite.entity.HungryAnimal;
 import kelvin.mite.entity.WolfData;
-import net.minecraft.entity.EntityData;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.ai.goal.*;
+import kelvin.mite.entity.goal.FoodTargetGoal;
+import kelvin.mite.main.Mite;
+import kelvin.mite.main.resources.MoonHelper;
+import net.minecraft.entity.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.mob.AbstractSkeletonEntity;
-import net.minecraft.entity.mob.Angerable;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.mob.ZombieEntity;
+import net.minecraft.entity.mob.*;
 import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.DyeItem;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
@@ -29,7 +25,6 @@ import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.event.GameEvent;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -56,6 +51,25 @@ public abstract class WolfEntityMixin extends TameableEntity implements Angerabl
 
 
 
+    @Inject(at=@At("HEAD"), method="initGoals")
+    public void initGoals(CallbackInfo info) {
+
+        this.targetSelector.add(4, new FoodTargetGoal(this, true));
+        FoodTargetGoal foodTargetGoal = new FoodTargetGoal(this, true);
+        foodTargetGoal.onlyEatsMeat = true;
+        this.targetSelector.add(4, foodTargetGoal);
+    }
+
+    public boolean tryAttack(Entity target) {
+        boolean bl = target.damage(DamageSource.mob(this), (float)((int)this.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE)));
+        if (bl) {
+            ((HungryAnimal)this).eat();
+            this.applyDamageEffects(this, target);
+        }
+
+        return bl;
+    }
+
     @Nullable
     public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt) {
         EntityData data = super.initialize(world, difficulty, spawnReason, entityData, entityNbt);
@@ -69,6 +83,7 @@ public abstract class WolfEntityMixin extends TameableEntity implements Angerabl
                 }
             }
         }
+
 
         return data;
     }
@@ -144,11 +159,47 @@ public abstract class WolfEntityMixin extends TameableEntity implements Angerabl
 
     @Inject(at = @At("HEAD"), method = "tick", cancellable = true)
     public void tick(CallbackInfo info) {
-        if (isDire() && !isTamed() && this.random.nextFloat() < 0.004F) {
+        if (isDire() && !isTamed() && this.random.nextFloat() < 0.004F && !(MoonHelper.IsBlueMoon(Mite.day_time) && world.isNight())) {
             if (this.getAngryAt() != null) {
                 PlayerEntity player = world.getClosestPlayer(this, 4);
                 if (player != null) {
                     this.setAngryAt(player.getUuid());
+                }
+            }
+        }
+
+
+        if (((HungryAnimal)this).isHungry() && !this.isTamed() && this.getTarget() == null && this.getAngryAt() == null) {
+            int probability = this.isDire() ? 50 : 200;
+            LivingEntity closest = null;
+            float distance = Float.MAX_VALUE;
+            var entities = world.getEntitiesByClass(AnimalEntity.class, this.getBoundingBox().expand(32), (entity) -> {
+                return !(entity instanceof WolfEntity);
+            });
+            for (int i = 0; i < entities.size(); i++) {
+                float dist = entities.get(i).distanceTo(this);
+                if (dist < distance) {
+                    distance = dist;
+                    closest = entities.get(i);
+                }
+            }
+            PlayerEntity player = world.getClosestPlayer(this, 32);
+            boolean flag = false;
+            if (player != null) {
+                if (player.distanceTo(this) < distance) {
+                    flag = true;
+                    if (!canSee(player)) {
+                        player = null;
+                    }
+                }
+            }
+            if (player != null && ((random.nextInt(isDire() ? 10 : 40) == 0 || flag) || closest == null && !(MoonHelper.IsBlueMoon(Mite.day_time) && world.isNight()))) {
+                setTarget(player);
+                this.setAngryAt(player.getUuid());
+            } else {
+                if (closest != null) {
+                    setTarget(closest);
+                    this.setAngryAt(closest.getUuid());
                 }
             }
         }

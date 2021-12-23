@@ -1,5 +1,6 @@
 package kelvin.mite.blocks.entity;
 
+import kelvin.mite.blocks.properties.MiteBlockProperties;
 import kelvin.mite.main.resources.CropNutrients;
 import kelvin.mite.registry.BlockEntityRegistry;
 import net.minecraft.block.*;
@@ -126,9 +127,12 @@ public class CropBlockEntity extends BlockEntity implements BlockEntityProvider 
         }
         crops.age = (int)Math.floor(crops.max_age * (crops.ticks / crops.time_until_grown));
 
+
         if (crops.age > crops.max_age) {
             crops.age = crops.max_age;
         }
+
+
 
         boolean grow = false;
         if (blockState.getBlock() instanceof BeetrootsBlock) {
@@ -142,6 +146,17 @@ public class CropBlockEntity extends BlockEntity implements BlockEntityProvider 
                 grow = true;
             }
         }
+
+        if (nitrogen < 6 || potassium < 6 || phosphor < 6) {
+            if (blockState.get(MiteBlockProperties.BLIGHTED) == false) {
+                world.setBlockState(blockPos, blockState.with(MiteBlockProperties.BLIGHTED, true));
+            }
+        } else {
+            if (blockState.get(MiteBlockProperties.BLIGHTED) == true) {
+                world.setBlockState(blockPos, blockState.with(MiteBlockProperties.BLIGHTED, false));
+            }
+        }
+
         if (grow) {
             CropNutrients nutrients = CropNutrients.GetNutrients(blockState.getBlock());
             if (farmland != null) {

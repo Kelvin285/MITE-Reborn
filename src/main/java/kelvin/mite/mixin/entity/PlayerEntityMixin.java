@@ -1,16 +1,23 @@
 package kelvin.mite.mixin.entity;
 
+import kelvin.mite.items.*;
 import kelvin.mite.main.resources.MiteHungerManager;
+import kelvin.mite.registry.ItemRegistry;
 import kelvin.mite.structures.MiteVillageStructure;
 import net.minecraft.advancement.criterion.Criteria;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
+import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.CreeperEntity;
+import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.player.HungerManager;
 import net.minecraft.fluid.Fluid;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
@@ -18,6 +25,7 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
 import net.minecraft.tag.Tag;
 import net.minecraft.util.Hand;
+import net.minecraft.util.hit.HitResult;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -41,7 +49,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.Items;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -94,10 +101,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 		this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue((int)Math.floor(experienceLevel / 5) * 2 + 6);
 
 		super.baseTick();
-
-		if (!MiteVillageStructure.CanGenerateVillage && MiteVillageStructure.canGenerate(world)) {
-			MiteVillageStructure.CanGenerateVillage = true;
-		}
+		MiteVillageStructure.CanGenerateVillage = MiteVillageStructure.canGenerate(world);
 
 		if (world.hasRain(getBlockPos())) {
 			this.hungerManager.addExhaustion(0.01f);
@@ -191,10 +195,54 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 		((MiteHungerManager)this.hungerManager).addExhaustion(MiteHungerManager.HungerCategory.PROTEIN, hot ? 0.2f : 0.1f);
 	}
 
+	public float getReachDistance() {
+		if (((PlayerEntity)(Object)this).isCreative()) {
+			return 5.0F;
+		}
+		float reach = 1.5f;
+
+		ItemStack selectedStack = selectedStack = getMainHandStack();
+		if (selectedStack != null) {
+			Item item = selectedStack.getItem();
+			if (item == Items.STICK) reach += 0.5F;
+			if (item == ItemRegistry.BRANCH) reach += 1.0F;
+			else if (item == Items.BONE)reach += 0.5f;
+			else if (item == ItemRegistry.WOODEN_CLUB) reach += 0.5f;
+			else if (item == ItemRegistry.WOODEN_CUDGEL)reach += 0.25f;
+			else if (item instanceof DaggerItem) reach += 0.5f;
+			else if (item instanceof KnifeItem) reach += 0.25f;
+			else if (item instanceof HatchetItem) reach += 0.5f;
+			else if (item instanceof MiteWarhammerItem) reach += 0.75f;
+			else if (item instanceof MiteMattockItem) reach += 0.75f;
+			else if (item instanceof ScytheItem) reach += 1.0f;
+			else if (item instanceof SpearItem) reach += 1.25f;
+			else if (item instanceof TridentItem) reach += 1.25f;
+			else if (item instanceof ShearsItem) reach += 0.5f;
+			else if (item instanceof ShovelItem) reach += 0.75f;
+			else if (item instanceof PickaxeItem) reach += 0.75f;
+			else if (item instanceof AxeItem) reach += 0.75f;
+			else if (item instanceof SwordItem) reach += 0.75f;
+			else if (item instanceof HoeItem) reach += 0.75f;
+
+		}
+		return reach;
+	}
+
 	public void attackLivingEntity(LivingEntity target) {
-		super.attackLivingEntity(target);
-		target.damage(DamageSource.player((PlayerEntity)(Object)this), ((MiteHungerManager)this.hungerManager).getSaturation(MiteHungerManager.HungerCategory.PROTEIN) / ((MiteHungerManager)this.hungerManager).getMaxSaturation());
 		((MiteHungerManager)this.hungerManager).addExhaustion(MiteHungerManager.HungerCategory.PROTEIN, hot ? 0.5f : 0.25f);
+
+		if (target.getPos().distanceTo(getEyePos()) > MinecraftClient.getInstance().interactionManager.getReachDistance() - 1.25f) {
+			return;
+		}
+		target.damage(DamageSource.player((PlayerEntity)(Object)this), ((MiteHungerManager)this.hungerManager).getSaturation(MiteHungerManager.HungerCategory.PROTEIN) / ((MiteHungerManager)this.hungerManager).getMaxSaturation());
+
+		if (target instanceof HostileEntity) {
+			if (random.nextInt(3) == 0) {
+				damage(DamageSource.mob(target), 1);
+			}
+		}
+
+		super.attackLivingEntity(target);
 	}
 
 	public void jump() {
@@ -219,7 +267,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 	{
 		if (source == DamageSource.FALL) {
 			((MiteHungerManager)this.hungerManager).addExhaustion(MiteHungerManager.HungerCategory.DAIRY, 0.5f * amount);
-			amount -= ((MiteHungerManager)this.hungerManager).getSaturation(MiteHungerManager.HungerCategory.DAIRY) / ((MiteHungerManager)this.hungerManager).getMaxSaturation();
+			//amount -= ((MiteHungerManager)this.hungerManager).getSaturation(MiteHungerManager.HungerCategory.DAIRY) / ((MiteHungerManager)this.hungerManager).getMaxSaturation();
 		}
 		((MiteHungerManager)this.hungerManager).addExhaustion(MiteHungerManager.HungerCategory.FRUITS, (hot ? 0.75f : 0.5f) * amount);
 

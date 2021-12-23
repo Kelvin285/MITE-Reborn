@@ -193,5 +193,6 @@
   "item.mite.turkey_cooked": "Cooked Turkey",
   "block.minecraft.stone": "Limestone",
   "block.minecraft.gravel": "Limestone Gravel",
-  "entity.mite.turkey": "Turkey"
+  "entity.mite.turkey": "Turkey",
+  "entity.mite.bear": "Bear"
 }

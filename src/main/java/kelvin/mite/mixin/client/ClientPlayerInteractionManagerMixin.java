@@ -1,5 +1,9 @@
 package kelvin.mite.mixin.client;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket;
+import net.minecraft.util.hit.HitResult;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.spongepowered.asm.mixin.Mixin;
@@ -68,14 +72,25 @@ public class ClientPlayerInteractionManagerMixin {
 	
 	private static float block_reach = 2.75F;
 	private static float entity_reach = 1.5F;
-	
+
+	private float current_reach = block_reach;
+
+	@Shadow
+	private void syncSelectedSlot() {
+
+	}
+
+
 	public float getReachDistance() {
 		if (this.gameMode.isCreative()) {
 			return 5.0F;
 		}
-		float reach = block_reach;
+		float reach = current_reach;
+
 		ItemStack selectedStack = null;
+
 		if (client.player != null) {
+
 			selectedStack = client.player.getMainHandStack();
 		}
 		if (selectedStack != null) {

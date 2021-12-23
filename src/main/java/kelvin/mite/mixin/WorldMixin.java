@@ -14,5 +14,6 @@ public class WorldMixin {
         if (!((World)(Object)this).isClient) {
             Mite.season_time = ((World)(Object)this).getTimeOfDay() + Mite.StartingDay;
         }
+        Mite.day_time = ((World)(Object)this).getTimeOfDay();
     }
 }

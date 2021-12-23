@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import it.unimi.dsi.fastutil.objects.ObjectListIterator;
 import kelvin.mite.main.Mite;
 import kelvin.mite.main.resources.FastNoiseLite;
+import kelvin.mite.main.resources.MoonIdentifier;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.GlUniform;
 import net.minecraft.client.gl.VertexBuffer;
@@ -20,6 +21,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -32,12 +34,18 @@ public class WorldRendererMixin {
     private float season_time = 0;
     private FastNoiseLite noise = new FastNoiseLite();
 
+    @Shadow
+    private static final Identifier MOON_PHASES;
 
+    static {
+        MOON_PHASES = new MoonIdentifier("textures/environment/moon_phases.png");
+    }
 
     @Inject(at=@At("HEAD"), method="renderLayer")
     private void renderLayer(RenderLayer renderLayer, MatrixStack matrices, double d, double e, double f, Matrix4f matrix4f, CallbackInfo info) {
-
+        GameRenderer g;
         Mite.season_time = MinecraftClient.getInstance().world.getTimeOfDay() + Mite.StartingDay;
+        Mite.day_time = MinecraftClient.getInstance().world.getTimeOfDay();
 
         GL15.glActiveTexture(GL15.GL_TEXTURE0);
 
@@ -57,7 +65,10 @@ public class WorldRendererMixin {
         season_time = world_time / 2880000.0F;
         season_time %= 1;
 
-        wind_time+=0.01f;
+        wind_time+=0.0025f;
+        if (MinecraftClient.getInstance().world.isRaining()) {
+            wind_time+=0.01f - 0.0025f;
+        }
 
         if (shader.getUniform("wind_time") != null &&
         shader.getUniform("wind_dir") != null &&
