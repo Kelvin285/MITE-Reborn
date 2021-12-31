@@ -4,7 +4,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import kelvin.mite.main.resources.FallingBlockHelper;
 import net.minecraft.block.*;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootTable;
@@ -49,11 +52,7 @@ public class BlockMixin extends AbstractBlock {
 	public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
 		if ((Block)(Object)this == Blocks.DIRT ||
 				(Block)(Object)this == Blocks.COBBLESTONE) {
-			if (FallingBlock.canFallThrough(world.getBlockState(pos.down())) && pos.getY() >= world.getBottomY()) {
-				FallingBlockEntity fallingBlockEntity = new FallingBlockEntity(world, (double) pos.getX() + 0.5D,
-						(double) pos.getY(), (double) pos.getZ() + 0.5D, world.getBlockState(pos));
-				world.spawnEntity(fallingBlockEntity);
-			}
+			FallingBlockHelper.tryToFall(world, pos);
 		}
 	}
 	
@@ -72,8 +71,17 @@ public class BlockMixin extends AbstractBlock {
 
 			world.createAndScheduleBlockTick(pos, (Block)(Object)this, 2);
 		}
+
 		entity.handleFallDamage(fallDistance, 1.0F, DamageSource.FALL);
 	}
+
+	public void onSteppedOn(World world, BlockPos pos, BlockState state, Entity entity) {
+		if ((Block)(Object)this == Blocks.DIRT || (Block)(Object)this == Blocks.COBBLESTONE || (Block)(Object)this instanceof FallingBlock) {
+
+			world.createAndScheduleBlockTick(pos, (Block)(Object)this, 2);
+		}
+	}
+
 	public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
 		if ((Block)(Object)this == Blocks.DIRT || (Block)(Object)this instanceof FallingBlock) {
 

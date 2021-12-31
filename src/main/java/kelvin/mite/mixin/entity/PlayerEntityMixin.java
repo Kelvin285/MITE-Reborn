@@ -97,6 +97,8 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
 	private boolean hot, cold;
 	private float cold_lerp = 0;
+
+
 	public void baseTick() {
 		this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue((int)Math.floor(experienceLevel / 5) * 2 + 6);
 
@@ -172,7 +174,6 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 	public void swingHand(Hand hand, boolean fromServerPlayer) {
 		super.swingHand(hand, fromServerPlayer);
 		((MiteHungerManager)this.hungerManager).addExhaustion(MiteHungerManager.HungerCategory.VEGETABLES, hot ? 0.1f : 0.01f);
-
 	}
 
 	@Inject(at=@At("HEAD"),method="eatFood",cancellable = true)
@@ -183,16 +184,19 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 	}
 
 
-	public float getMovementSpeed() {
+	@Inject(at=@At("HEAD"), method="getMovementSpeed", cancellable = true)
+	public void getMovementSpeed(CallbackInfoReturnable<Float> info) {
 		float speed = (float)this.getAttributeValue(EntityAttributes.GENERIC_MOVEMENT_SPEED) + ((float)this.getAttributeValue(EntityAttributes.GENERIC_MOVEMENT_SPEED) * ((MiteHungerManager)this.hungerManager).getSaturation(MiteHungerManager.HungerCategory.GRAIN) / ((MiteHungerManager)this.hungerManager).getMaxSaturation()) * 0.075f;
 		speed = MathHelper.lerp(cold_lerp, speed, speed * 0.75f);
-		return speed;
+		info.setReturnValue(speed);
 	}
 
 
-	public void takeShieldHit(LivingEntity attacker) {
+	@Inject(at=@At("HEAD"), method="takeShieldHit", cancellable = true)
+	public void takeShieldHit(LivingEntity attacker, CallbackInfo info) {
 		super.takeShieldHit(attacker);
 		((MiteHungerManager)this.hungerManager).addExhaustion(MiteHungerManager.HungerCategory.PROTEIN, hot ? 0.2f : 0.1f);
+		info.cancel();
 	}
 
 	public float getReachDistance() {
@@ -228,7 +232,8 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 		return reach;
 	}
 
-	public void attackLivingEntity(LivingEntity target) {
+	@Inject(at=@At("HEAD"), method="attackLivingEntity", cancellable = true)
+	public void attackLivingEntity(LivingEntity target, CallbackInfo info) {
 		((MiteHungerManager)this.hungerManager).addExhaustion(MiteHungerManager.HungerCategory.PROTEIN, hot ? 0.5f : 0.25f);
 
 		if (target.getPos().distanceTo(getEyePos()) > MinecraftClient.getInstance().interactionManager.getReachDistance() - 1.25f) {
@@ -243,9 +248,11 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 		}
 
 		super.attackLivingEntity(target);
+		info.cancel();
 	}
 
-	public void jump() {
+	@Inject(at=@At("HEAD"), method="jump", cancellable = true)
+	public void jump(CallbackInfo info) {
 		super.jump();
 		if (this.isSprinting()) {
 			((MiteHungerManager)this.hungerManager).addExhaustion(MiteHungerManager.HungerCategory.VEGETABLES, hot ? 0.2f : 0.1f);
@@ -253,6 +260,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 			((MiteHungerManager)this.hungerManager).addExhaustion(MiteHungerManager.HungerCategory.GRAIN, hot ? 0.01f : 0.005f);
 			((MiteHungerManager)this.hungerManager).addExhaustion(MiteHungerManager.HungerCategory.VEGETABLES, hot ? 0.1f : 0.05f);
 		}
+		info.cancel();
 	}
 
 	public void swimUpward(Tag<Fluid> fluid) {
@@ -263,7 +271,8 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 		this.setVelocity(this.getVelocity().add(0.0D, 0.02D * ((MiteHungerManager)this.hungerManager).getSaturation(MiteHungerManager.HungerCategory.VEGETABLES) / (((MiteHungerManager)this.hungerManager).getMaxSaturation() * (4.0f / 5.0f)), 0.0D));
 	}
 
-	public boolean damage(DamageSource source, float amount)
+	@Inject(at=@At("HEAD"), method="damage", cancellable = true)
+	public void damage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> info)
 	{
 		if (source == DamageSource.FALL) {
 			((MiteHungerManager)this.hungerManager).addExhaustion(MiteHungerManager.HungerCategory.DAIRY, 0.5f * amount);
@@ -271,7 +280,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 		}
 		((MiteHungerManager)this.hungerManager).addExhaustion(MiteHungerManager.HungerCategory.FRUITS, (hot ? 0.75f : 0.5f) * amount);
 
-		return super.damage(source, amount);
+		info.setReturnValue(super.damage(source, amount));
 	}
 
 
@@ -349,12 +358,13 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 				speed = -1.0f;
 			} else if (state.getMaterial() == Material.ICE) {
 				speed = -1.0f;
-			} else if (state.getMaterial() == Material.STONE) {
+			} else if (state.getMaterial() == Material.STONE && state.getBlock() != Blocks.COBBLESTONE) {
 				speed = -1.0f;
 			} else if (state.getMaterial() == Material.DENSE_ICE) {
 				speed = -1.0f;
 			} else if (state.getMaterial() == Material.SOIL || BlockRegistry.CanSwapWithGrass(state.getBlock()) || state.getBlock() instanceof MiteGrassBlock) {
-				speed = -1.0f;
+				//speed = -1.0f;
+				speed *= 0.75f;
 			}
 		}
 		

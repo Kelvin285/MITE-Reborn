@@ -61,6 +61,7 @@
 	"block.CropBlockMixin",
 	"entity.goal.EscapeDangerGoalMixin",
 	"entity.HostileEntityMixin",
+	  "entity.FallingBlockEntityMixin",
 	"entity.goal.ActiveTargetGoalMixin",
 	"item.HoeItemMixin",
 	  "block.BeetrootsBlockMixin",
