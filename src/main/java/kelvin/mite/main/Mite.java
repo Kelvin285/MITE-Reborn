@@ -13,8 +13,12 @@ public class Mite implements ModInitializer {
 
 	public static boolean client = false;
 
-	public static final float TicksInYear = 2880000.0f;
-	public static final int StartingDay = 24000 * 20; // sometime in spring
+	public static double time_increment = 20.0D / 40.0D;
+
+	public static long ticks_per_day = 24000;
+
+	public static final float TicksInYear = ticks_per_day * 120;
+	public static final long StartingDay = ticks_per_day * 20; // sometime in spring
 	public static long season_time = StartingDay;
 
 	public static long day_time = 0;

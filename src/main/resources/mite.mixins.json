@@ -4,9 +4,11 @@
   "package": "kelvin.mite.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+	"structures.RuinedPortalFeatureMixin",
 	"BiomeAccessMixin",
 	"ChunkGeneratorMixin",
 	"entity.ZombieEntityMixin",
+	  "entity.SkeletonEntityMixin",
 	"HungerManagerMixin",
 	"BiomeMixin",
 	"block.PlantBlockMixin",
@@ -20,7 +22,9 @@
 	"client.CraftingScreenHandlerMixin",
 	"entity.SquidEntityMixin",
 	"entity.LivingEntityMixin",
+	  "entity.PhantomEntityMixin",
 	"item.ItemMixin",
+	  "item.ItemsMixin",
 	"item.MiningToolItemMixin",
 
 	"CookingRecipeSerializerMixin",
@@ -50,7 +54,8 @@
 	"structures.ShipwreckGeneratorMixin",
 	"structures.StructureFeatureMixin",
 	"ServerWorldMixin",
-	"RecipeBookMixin",
+	  "LevelPropertiesMixin",
+	"PlayerManagerMixin",
 	"item.DyeItemMixin",
 	"block.LeavesBlockMixin",
 	  "block.VineBlockMixin",
@@ -61,7 +66,7 @@
 	"block.CropBlockMixin",
 	"entity.goal.EscapeDangerGoalMixin",
 	"entity.HostileEntityMixin",
-	  "entity.FallingBlockEntityMixin",
+	"entity.FallingBlockEntityMixin",
 	"entity.goal.ActiveTargetGoalMixin",
 	"item.HoeItemMixin",
 	  "block.BeetrootsBlockMixin",
@@ -73,7 +78,10 @@
 	  "item.MilkBucketItemMixin",
 	  "item.EggItemMixin",
 	  "IndigoMixinConfigPluginMixin",
-	  "ExplosionMixin"
+	  "ExplosionMixin",
+	  "item.ShieldItemMixin",
+	  "VanillaBiomeParametersMixin",
+	  "VanillaBiomeParametersAccessor"
   ],
   "client": [
 	"client.InGameHudMixin",
@@ -98,7 +106,10 @@
 	  "client.rendering.MutableQuadViewImplMixin",
 	  "client.rendering.AbstractQuadRendererMixin",
 	  "client.rendering.DebugHudMixin",
-	  "client.MinecraftClientMixin"
+	  "client.MinecraftClientMixin",
+	  "client.toasts.RecipeToastMixin",
+	  "client.ClientWorldMixin",
+	  "client.ClientWorldPropertiesMixin"
   ],
   "injectors": {
     "defaultRequire": 1

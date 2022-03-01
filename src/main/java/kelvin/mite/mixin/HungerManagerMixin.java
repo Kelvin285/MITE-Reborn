@@ -22,7 +22,7 @@ public class HungerManagerMixin implements MiteHungerManager {
 	@Shadow
 	private int foodLevel = 20;
 	@Shadow
-	private float foodSaturationLevel = 5.0F;
+	private float foodSaturationLevel = 4.0F;
 	@Shadow
 	private float exhaustion;
 	@Shadow
@@ -69,11 +69,11 @@ public class HungerManagerMixin implements MiteHungerManager {
 
 	@Inject(at=@At("HEAD"),method="update",cancellable = true)
 	public void update(PlayerEntity player, CallbackInfo info) {
-		int max_food_level = (player.experienceLevel / 5 + 3) * 2;
-		max_saturation = 8 + (player.experienceLevel / 5) * 3;
+		int max_food_level = Math.min(20, (player.experienceLevel / 5 + 3) * 2);
+		max_saturation = 5;
 
-		if (this.foodSaturationLevel > 5) {
-			this.foodSaturationLevel = 5;
+		if (this.foodSaturationLevel > 4) {
+			this.foodSaturationLevel = 4;
 		}
 
 		if (ticks > 20 * 60 * 30) { // subtract food level by 1 every 30 minutes

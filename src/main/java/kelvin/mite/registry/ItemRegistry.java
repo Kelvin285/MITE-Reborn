@@ -1,20 +1,17 @@
 package kelvin.mite.registry;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.util.Set;
 
 import kelvin.mite.items.*;
+import kelvin.mite.main.Mite;
+import kelvin.mite.main.resources.ItemChanger;
 import kelvin.mite.main.resources.Resources;
 import net.minecraft.block.Block;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.FoodComponent;
-import net.minecraft.item.Item;
+import net.minecraft.item.*;
 import net.minecraft.item.Item.Settings;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.StewItem;
-import net.minecraft.item.ShieldItem;
-import net.minecraft.item.ShovelItem;
-import net.minecraft.item.SwordItem;
+import net.minecraft.recipe.book.RecipeBook;
 import net.minecraft.tag.Tag;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
@@ -116,6 +113,7 @@ public class ItemRegistry {
 	public static Item  COOKED_EGG;// = ITEMS.Register("cooked_egg", () -> new Item((new Settings()).group(ItemGroup.FOOD).maxCount(16).food((new FoodComponent.Builder()).hunger(4).saturationModifier(0.3F).meat().build())));
 	public static Item  BANANA;// = ITEMS.Register("banana", () -> new Item((new Settings()).group(ItemGroup.FOOD).maxCount(16).food((new FoodComponent.Builder()).hunger(2).saturationModifier(0.2F).build())));
 	public static Item  BLUEBERRIES;// = ITEMS.Register("blueberries", () -> new Item((new Settings()).group(ItemGroup.FOOD).maxCount(16).food((new FoodComponent.Builder()).hunger(1).saturationModifier(0.1F).build())));
+	public static Item 	SWEET_BERRIES;
 	public static Item  BLUEBERRY_MUFFIN;// = ITEMS.Register("blueberry_muffin", () -> new Item((new Settings()).group(ItemGroup.FOOD).maxCount(16).food((new FoodComponent.Builder()).hunger(5).saturationModifier(0.2F).build())));
 	public static Item  BROWNIE;// = ITEMS.Register("brownie", () -> new Item((new Settings()).group(ItemGroup.FOOD).maxCount(16).food((new FoodComponent.Builder()).hunger(3).saturationModifier(0.2F).build())));
 	public static Item  CHEESE;// = ITEMS.Register("cheese", () -> new Item((new Settings()).group(ItemGroup.FOOD).maxCount(16).food((new FoodComponent.Builder()).hunger(3).saturationModifier(0.4F).build())));
@@ -145,6 +143,8 @@ public class ItemRegistry {
 	public static Item UNBAKED_CAKE;// = ITEMS.Register("unbaked_cake", () -> new BlockItem(BlockRegistry.UNBAKED_CAKE.get(), new Settings().group(ItemGroup.FOOD).maxCount(1)));
 
 	public static Item COMPOST;
+
+	public static Item MORTAR;
 
 	private static FoodComponent buildStew(int hunger, float saturation) {
         return (new FoodComponent.Builder()).hunger(hunger).saturationModifier(saturation).build();
@@ -210,6 +210,9 @@ public class ItemRegistry {
 	}
 	
 	public static void RegisterItems() {
+
+
+
 		DRY_GRASS = Register("dry_grass", new Item(new Settings().group(ItemGroup.MATERIALS)));
 		FLAX_FIBERS = Register("flax_fibers", new Item(new Settings().group(ItemGroup.MATERIALS)));
 
@@ -261,6 +264,8 @@ public class ItemRegistry {
 		NETHERRACK_FURNACE = Register("netherrack_furnace", new BlockItem(BlockRegistry.NETHERRACK_FURNACE, (new Settings()).group(ItemGroup.BUILDING_BLOCKS).maxCount(1)));
 		PEA_GRAVEL = Register("pea_gravel", new BlockItem(BlockRegistry.PEA_GRAVEL, (new Settings()).group(ItemGroup.BUILDING_BLOCKS)));
 		MANURE = Register("manure", new ManureItem((new Settings()).group(ItemGroup.MISC).maxCount(16)));
+		MORTAR = Register("mortar", new Item((new Settings()).group(ItemGroup.MISC).maxCount(16)));
+
 		COMPOST = Register("compost", new CompostItem((new Settings()).group(ItemGroup.MISC).maxCount(16)));
 		COBWEB_BLOCK = Register("cobweb_block", new BlockItem(BlockRegistry.COBWEB_BLOCK, new Settings().group(ItemGroup.BUILDING_BLOCKS)));
 		SHINING_GRAVEL = Register("shining_gravel", new BlockItem(BlockRegistry.SHINING_GRAVEL, new Settings().group(ItemGroup.BUILDING_BLOCKS)));
@@ -305,6 +310,7 @@ public class ItemRegistry {
 		COOKED_EGG = Register("cooked_egg", new Item((new Settings()).group(ItemGroup.FOOD).maxCount(16).food((new FoodComponent.Builder()).hunger(4).saturationModifier(0.3F).meat().build())));
 		BANANA = Register("banana", new Item((new Settings()).group(ItemGroup.FOOD).food((new FoodComponent.Builder()).hunger(2).saturationModifier(0.2F).build())));
 		BLUEBERRIES = Register("blueberries", new Item((new Settings()).group(ItemGroup.FOOD).food((new FoodComponent.Builder()).hunger(1).saturationModifier(0.1F).build())));
+		SWEET_BERRIES = Register("sweet_berries", new Item((new Settings()).group(ItemGroup.FOOD).food((new FoodComponent.Builder()).hunger(1).saturationModifier(0.1F).build())));
 		BLUEBERRY_MUFFIN = Register("blueberry_muffin", new Item((new Settings()).group(ItemGroup.FOOD).food((new FoodComponent.Builder()).hunger(5).saturationModifier(0.2F).build())));
 		BROWNIE = Register("brownie", new Item((new Settings()).group(ItemGroup.FOOD).food((new FoodComponent.Builder()).hunger(3).saturationModifier(0.2F).build())));
 		CHEESE = Register("cheese", new Item((new Settings()).group(ItemGroup.FOOD).food((new FoodComponent.Builder()).hunger(3).saturationModifier(0.4F).build())));
@@ -340,5 +346,15 @@ public class ItemRegistry {
 		//for (Block block : BlockRegistry.REGISTRY) {
 		//	Register(block, new BlockItem(block, new Settings().group(ItemGroup.BUILDING_BLOCKS)));
 		//}
+
+		((ShieldTier)Items.SHIELD).setProtectionLevel(2);
+		((ShieldTier)WOODEN_SHIELD).setProtectionLevel(0);
+
+		if (Mite.debug) {
+			File recipe_dir = new File("recipe_output\\");
+			recipe_dir.mkdir();
+		}
+		Items items = new Items();
+		((ItemChanger)items).ChangeItems();
 	}
 }

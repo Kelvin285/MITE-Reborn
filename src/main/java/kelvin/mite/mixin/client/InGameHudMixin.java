@@ -173,7 +173,9 @@ public abstract class InGameHudMixin extends DrawableHelper {
     }
 
     private int getHungerCount(PlayerEntity playerEntity) {
-        return 3 + (int)Math.floor(playerEntity.experienceLevel / 5.0);
+        int count = 3 + (int)Math.floor(playerEntity.experienceLevel / 5.0);
+        if (count > 10) count = 10;
+        return count;
     }
 
     static {

@@ -37,6 +37,9 @@ import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket.Action;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameMode;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ClientPlayerInteractionManager.class)
 public class ClientPlayerInteractionManagerMixin {
@@ -81,9 +84,11 @@ public class ClientPlayerInteractionManagerMixin {
 	}
 
 
-	public float getReachDistance() {
+	@Inject(at=@At("RETURN"), method="getReachDistance", cancellable = true)
+	public void getReachDistance(CallbackInfoReturnable<Float> info) {
 		if (this.gameMode.isCreative()) {
-			return 5.0F;
+			info.setReturnValue(5.0F);
+			return;
 		}
 		float reach = current_reach;
 
@@ -116,6 +121,6 @@ public class ClientPlayerInteractionManagerMixin {
 			else if (item instanceof HoeItem) reach += 0.75f;
 			
 		}
-		return reach;
+		info.setReturnValue(reach);
 	}
 }

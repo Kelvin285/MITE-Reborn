@@ -23,6 +23,7 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -33,6 +34,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class AbstractSkeletonEntityMixin extends HostileEntity implements RangedAttackMob {
     protected AbstractSkeletonEntityMixin(EntityType<? extends HostileEntity> entityType, World world) {
         super(entityType, world);
+    }
+//    private final BowAttackGoal<AbstractSkeletonEntity> bowAttackGoal = new BowAttackGoal(this, 1.0D, 20, 15.0F);
+    @Mutable
+    @Shadow
+    private BowAttackGoal<AbstractSkeletonEntity> bowAttackGoal;
+
+    @Inject(at=@At("RETURN"), method="<init>")
+    public void Constructor(CallbackInfo info) {
+        bowAttackGoal = new BowAttackGoal(this, 1.0D, 20, 48.0F);
     }
 
     public void initGoals() {

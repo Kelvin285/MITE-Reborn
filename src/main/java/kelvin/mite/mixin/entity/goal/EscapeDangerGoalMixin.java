@@ -58,7 +58,7 @@ public class EscapeDangerGoalMixin {
                     return false;
                 }
             }
-            return !player.isCreative() && !player.isSneaking() && !(MoonHelper.IsBlueMoon(Mite.day_time) && mob.world.isNight());
+            return !player.isCreative() && !player.isSneaking() && player.isSprinting() && !(MoonHelper.IsBlueMoon(Mite.day_time) && mob.world.isNight());
         });
         List<LivingEntity> scared = world.<LivingEntity>getEntitiesByClass(
                 LivingEntity.class,

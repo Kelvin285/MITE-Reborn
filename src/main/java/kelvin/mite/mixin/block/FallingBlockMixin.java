@@ -32,12 +32,17 @@ public abstract class FallingBlockMixin extends Block implements LandingBlock {
 		MagmaBlock block;
 	}
 
+	/*
 	@Override
 	public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
 		world.createAndScheduleBlockTick(pos, this, 1);
 		return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
 	}
+	 */
 
+	public void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify) {
+		//world.createAndScheduleBlockTick(pos, this, this.getFallDelay());
+	}
 
 	public boolean canFall(World world, BlockPos pos) {
 		return FallingBlock.canFallThrough(world.getBlockState(pos)) && pos.getY() >= world.getBottomY();
@@ -47,15 +52,18 @@ public abstract class FallingBlockMixin extends Block implements LandingBlock {
 		if (canFall(world, pos.down())) {
 			fall = true;
 		} else if (!(world.getBlockState(pos).getBlock() instanceof AnvilBlock)){
-			if (canFall(world, pos.add(0, 1, 0))) {
-				if (canFall(world, pos.add(-1, 0, 0)) && canFall(world, pos.add(-1, -1, 0))) {
-					fall = true;
-				} else if (canFall(world, pos.add(0, 0, -1)) && canFall(world, pos.add(0, -1, -1))) {
-					fall = true;
-				} else if (canFall(world, pos.add(1, 0, 0)) && canFall(world, pos.add(1, -1, 0))) {
-					fall = true;
-				} else if (canFall(world, pos.add(0, 0, 1)) && canFall(world, pos.add(0, -1, 1))) {
-					fall = true;
+			if (world.getRandom().nextInt(3) == 0 && !world.isClient()) {
+
+				if (canFall(world, pos.add(0, 1, 0))) {
+					if (canFall(world, pos.add(-1, 0, 0)) && canFall(world, pos.add(-1, -1, 0))) {
+						fall = true;
+					} else if (canFall(world, pos.add(0, 0, -1)) && canFall(world, pos.add(0, -1, -1))) {
+						fall = true;
+					} else if (canFall(world, pos.add(1, 0, 0)) && canFall(world, pos.add(1, -1, 0))) {
+						fall = true;
+					} else if (canFall(world, pos.add(0, 0, 1)) && canFall(world, pos.add(0, -1, 1))) {
+						fall = true;
+					}
 				}
 			}
 
@@ -75,18 +83,22 @@ public abstract class FallingBlockMixin extends Block implements LandingBlock {
 
 	@Override
 	public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack) {
-
-		tryToFall(world, pos);
+		if (placer != null) {
+			tryToFall(world, pos);
+		}
 	}
 
 	@Override
 	public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-		tryToFall(world, pos);
+		if (!world.getBlockState(pos.down()).isSolidBlock(world, pos.down())) {
+			tryToFall(world, pos);
+		}
 	}
 
 	public void onSteppedOn(World world, BlockPos pos, BlockState state, Entity entity) {
-		tryToFall(world, pos);
-
+		if (entity.getVelocity().length() > 0.0f) {
+			tryToFall(world, pos);
+		}
 		super.onSteppedOn(world, pos, state, entity);
 	}
 	

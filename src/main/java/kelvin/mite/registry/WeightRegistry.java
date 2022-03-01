@@ -5,19 +5,7 @@ import java.util.HashMap;
 import kelvin.mite.items.SpearItem;
 import net.minecraft.block.Material;
 import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.AxeItem;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.BookItem;
-import net.minecraft.item.BowItem;
-import net.minecraft.item.FishingRodItem;
-import net.minecraft.item.HoeItem;
-import net.minecraft.item.HorseArmorItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
-import net.minecraft.item.StewItem;
-import net.minecraft.item.ShovelItem;
-import net.minecraft.item.ToolItem;
+import net.minecraft.item.*;
 import net.minecraft.util.registry.Registry;
 
 public class WeightRegistry {
@@ -85,6 +73,7 @@ public class WeightRegistry {
 			if (block.getName().toString().contains("slab")) {
 				w *= 0.25f;
 			}
+
 			
 			weight.put(item, w);
 		});
@@ -96,7 +85,7 @@ public class WeightRegistry {
 				return;
 			}
 			
-			int w = 0;
+			int w = 1;
 			if (!item.getName().toString().contains("nugget") && !item.getName().toString().contains("chip")) {
 				if (item.getName().toString().contains("iron")) {
 					w += 7;
@@ -142,6 +131,10 @@ public class WeightRegistry {
 				} else if (item.getName().toString().contains("leather")) {
 					w += 3;
 				}
+			}
+
+			if (item instanceof ShieldItem) {
+				w = 5;
 			}
 			
 			if (item == Items.ENDER_PEARL) { 

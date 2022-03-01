@@ -43,15 +43,10 @@ public class EntityRegistry {
 		BEAR = Registry.register(
 				Registry.ENTITY_TYPE,
 				new Identifier("mite", "bear"),
-				FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, BearEntity::new).size(EntityDimensions.fixed(0.5f, 0.5f)).build()
+				FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, BearEntity::new).size(EntityDimensions.fixed(1.4f, 1.4f)).build()
 
 		);
-//		BASIC_TREE = Registry.register(
-//				Registry.ENTITY_TYPE,
-//				new Identifier("trewrite", "basic_tree"),
-//				FabricEntityTypeBuilder.create(SpawnGroup.MISC, BasicTreeEntity::new).size(EntityDimensions.fixed(2, 8)).build()
-//				);
-		
+
 		RegisterAttributes();
 		RegisterSpawns();
 	}

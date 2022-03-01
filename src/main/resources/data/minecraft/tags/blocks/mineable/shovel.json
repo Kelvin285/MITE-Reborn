@@ -51,16 +51,6 @@
     "mite:grassy_andesite_sand",
     "mite:grassy_diorite_sand",
     "mite:grassy_granite_sand",
-    "mite:grassy_sandstone_gravel_with_snow",
-    "mite:grassy_red_sandstone_gravel_with_snow",
-    "mite:grassy_diorite_gravel_with_snow",
-    "mite:grassy_andesite_gravel_with_snow",
-    "mite:grassy_gravel_with_snow",
-    "mite:grassy_limestone_sand_with_snow",
-    "mite:grassy_andesite_sand_with_snow",
-    "mite:grassy_diorite_sand_with_snow",
-    "mite:grassy_granite_sand_with_snow",
-    "mite:grassy_dirt",
-    "mite:grassy_dirt_with_snow"
+    "mite:grassy_dirt"
   ]
 }

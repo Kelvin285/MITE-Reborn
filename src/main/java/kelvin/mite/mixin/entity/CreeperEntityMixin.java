@@ -23,8 +23,8 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.world.*;
 import net.minecraft.world.explosion.Explosion;
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -55,6 +55,7 @@ public abstract class CreeperEntityMixin extends HostileEntity {
     @Shadow
     private int fuseTime = 30;
     @Shadow
+    @Mutable
     private int explosionRadius = 3;
     @Shadow
     private int headsDropped;
@@ -75,6 +76,8 @@ public abstract class CreeperEntityMixin extends HostileEntity {
         this.targetSelector.add(1, new ActiveTargetGoal(this, PlayerEntity.class, true));
         this.targetSelector.add(2, new RevengeGoal(this, new Class[0]));
     }
+
+
 
     @Override
     public void initDataTracker() {
@@ -98,8 +101,9 @@ public abstract class CreeperEntityMixin extends HostileEntity {
         if (entityData == null) {
             boolean flag = world.getRandom().nextFloat() < 0.05F;
             if (flag) {
-                System.out.println("bee");
+                //System.out.println("bee");
             }
+            flag = false;
             entityData = new CreeperData(flag);
         }
 
@@ -112,6 +116,18 @@ public abstract class CreeperEntityMixin extends HostileEntity {
         }
 
         return (EntityData)entityData;
+    }
+
+    @Inject(at = @At("HEAD"), method = "tick")
+    public void tick(CallbackInfo info) {
+        if (this.getTarget() == null) {
+            PlayerEntity player = world.getClosestPlayer(getX(), getY(), getZ(), 64, false);
+            if (player != null) {
+                if (this.canSee(player)) {
+                    this.setTarget(player);
+                }
+            }
+        }
     }
 
     @Override

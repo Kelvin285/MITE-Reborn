@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "bed",
+  "pattern": [
+    "D##",
+    "XXX"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:purple_wool"
+    },
+    "X": {
+      "tag": "minecraft:planks"
+    },
+    "D": {
+      "item": "mite:down_feather_block"
+    }
+  },
+  "result": {
+    "item": "minecraft:purple_bed"
+  }
+}

@@ -17,6 +17,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class FarmlandBlockEntity extends BlockEntity implements BlockEntityProvider {
@@ -104,6 +105,57 @@ public class FarmlandBlockEntity extends BlockEntity implements BlockEntityProvi
                 }
                 if (random.nextInt(15 * 20) == 0) {
                     farmland.potassium++;
+                }
+            } else if (MoonHelper.IsBloodMoon(Mite.day_time) && world.isNight()) {
+                Random random = t.getWorld().getRandom();
+                if (random.nextInt(120 * 20) == 0) {
+                    farmland.nitrogen--;
+                }
+                if (random.nextInt(120 * 20) == 0) {
+                    farmland.phosphorus--;
+                }
+                if (random.nextInt(120 * 20) == 0) {
+                    farmland.potassium--;
+                }
+            } else {
+                Random random = t.getWorld().getRandom();
+                if (random.nextInt(300 * 20) == 0) {
+                    if (farmland.nitrogen == 0 || farmland.phosphorus == 0 || farmland.potassium == 0) {
+                        BlockEntity north = world.getBlockEntity(blockPos.north());
+                        BlockEntity east = world.getBlockEntity(blockPos.east());
+                        BlockEntity south = world.getBlockEntity(blockPos.south());
+                        BlockEntity west = world.getBlockEntity(blockPos.west());
+                        ArrayList<FarmlandBlockEntity> farms = new ArrayList<FarmlandBlockEntity>();
+                        if (north instanceof FarmlandBlockEntity) {
+                            farms.add((FarmlandBlockEntity)north);
+                        }
+                        if (east instanceof FarmlandBlockEntity) {
+                            farms.add((FarmlandBlockEntity)east);
+                        }
+                        if (south instanceof FarmlandBlockEntity) {
+                            farms.add((FarmlandBlockEntity)south);
+                        }
+                        if (west instanceof FarmlandBlockEntity) {
+                            farms.add((FarmlandBlockEntity)west);
+                        }
+                        for (int i = 0; i < farms.size(); i++) {
+                            int index = random.nextInt(farms.size());
+                            if (farmland.potassium == 0 && farms.get(i).potassium > 0) {
+                                farms.get(i).potassium--;
+                                farmland.potassium++;
+                            }
+                            if (farmland.nitrogen == 0 && farms.get(i).nitrogen > 0) {
+                                farms.get(i).nitrogen--;
+                                farmland.nitrogen++;
+                            }
+                            if (farmland.phosphorus == 0 && farms.get(i).phosphorus > 0) {
+                                farms.get(i).phosphorus--;
+                                farmland.phosphorus++;
+                            }
+                            farms.remove(index);
+                        }
+                    }
+
                 }
             }
 

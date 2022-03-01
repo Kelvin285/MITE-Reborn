@@ -74,7 +74,7 @@ public abstract class SquidEntityMixin extends WaterCreatureEntity {
 				}
 			}
 
-			if (MoonHelper.IsBlueMoon(Mite.day_time) && world.isNight()) {
+			if (MoonHelper.IsBlueMoon(Mite.day_time) && world.isNight() || world.isDay()) {
 				target = null;
 			}
 

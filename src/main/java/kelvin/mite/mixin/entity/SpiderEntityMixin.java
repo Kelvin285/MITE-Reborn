@@ -90,6 +90,19 @@ public abstract class SpiderEntityMixin  extends HostileEntity implements Ranged
         if (!this.world.isClient) {
             this.setClimbingWall(this.horizontalCollision);
         }
+
+        if (this.getBrightnessAtEyes() <= 0.5f) {
+            if (this.getTarget() == null) {
+                PlayerEntity player = world.getClosestPlayer(getX(), getY(), getZ(), 64, false);
+                if (player != null) {
+                    if (this.canSee(player)) {
+                        this.setTarget(player);
+                        angry_ticks = 20 * 60 * 4;
+                    }
+                }
+            }
+        }
+
         if (angry_ticks > 0) {
             angry_ticks--;
         }
@@ -153,7 +166,7 @@ public abstract class SpiderEntityMixin  extends HostileEntity implements Ranged
 
         public boolean shouldContinue() {
             float f = this.mob.getBrightnessAtEyes();
-            if (f >= 0.5F && this.mob.getRandom().nextInt(100) == 0 && ((SpiderEntityMixin)mob).angry_ticks <= 0) {
+            if (f >= 0.5F && this.mob.getRandom().nextInt(400) == 0 && ((SpiderEntityMixin)mob).angry_ticks <= 0) {
                 this.mob.setTarget((LivingEntity)null);
                 return false;
             } else {

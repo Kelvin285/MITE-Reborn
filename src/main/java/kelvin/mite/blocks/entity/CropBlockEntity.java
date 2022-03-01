@@ -2,6 +2,7 @@ package kelvin.mite.blocks.entity;
 
 import kelvin.mite.blocks.properties.MiteBlockProperties;
 import kelvin.mite.main.resources.CropNutrients;
+import kelvin.mite.main.resources.MoonHelper;
 import kelvin.mite.registry.BlockEntityRegistry;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
@@ -69,8 +70,6 @@ public class CropBlockEntity extends BlockEntity implements BlockEntityProvider 
 
     public static <T extends BlockEntity> void tick(World world, BlockPos blockPos, BlockState blockState, T t) {
         CropBlockEntity crops = (CropBlockEntity) t;
-
-
 
         boolean sync = false;
         if (crops.current_time == -1) {

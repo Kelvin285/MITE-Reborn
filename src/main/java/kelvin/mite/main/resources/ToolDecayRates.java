@@ -162,7 +162,10 @@ public class ToolDecayRates {
 		if (state.getBlock() instanceof SnowBlock) {
 			return state.get(SnowBlock.LAYERS) * 10;
 		}
-		
+		if (state.getMaterial() ==
+				Material.SOIL) {
+			return 40;
+		}
 		if (state.getBlock() instanceof FarmlandBlock) {
 			return 60;
 		}

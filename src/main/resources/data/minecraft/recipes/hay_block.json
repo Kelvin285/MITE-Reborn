@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": {
+      "item": "mite:dry_grass"
+    }
+  },
+  "result": {
+    "item": "minecraft:hay_block"
+  }
+}

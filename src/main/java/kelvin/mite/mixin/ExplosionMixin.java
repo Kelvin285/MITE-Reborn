@@ -35,6 +35,9 @@ public class ExplosionMixin {
                 world.getBlockState(pos).getMaterial() == Material.METAL) {
                     removing.add(pos);
                 }
+                if (((CreeperEntity) entity).getRandom().nextInt(10) <= 7) {
+                    removing.add(pos);
+                }
             }
         }
         for (BlockPos pos : removing) {

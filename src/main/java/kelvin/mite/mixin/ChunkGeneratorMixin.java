@@ -70,8 +70,8 @@ public class ChunkGeneratorMixin {
 					
 					placing_pos.set(x, y, z);
 					if (world.isChunkLoaded(placing_pos)) {
-						
-						if (surface.surface == MiteSurfaceConfig.SurfaceType.SAND_GRASS) { 
+						/*
+						if (surface.surface == MiteSurfaceConfig.SurfaceType.SAND_GRASS) {
 							if (world.getBlockState(placing_pos).getBlock() == Blocks.STONE) {
 								world.setBlockState(placing_pos, surface.stone_config.stone.getDefaultState(), 0);
 							} else if (world.getBlockState(placing_pos).getBlock() == Blocks.GRASS_BLOCK) {
@@ -96,6 +96,19 @@ public class ChunkGeneratorMixin {
 								world.setBlockState(placing_pos, surface.stone_config.sand.getDefaultState(), 0);
 							}
 						}
+						*/
+						if (world.getBlockState(placing_pos).getBlock() == Blocks.STONE) {
+							world.setBlockState(placing_pos, surface.stone_config.stone.getDefaultState(), 0);
+						} else if (world.getBlockState(placing_pos).getBlock() == Blocks.GRASS_BLOCK) {
+							world.setBlockState(placing_pos, BlockRegistry.TrySwapWithGrass(Blocks.DIRT).getDefaultState(), 0);
+						} else if (world.getBlockState(placing_pos).getBlock() == Blocks.DIRT) {
+							world.setBlockState(placing_pos, Blocks.DIRT.getDefaultState(), 0);
+						} else if (world.getBlockState(placing_pos).getBlock() == Blocks.GRAVEL) {
+							world.setBlockState(placing_pos, surface.stone_config.gravel.getDefaultState(), 0);
+						} else if (world.getBlockState(placing_pos).getBlock() == Blocks.SAND) {
+							world.setBlockState(placing_pos, surface.stone_config.sand.getDefaultState(), 0);
+						}
+						/*
 						if (y <= 62) {
 							if (world.getBlockState(placing_pos).getBlock() == Blocks.GRASS_BLOCK) {
 								world.setBlockState(placing_pos, surface.stone_config.gravel.getDefaultState(), 0);
@@ -103,6 +116,7 @@ public class ChunkGeneratorMixin {
 								world.setBlockState(placing_pos, surface.stone_config.gravel.getDefaultState(), 0);
 							}
 						}
+						 */
 						
 						GenerateTrees(world, x, y, z, pos, placing_pos, surface);
 						GenerateRocks(world, x, y, z, pos, placing_pos);
@@ -221,10 +235,12 @@ public class ChunkGeneratorMixin {
 			float max_temp = 30.0f;
 			if (temp <= 13.0f / max_temp + 0.5f) {
 				crops.add(Blocks.POTATOES);
+				crops.add(BlockRegistry.BLUEBERRY_BUSH);
 			}
 
 			if (temp <= 20 + max_temp - 0.5f) {
 				crops.add(Blocks.BEETROOTS);
+				crops.add(BlockRegistry.BLUEBERRY_BUSH);
 			}
 
 			if (temp >= 23.0f / max_temp - 0.5f && temp <= 1.75f) {
@@ -247,7 +263,11 @@ public class ChunkGeneratorMixin {
 									BlockRegistry.grass_variants.containsValue(region.getBlockState(placing_pos).getBlock())) {
 								placing_pos.set(placing_pos.getX(), placing_pos.getY() + 1, placing_pos.getZ());
 								if (region.getBlockState(placing_pos).isAir()) {
-									region.setBlockState(placing_pos, crop.getDefaultState(), 0);
+									if (crop == BlockRegistry.BLUEBERRY_BUSH) {
+										region.setBlockState(placing_pos, crop.getDefaultState().with(SweetBerryBushBlock.AGE, new Random().nextInt(4)), 0);
+									} else {
+										region.setBlockState(placing_pos, crop.getDefaultState(), 0);
+									}
 
 									BlockEntity blockEntity = region.getBlockEntity(placing_pos);
 									if (blockEntity instanceof CropBlockEntity) {

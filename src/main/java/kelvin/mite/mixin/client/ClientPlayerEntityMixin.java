@@ -12,9 +12,11 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.HungerManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.item.ShieldItem;
 import net.minecraft.tag.Tag;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -58,8 +60,7 @@ public abstract class ClientPlayerEntityMixin extends PlayerEntity  {
     }
 
     public void baseTick() {
-        this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue((int)Math.floor(experienceLevel / 5) * 2 + 6);
-
+        this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(Math.min(20, (int)Math.floor(experienceLevel / 5) * 2 + 6));
         super.baseTick();
     }
 
@@ -69,4 +70,23 @@ public abstract class ClientPlayerEntityMixin extends PlayerEntity  {
             super.swimUpward(fluid);
         }
     }
+
+    public void changeLookDirection(double cursorDeltaX, double cursorDeltaY) {
+        if (this.getActiveItem() != null) {
+            if (!(this.getActiveItem().getItem() instanceof ShieldItem)) {
+                super.changeLookDirection(cursorDeltaX, cursorDeltaY);
+            } else {
+                super.changeLookDirection(cursorDeltaX * 0.4F, cursorDeltaY * 0.4F);
+            }
+        }
+    }
+
+
+    public boolean damage(DamageSource source, float amount) {
+
+        return false;
+    }
+
+
+
 }

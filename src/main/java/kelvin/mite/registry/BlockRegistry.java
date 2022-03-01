@@ -16,17 +16,8 @@ import kelvin.mite.screens.MITEFurnaceContainer;
 import kelvin.mite.crafting.CraftingIngredient;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
-import net.minecraft.block.AbstractBlock;
+import net.minecraft.block.*;
 import net.minecraft.block.AbstractBlock.Settings;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.CampfireBlock;
-import net.minecraft.block.FallingBlock;
-import net.minecraft.block.FenceBlock;
-import net.minecraft.block.GravelBlock;
-import net.minecraft.block.HayBlock;
-import net.minecraft.block.Material;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.item.BlockItem;
@@ -101,6 +92,8 @@ public class BlockRegistry {
     public static Block THIN_SPRUCE_LOG;
 
     public static Block ROCK;
+
+    public static Block BLUEBERRY_BUSH;
 
     public static Block FARMLAND_DIRT, FARMLAND_SANDSTONE, FARMLAND_RED_SANDSTONE,
 	FARMLAND_ANDESITE, FARMLAND_GRANITE, FARMLAND_DIORITE, FARMLAND_LIMESTONE;
@@ -256,16 +249,52 @@ public class BlockRegistry {
 				+ "    }\r\n"
 				+ "  }\r\n"
 				+ "}";
-		
-		String block_snow_json = "{\r\n"
-				+ "  \"parent\": \"minecraft:block/cube_bottom_top\",\r\n"
-				+ "  \"textures\": {\r\n"
-				+ "    \"top\": \""+top+"\",\r\n"
-				+ "    \"bottom\": \""+bottom+"\",\r\n"
-				+ "    \"side\": \""+side+"\",\r\n"
-				+ "    \"particle\": \""+particle+"\"\r\n"
-				+ "  }\r\n"
-				+ "}";
+
+
+		String snow = bottom+"_snow";
+		if (bottom.equals("minecraft:block/dirt")) {
+			snow = "minecraft:block/grass_block_snow";
+		}
+		else if (bottom.equals("minecraft:block/sand")) {
+			snow = "mite:block/sand_snow";
+		} else if (bottom.equals("minecraft:block/gravel")) {
+			snow = "mite:block/gravel_snow";
+		} else if (bottom.equals("minecraft:block/red_sand")) {
+			snow = "mite:block/red_sand_snow";
+		}
+
+		String block_snow_json = "{   \"parent\": \"block/block\",\r\n"
+				+ "    \"textures\": {\r\n"
+				+ "        \"particle\": \""+particle+"\",\r\n"
+				+ "        \"bottom\": \""+bottom+"\",\r\n"
+				+ "        \"top\": \""+"block/snow"+"\",\r\n"
+				+ "        \"side\": \""+snow+"\",\r\n"
+				+ "        \"overlay\": \""+"mite:block/snow_overlay"+"\"\r\n"
+				+ "    },\r\n"
+				+ "    \"elements\": [\r\n"
+				+ "        {   \"from\": [ 0, 0, 0 ],\r\n"
+				+ "            \"to\": [ 16, 16, 16 ],\r\n"
+				+ "            \"faces\": {\r\n"
+				+ "                \"down\":  { \"uv\": [ 0, 0, 16, 16 ], \"texture\": \"#bottom\", \"cullface\": \"down\" },\r\n"
+				+ "                \"up\":    { \"uv\": [ 0, 0, 16, 16 ], \"texture\": \"#top\",    \"cullface\": \"up\", \"tintindex\": 0 },\r\n"
+				+ "                \"north\": { \"uv\": [ 0, 0, 16, 16 ], \"texture\": \"#side\",   \"cullface\": \"north\" },\r\n"
+				+ "                \"south\": { \"uv\": [ 0, 0, 16, 16 ], \"texture\": \"#side\",   \"cullface\": \"south\" },\r\n"
+				+ "                \"west\":  { \"uv\": [ 0, 0, 16, 16 ], \"texture\": \"#side\",   \"cullface\": \"west\" },\r\n"
+				+ "                \"east\":  { \"uv\": [ 0, 0, 16, 16 ], \"texture\": \"#side\",   \"cullface\": \"east\" }\r\n"
+				+ "            }\r\n"
+				+ "        },\r\n"
+				+ "        {   \"from\": [ 0, 0, 0 ],\r\n"
+				+ "            \"to\": [ 16, 16, 16 ],\r\n"
+				+ "            \"faces\": {\r\n"
+				+ "                \"north\": { \"uv\": [ 0, 0, 16, 16 ], \"texture\": \"#overlay\", \"tintindex\": 0, \"cullface\": \"north\" },\r\n"
+				+ "                \"south\": { \"uv\": [ 0, 0, 16, 16 ], \"texture\": \"#overlay\", \"tintindex\": 0, \"cullface\": \"south\" },\r\n"
+				+ "                \"west\":  { \"uv\": [ 0, 0, 16, 16 ], \"texture\": \"#overlay\", \"tintindex\": 0, \"cullface\": \"west\" },\r\n"
+				+ "                \"east\":  { \"uv\": [ 0, 0, 16, 16 ], \"texture\": \"#overlay\", \"tintindex\": 0, \"cullface\": \"east\" }\r\n"
+				+ "            }\r\n"
+				+ "        }\r\n"
+				+ "    ]\r\n"
+				+ "}\r\n"
+				+ "";
 		
 		try {
 			File json_bm = new File(src+"assets/mite/models/block/"+block_name+".json");
@@ -413,7 +442,9 @@ public class BlockRegistry {
 	     THIN_SPRUCE_LOG = Register("mite:thin_spruce_log", new FenceBlock(Block.Settings.of(Material.WOOD).strength(0.25f)));
 
 	     ROCK = Register("mite:rock", new MiteRockBlock(AbstractBlock.Settings.copy(Blocks.STONE_BUTTON).breakInstantly()));
-	     
+
+	     BLUEBERRY_BUSH = Register("mite:blueberry_bush", new SweetBerryBushBlock(AbstractBlock.Settings.copy(Blocks.SWEET_BERRY_BUSH)));
+
 		Block[] soil_blocks = new Block[] {Blocks.DIRT, Blocks.ROOTED_DIRT, Blocks.COARSE_DIRT, Blocks.GRAVEL, Blocks.SAND, Blocks.CLAY, Blocks.RED_SAND,
 				SANDSTONE_GRAVEL, RED_SANDSTONE_GRAVEL, ANDESITE_GRAVEL, DIORITE_GRAVEL, GRANITE_GRAVEL,
 				ANDESITE_SAND, DIORITE_SAND, GRANITE_SAND, LIMESTONE_SAND};
@@ -431,19 +462,15 @@ public class BlockRegistry {
 			Block grass = Register(new Identifier(grass_name), new MiteGrassBlock(
 					Settings.of(soil_blocks[i].getDefaultState().getMaterial()).ticksRandomly().strength(soil_blocks[i].getDefaultState().getHardness(null, null)).dropsLike(soil_blocks[i]).sounds(soil_blocks[i].getDefaultState().getSoundGroup()), soil_blocks[i]),
 					"grassy_"+block_name);
-			Block snow = Register(new Identifier(grass_name+"_with_snow"), new MiteGrassBlock(
-					Settings.of(soil_blocks[i].getDefaultState().getMaterial()).ticksRandomly().strength(soil_blocks[i].getDefaultState().getHardness(null, null)).dropsLike(soil_blocks[i]).sounds(soil_blocks[i].getDefaultState().getSoundGroup()), soil_blocks[i]),
-					"grassy_"+block_name+"_with_snow");
+
 			if (Mite.client) {
 				ColorProviderRegistry.BLOCK.register((state, view, pos, tintIndex) -> ColorProviderRegistry.BLOCK.get(Blocks.GRASS_BLOCK).getColor(state, view, pos, tintIndex), grass);
-				ColorProviderRegistry.BLOCK.register((state, view, pos, tintIndex) -> 0xffffff, snow);
 			}
 			Item grass_item = ItemRegistry.Register(grass, new BlockItem(grass, new net.minecraft.item.Item.Settings().group(ItemGroup.BUILDING_BLOCKS)));
 			if (Mite.client) {
 				ColorProviderRegistry.ITEM.register((stack, tintIndex) -> grass_color.getRGB(), grass_item);
 
 				BlockRenderLayerMap.INSTANCE.putBlock(grass, RenderLayer.getCutout());
-				BlockRenderLayerMap.INSTANCE.putBlock(snow, RenderLayer.getCutout());
 			}
 
 			grass_variants.put(soil_blocks[i], grass);
@@ -454,6 +481,7 @@ public class BlockRegistry {
 		farmland_variants.put(Blocks.DIRT, FARMLAND_DIRT);
 		farmland_variants.put(grass_variants.get(Blocks.DIRT), FARMLAND_DIRT);
 
+		/*
 		farmland_variants.put(Blocks.SAND, FARMLAND_SANDSTONE);
 		farmland_variants.put(grass_variants.get(Blocks.SAND), FARMLAND_SANDSTONE);
 
@@ -471,6 +499,7 @@ public class BlockRegistry {
 
 		farmland_variants.put(BlockRegistry.LIMESTONE_SAND, FARMLAND_LIMESTONE);
 		farmland_variants.put(grass_variants.get(BlockRegistry.LIMESTONE_SAND), FARMLAND_LIMESTONE);
+		*/
 
 		gravel_variants.add(Blocks.GRAVEL);
 		gravel_variants.add(ANDESITE_GRAVEL);
@@ -490,6 +519,7 @@ public class BlockRegistry {
 			BlockRenderLayerMap.INSTANCE.putBlock(CHICKEN_NEST, RenderLayer.getCutout());
 			BlockRenderLayerMap.INSTANCE.putBlock(CAMPFIRE_LOW, RenderLayer.getCutout());
 			BlockRenderLayerMap.INSTANCE.putBlock(FLAX, RenderLayer.getCutout());
+			BlockRenderLayerMap.INSTANCE.putBlock(BLUEBERRY_BUSH, RenderLayer.getCutout());
 
 			ColorProviderRegistry.BLOCK.register((state, view, pos, tintIndex) -> ColorProviderRegistry.BLOCK.get(Blocks.GRASS).getColor(state, view, pos, tintIndex), FLAX);
 		}

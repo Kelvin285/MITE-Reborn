@@ -93,8 +93,8 @@ public class VanillaTweaks {
 		ChangeStrength(Blocks.SUGAR_CANE, 0.25f);
 		ChangeStrength(Blocks.SEAGRASS, 0.08f);
 		ChangeStrength(Blocks.TALL_SEAGRASS, 0.08f);
-		ChangeStrength(Blocks.KELP_PLANT, 0.08f);
-		ChangeStrength(Blocks.KELP, 0.08f);
+		ChangeStrength(Blocks.KELP_PLANT, 0.25f);
+		ChangeStrength(Blocks.KELP, 0.25f);
 		ChangeStrength(Blocks.SWEET_BERRY_BUSH, 0.03f);
 		ChangeStrength(Blocks.OBSIDIAN, 0.5f);
 		ChangeStrength(Blocks.FURNACE, 0.2f);
@@ -312,7 +312,7 @@ public class VanillaTweaks {
 
 		ChangeMaxDamage(Items.STONE_PICKAXE, 900);
 		ChangeMaxDamage(Items.STONE_AXE, 900);
-		ChangeMaxDamage(Items.STONE_SHOVEL, 100);
+		ChangeMaxDamage(Items.STONE_SHOVEL, 200);
 	}
 
 	public static void ApplyChanges() {

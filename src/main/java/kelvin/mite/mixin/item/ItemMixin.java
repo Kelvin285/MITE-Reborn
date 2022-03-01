@@ -22,6 +22,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Random;
 
@@ -38,33 +39,53 @@ public class ItemMixin {
 	private static final FoodComponent FOOD_EGG = new FoodComponent.Builder().hunger(2).saturationModifier(1.0f).meat().build();
 	private static final FoodComponent FOOD_HONEYCOMB = new FoodComponent.Builder().hunger(3).saturationModifier(1.0f).build();
 	private static final FoodComponent FOOD_SUGAR = new FoodComponent.Builder().hunger(0).saturationModifier(1.0f).build();
+	private static final FoodComponent FOOD_ROTTEN_FLESH = new FoodComponent.Builder().hunger(4).saturationModifier(2.0f).statusEffect(new StatusEffectInstance(StatusEffects.NAUSEA, 15), 1).statusEffect(new StatusEffectInstance(StatusEffects.POISON, 15 * 20), 1).statusEffect(new StatusEffectInstance(StatusEffects.HUNGER, 30 * 20), 1).build();
 
+	@Shadow
 	public FoodComponent getFoodComponent() {
+		return null;
+	}
+
+	@Inject(at=@At("RETURN"), method="getFoodComponent", cancellable = true)
+	public void getFoodComponent(CallbackInfoReturnable<FoodComponent> info) {
 		Item item = ((Item)(Object)this);
 		if (item == Items.WHEAT_SEEDS) {
-			return FOOD_WHEAT_SEEDS;
+			info.setReturnValue(FOOD_WHEAT_SEEDS);
+			return;
 		} else if (item == Items.PUMPKIN_SEEDS) {
-			return FOOD_PUMPKIN_SEEDS;
+			info.setReturnValue(FOOD_PUMPKIN_SEEDS);
+			return;
 		} else if (item == Items.RED_MUSHROOM) {
-			return FOOD_RED_MUSHROOM;
+			info.setReturnValue(FOOD_RED_MUSHROOM);
+			return;
 		} else if (item == Items.BROWN_MUSHROOM) {
-			return FOOD_BROWN_MUSHROOM;
+			info.setReturnValue(FOOD_BROWN_MUSHROOM);
+			return;
 		} else if (item == Items.EGG) {
-			return FOOD_EGG;
+			info.setReturnValue(FOOD_EGG);
+			return;
 		} else if (item == Items.HONEYCOMB) {
-			return FOOD_HONEYCOMB;
+			info.setReturnValue(FOOD_HONEYCOMB);
+			return;
 		} else if (item == Items.SUGAR) {
-			return FOOD_SUGAR;
+			info.setReturnValue(FOOD_SUGAR);
+			return;
+		} else if (item == Items.ROTTEN_FLESH) {
+			info.setReturnValue(FOOD_ROTTEN_FLESH);
+			return;
 		}
-		return this.foodComponent;
 	}
 
-	public boolean isFood() {
-		return getFoodComponent() != null;
+	@Inject(at = @At("RETURN"), method="isFood", cancellable = true)
+	public void isFood(CallbackInfoReturnable<Boolean> info) {
+		info.setReturnValue(getFoodComponent() != null);
 	}
 
-
-	public boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+	//    public boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+	//        return false;
+	//    }
+	@Inject(at=@At("RETURN"), method="postHit", cancellable = true)
+	public void postHit(ItemStack stack, LivingEntity target, LivingEntity attacker, CallbackInfoReturnable<Boolean> info) {
 		stack.damage(ToolDecayRates.GetDecayRateAgainstEnemy(stack.getItem()), attacker, e -> e.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND));
 		if (stack.getItem() == Items.STICK || stack.getItem() == ItemRegistry.BRANCH) {
 			if (new Random().nextInt(5) == 0) {
@@ -73,7 +94,6 @@ public class ItemMixin {
 				attacker.world.playSound((PlayerEntity)attacker, attacker.getBlockPos(), SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS, 1.0f, 1.0f);
 			}
 		}
-		return true;
 	}
 
 	public boolean postMine(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity miner) {

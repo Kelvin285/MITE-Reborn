@@ -62,7 +62,7 @@ public class WorldRendererMixin {
 
         long world_time = Mite.season_time;
 
-        season_time = world_time / 2880000.0F;
+        season_time = world_time / Mite.TicksInYear;
         season_time %= 1;
 
         wind_time+=0.0025f;
@@ -81,6 +81,7 @@ public class WorldRendererMixin {
             //shader.getUniform("Sampler1").set(20);
             //GL20.glUniform1i(GL20.glGetUniformLocation(shader.getProgramRef(), "Sampler1"), 20);
             shader.getUniform("Season").set(season_time);
+            shader.getUniform("DEF").set((float)d, (float)e, (float)f);
         }
 
     }

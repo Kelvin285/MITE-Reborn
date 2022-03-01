@@ -27,6 +27,7 @@ public class NutrientsRegistry {
     }
 
     public static void RegisterNutrients() {
+        Register(ItemRegistry.SWEET_BERRIES, 1, 0, 0, 0, 0);
         Register(Items.SWEET_BERRIES, 1, 0, 0, 0, 0);
         Register(ItemRegistry.ORANGE, 2, 0, 0, 0, 0);
         Register(ItemRegistry.BANANA, 2, 0, 0, 0, 0);

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:dirt"
+    },
+	{
+	  "item": "mite:dry_grass"
+	},
+    {
+      "item": "mite:bowl_water"
+    },
+    {
+      "item": "minecraft:clay_ball"
+    }
+  ],
+  "result": {
+    "item": "mite:mortar",
+    "count": 3
+  }
+}

@@ -1,13 +1,9 @@
 package kelvin.mite.mixin.entity;
 
-import net.minecraft.block.AnvilBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.FallingBlockEntity;
-import net.minecraft.entity.MovementType;
+import kelvin.mite.main.resources.FallingBlockHelper;
+import net.minecraft.block.*;
+import net.minecraft.entity.*;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
@@ -19,6 +15,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 @Mixin(FallingBlockEntity.class)
@@ -53,7 +50,7 @@ public abstract class FallingBlockEntityMixin extends Entity {
     }
 
     public boolean canFallThrough(BlockPos pos) {
-        return !world.getBlockState(pos).isSolidBlock(world, pos);
+        return FallingBlock.canFallThrough(world.getBlockState(pos));
     }
 
     private boolean fallen = false;
@@ -74,6 +71,8 @@ public abstract class FallingBlockEntityMixin extends Entity {
                 world.removeBlock(getBlockPos(), false);
             }
         }
+
+
 
         if (fallen) {
             moving = false;
@@ -161,6 +160,22 @@ public abstract class FallingBlockEntityMixin extends Entity {
 
                 if (moving) {
                     state = MOVE;
+                    if (!world.isClient()) {
+                        BlockPos left = getBlockPos().add(-1, 0, 0);
+                        BlockPos right = getBlockPos().add(1, 0, 0);
+                        BlockPos front = getBlockPos().add(0, 0, 1);
+                        BlockPos back = getBlockPos().add(0, 0, -1);
+                        BlockPos down = getBlockPos().add(0, -1, 0);
+                        BlockPos[] plist = {left, right, front, back, down};
+                        for (int i = 0; i < plist.length; i++) {
+                            if (random.nextInt(10) == 0) {
+                                BlockPos pos = plist[i];
+                                if (FallingBlockHelper.isFallingBlock(world, pos)) {
+                                    FallingBlockHelper.tryToFall(world, pos);
+                                }
+                            }
+                        }
+                    }
                 } else {
                     if (fallDistance > 0.04F) {
                         state = FALL;
@@ -172,8 +187,20 @@ public abstract class FallingBlockEntityMixin extends Entity {
                 }
             }
         } else if (state == MOVE) {
+            List<Entity> entities = world.getOtherEntities(this, this.getBoundingBox(), (entity) -> {
+                return entity instanceof LivingEntity;
+            });
+
             this.setVelocity(move_dir.x * speed, 0, move_dir.z * speed);
             this.setVelocity(getVelocity().multiply(0.9F));
+
+            for (int i = 0; i < entities.size(); i++) {
+                entities.get(i).setVelocity(entities.get(i).getVelocity().lerp(new Vec3d(getVelocity().x, entities.get(i).getVelocity().y, getVelocity().z), 0.75f));
+                if (this.getPos().y > entities.get(i).getEyePos().y - 0.25F) {
+                    entities.get(i).damage(DamageSource.FALLING_BLOCK, 2);
+                }
+            }
+
             if (Math.abs((getPos().x - 0.5f) - move_pos.getX()) <= 0.1f &&
             Math.abs((getPos().z - 0.5f) - move_pos.getZ()) <= 0.1f) {
                 this.setVelocity(0, 0, 0);

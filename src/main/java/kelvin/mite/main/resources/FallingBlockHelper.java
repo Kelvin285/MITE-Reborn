@@ -1,13 +1,19 @@
 package kelvin.mite.main.resources;
 
-import net.minecraft.block.AnvilBlock;
-import net.minecraft.block.FallingBlock;
+import net.minecraft.block.*;
 import net.minecraft.entity.FallingBlockEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldAccess;
 
 public class FallingBlockHelper {
 
+    public static boolean isFallingBlock(World world, BlockPos pos) {
+        Block block = world.getBlockState(pos).getBlock();
+        boolean flag = (block == Blocks.DIRT ||
+                block == Blocks.COBBLESTONE || block instanceof GrassBlock) || block instanceof FallingBlock;
+        return flag;
+    }
 
     public static boolean canFall(World world, BlockPos pos) {
         return FallingBlock.canFallThrough(world.getBlockState(pos)) && pos.getY() >= world.getBottomY();
@@ -17,15 +23,18 @@ public class FallingBlockHelper {
         if (canFall(world, pos.down())) {
             fall = true;
         } else if (!(world.getBlockState(pos).getBlock() instanceof AnvilBlock)){
-            if (canFall(world, pos.add(0, 1, 0))) {
-                if (canFall(world, pos.add(-1, 0, 0)) && canFall(world, pos.add(-1, -1, 0))) {
-                    fall = true;
-                } else if (canFall(world, pos.add(0, 0, -1)) && canFall(world, pos.add(0, -1, -1))) {
-                    fall = true;
-                } else if (canFall(world, pos.add(1, 0, 0)) && canFall(world, pos.add(1, -1, 0))) {
-                    fall = true;
-                } else if (canFall(world, pos.add(0, 0, 1)) && canFall(world, pos.add(0, -1, 1))) {
-                    fall = true;
+            if (world.random.nextInt(3) == 0 && !world.isClient()) {
+
+                if (canFall(world, pos.add(0, 1, 0))) {
+                    if (canFall(world, pos.add(-1, 0, 0)) && canFall(world, pos.add(-1, -1, 0))) {
+                        fall = true;
+                    } else if (canFall(world, pos.add(0, 0, -1)) && canFall(world, pos.add(0, -1, -1))) {
+                        fall = true;
+                    } else if (canFall(world, pos.add(1, 0, 0)) && canFall(world, pos.add(1, -1, 0))) {
+                        fall = true;
+                    } else if (canFall(world, pos.add(0, 0, 1)) && canFall(world, pos.add(0, -1, 1))) {
+                        fall = true;
+                    }
                 }
             }
 

@@ -15,6 +15,7 @@ uniform sampler2D Sampler2;
 uniform mat4 ModelViewMat;
 uniform mat4 ProjMat;
 uniform vec3 ChunkOffset;
+uniform vec3 DEF;
 uniform float wind_time = 0;
 uniform vec3 wind_dir = vec3(0, 0, 1);
 uniform float wind_strength = 1;
@@ -40,7 +41,7 @@ void main() {
 		}
 	}
 	
-	vec3 cpos = Position + floor(ChunkOffset / 16) * 16;
+	vec3 cpos = Position + ChunkOffset + DEF;
 	vec3 chunk_pos = Position + ChunkOffset;
 	
 	float wind = noise(vec3(cpos.x + wind_time, cpos.y + wind_time, cpos.z + wind_time));

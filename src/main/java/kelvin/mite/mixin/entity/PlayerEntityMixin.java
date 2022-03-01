@@ -2,30 +2,25 @@ package kelvin.mite.mixin.entity;
 
 import kelvin.mite.items.*;
 import kelvin.mite.main.resources.MiteHungerManager;
+import kelvin.mite.entity.PlayerInterface;
 import kelvin.mite.registry.ItemRegistry;
 import kelvin.mite.structures.MiteVillageStructure;
-import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.Mouse;
+import net.minecraft.client.input.Input;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.mob.CreeperEntity;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.player.HungerManager;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.*;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.stat.Stats;
 import net.minecraft.tag.Tag;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.hit.HitResult;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -54,7 +49,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 @Mixin(PlayerEntity.class)
-public abstract class PlayerEntityMixin extends LivingEntity {
+public abstract class PlayerEntityMixin extends LivingEntity implements PlayerInterface {
 
 	private final double MOVEMENT_SPEED = 0.10000000149011612D;
 	
@@ -62,6 +57,8 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 	private int experienceLevel;
 	@Shadow
 	private HungerManager hungerManager;
+
+	private int aliveTime = 0;
 
 
 	private static TrackedData<Float> FRUIT = DataTracker.registerData(PlayerEntity.class, TrackedDataHandlerRegistry.FLOAT);
@@ -77,6 +74,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 	protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
 		super(entityType, world);
 	}
+
 
 	@Inject(at = @At("RETURN"), method = "<init>")
 	public void Constructor(World world, BlockPos pos, float yaw, GameProfile profile, CallbackInfo info) {
@@ -98,9 +96,14 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 	private boolean hot, cold;
 	private float cold_lerp = 0;
 
+	protected void updatePostDeath() {
+		super.updatePostDeath();
+		aliveTime = 0;
+	}
 
 	public void baseTick() {
-		this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue((int)Math.floor(experienceLevel / 5) * 2 + 6);
+		aliveTime++;
+		this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(Math.min(20, (int)Math.floor(experienceLevel / 5) * 2 + 6));
 
 		super.baseTick();
 		MiteVillageStructure.CanGenerateVillage = MiteVillageStructure.canGenerate(world);
@@ -173,6 +176,16 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
 	public void swingHand(Hand hand, boolean fromServerPlayer) {
 		super.swingHand(hand, fromServerPlayer);
+		if (this.activeItemStack != null) {
+			if (this.activeItemStack.getItem() instanceof ToolItem ||
+			this.activeItemStack.getItem() instanceof TridentItem) {
+				((MiteHungerManager)this.hungerManager).addExhaustion(MiteHungerManager.HungerCategory.VEGETABLES, hot ? 0.1f : 0.01f);
+			}
+		}
+	}
+
+	public void onAttacking(Entity target) {
+		super.onAttacking(target);
 		((MiteHungerManager)this.hungerManager).addExhaustion(MiteHungerManager.HungerCategory.VEGETABLES, hot ? 0.1f : 0.01f);
 	}
 
@@ -208,21 +221,21 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 		ItemStack selectedStack = selectedStack = getMainHandStack();
 		if (selectedStack != null) {
 			Item item = selectedStack.getItem();
-			if (item == Items.STICK) reach += 0.5F;
+			if (item == Items.STICK) reach += 0.25F;
 			if (item == ItemRegistry.BRANCH) reach += 1.0F;
-			else if (item == Items.BONE)reach += 0.5f;
+			else if (item == Items.BONE)reach += 0.25f;
 			else if (item == ItemRegistry.WOODEN_CLUB) reach += 0.5f;
 			else if (item == ItemRegistry.WOODEN_CUDGEL)reach += 0.25f;
 			else if (item instanceof DaggerItem) reach += 0.5f;
 			else if (item instanceof KnifeItem) reach += 0.25f;
-			else if (item instanceof HatchetItem) reach += 0.5f;
+			else if (item instanceof HatchetItem || item == Items.STONE_SHOVEL) reach += 0.5f;
 			else if (item instanceof MiteWarhammerItem) reach += 0.75f;
 			else if (item instanceof MiteMattockItem) reach += 0.75f;
 			else if (item instanceof ScytheItem) reach += 1.0f;
 			else if (item instanceof SpearItem) reach += 1.25f;
 			else if (item instanceof TridentItem) reach += 1.25f;
 			else if (item instanceof ShearsItem) reach += 0.5f;
-			else if (item instanceof ShovelItem) reach += 0.75f;
+			else if (item instanceof ShovelItem && item != Items.STONE_SHOVEL) reach += 0.75f;
 			else if (item instanceof PickaxeItem) reach += 0.75f;
 			else if (item instanceof AxeItem) reach += 0.75f;
 			else if (item instanceof SwordItem) reach += 0.75f;
@@ -232,11 +245,12 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 		return reach;
 	}
 
+
 	@Inject(at=@At("HEAD"), method="attackLivingEntity", cancellable = true)
 	public void attackLivingEntity(LivingEntity target, CallbackInfo info) {
 		((MiteHungerManager)this.hungerManager).addExhaustion(MiteHungerManager.HungerCategory.PROTEIN, hot ? 0.5f : 0.25f);
 
-		if (target.getPos().distanceTo(getEyePos()) > MinecraftClient.getInstance().interactionManager.getReachDistance() - 1.25f) {
+		if (target.getPos().distanceTo(getEyePos()) > getReachDistance() - 1.25f) {
 			return;
 		}
 		target.damage(DamageSource.player((PlayerEntity)(Object)this), ((MiteHungerManager)this.hungerManager).getSaturation(MiteHungerManager.HungerCategory.PROTEIN) / ((MiteHungerManager)this.hungerManager).getMaxSaturation());
@@ -262,7 +276,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 		}
 		info.cancel();
 	}
-
+	
 	public void swimUpward(Tag<Fluid> fluid) {
 		super.swimUpward(fluid);
 		((MiteHungerManager)this.hungerManager).addExhaustion(MiteHungerManager.HungerCategory.GRAIN, 0.01f);
@@ -274,13 +288,18 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 	@Inject(at=@At("HEAD"), method="damage", cancellable = true)
 	public void damage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> info)
 	{
-		if (source == DamageSource.FALL) {
-			((MiteHungerManager)this.hungerManager).addExhaustion(MiteHungerManager.HungerCategory.DAIRY, 0.5f * amount);
-			//amount -= ((MiteHungerManager)this.hungerManager).getSaturation(MiteHungerManager.HungerCategory.DAIRY) / ((MiteHungerManager)this.hungerManager).getMaxSaturation();
-		}
-		((MiteHungerManager)this.hungerManager).addExhaustion(MiteHungerManager.HungerCategory.FRUITS, (hot ? 0.75f : 0.5f) * amount);
+		if (aliveTime < 30 * 20 && source.getAttacker() != null || ((PlayerEntity)(Object)this).isCreative() || ((PlayerEntity)(Object)this).isSpectator()) {
+			info.cancel();
+		} else {
+			if (source == DamageSource.FALL) {
+				((MiteHungerManager)this.hungerManager).addExhaustion(MiteHungerManager.HungerCategory.DAIRY, 0.5f * amount);
+				//amount -= ((MiteHungerManager)this.hungerManager).getSaturation(MiteHungerManager.HungerCategory.DAIRY) / ((MiteHungerManager)this.hungerManager).getMaxSaturation();
+			}
+			((MiteHungerManager)this.hungerManager).addExhaustion(MiteHungerManager.HungerCategory.FRUITS, (hot ? 0.75f : 0.5f) * amount);
 
-		info.setReturnValue(super.damage(source, amount));
+			info.setReturnValue(super.damage(source, amount));
+		}
+
 	}
 
 
@@ -288,24 +307,27 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 	private PlayerInventory getInventory() {
 		return null;
 	}
-	
+
 	@Inject(at = @At("HEAD"), method = "tick")
 	public void tick(CallbackInfo info) {
 		int weight = Resources.GetInventoryWeight(this.getInventory());
 		double move_mult = 1;
+		double slow_speed = 0.8F;
 		if (weight > Resources.MAX_CARRY * 0.65) {
-			move_mult = MathHelper.lerp(move_mult, 0, (Resources.MAX_CARRY - weight) / (double)(Resources.MAX_CARRY - Resources.MAX_CARRY * 0.65));
+			move_mult = MathHelper.lerp(move_mult, slow_speed, (Resources.MAX_CARRY - weight) / (double)(Resources.MAX_CARRY - Resources.MAX_CARRY * 0.65));
 		}
 		if (weight > Resources.MAX_CARRY) {
-			move_mult = 0;
-		}
-		if (move_mult < 0.5F) { // adding this temporarily as a test.
-			move_mult = 0.5F;
+			move_mult = slow_speed;
 		}
 		this.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).setBaseValue(MOVEMENT_SPEED * move_mult);
 		this.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE).setBaseValue((hungerManager.getFoodLevel() + hungerManager.getSaturationLevel()) > 0 ? 1 : 0);
 
-		this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue((int)Math.floor(experienceLevel / 5) * 2 + 6);
+		int max_health = Math.min(20, (int)Math.floor(experienceLevel / 5) * 2 + 6);
+		this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(max_health);
+
+		if (this.getHealth() > max_health) {
+			this.setHealth(max_health);
+		}
 
 		if (this.getInventory().count(Items.IRON_INGOT) > 0) {
 			acquired_iron = true;
@@ -346,6 +368,10 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 						speed = -1.0f;
 					}
 				}
+			} else {
+				if (speed <= 20.0f) {
+					speed = 20.0f;
+				}
 			}
 		}
 		if (original_speed <= 1.0f) { // no tool
@@ -385,13 +411,13 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 	public void readCustomDataFromNbt(NbtCompound nbt, CallbackInfo info) {
 		super.readCustomDataFromNbt(nbt);
 		acquired_iron = nbt.getBoolean("AcquiredIron");
-		this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue((int)Math.round(experienceLevel / 5) * 2 + 6);
+		this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(Math.min(20, (int)Math.floor(experienceLevel / 5) * 2 + 6));
 		((MiteHungerManager)hungerManager).setSaturation(MiteHungerManager.HungerCategory.FRUITS, nbt.getFloat("Fruit"));
 		((MiteHungerManager)hungerManager).setSaturation(MiteHungerManager.HungerCategory.VEGETABLES, nbt.getFloat("Vegetables"));
 		((MiteHungerManager)hungerManager).setSaturation(MiteHungerManager.HungerCategory.GRAIN, nbt.getFloat("Grain"));
 		((MiteHungerManager)hungerManager).setSaturation(MiteHungerManager.HungerCategory.DAIRY, nbt.getFloat("Dairy"));
 		((MiteHungerManager)hungerManager).setSaturation(MiteHungerManager.HungerCategory.PROTEIN, nbt.getFloat("Protein"));
-
+		this.aliveTime = nbt.getInt("AliveTime");
 	}
 
 	@Inject(at = @At("RETURN"), method = "writeCustomDataToNbt", cancellable = true)
@@ -403,5 +429,25 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 		nbt.putFloat("Grain", ((MiteHungerManager)hungerManager).getSaturation(MiteHungerManager.HungerCategory.GRAIN));
 		nbt.putFloat("Dairy", ((MiteHungerManager)hungerManager).getSaturation(MiteHungerManager.HungerCategory.DAIRY));
 		nbt.putFloat("Protein", ((MiteHungerManager)hungerManager).getSaturation(MiteHungerManager.HungerCategory.PROTEIN));
+		nbt.putInt("AliveTime", aliveTime);
+	}
+
+	public void damageShield(float amount) {
+
+	}
+	public void takeShieldHit(LivingEntity attacker) {
+
+	}
+
+	public void setLastAttackTicks(int attackTicks) {
+		this.lastAttackedTicks = attackTicks;
+	}
+
+	public int getLastAttackTicks() {
+		return this.lastAttackedTicks;
+	}
+
+	public int getAliveTime() {
+		return this.aliveTime;
 	}
 }

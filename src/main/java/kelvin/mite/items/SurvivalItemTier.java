@@ -18,6 +18,11 @@ import net.minecraft.recipe.Ingredient;
 import net.minecraft.tag.ItemTags;
 
 public enum SurvivalItemTier implements ToolMaterial {
+
+    STICK(0, 5, 0.0F, 0.0F, 0, () -> {
+        return Ingredient.fromTag(ItemTags.PLANKS);
+    }, SwordItem.class),
+
     SIFTER(0, 35, 0.0F, 0.0F, 0, () -> {
         return Ingredient.fromTag(ItemTags.PLANKS);
     }, SwordItem.class),

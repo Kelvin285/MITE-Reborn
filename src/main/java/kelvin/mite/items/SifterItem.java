@@ -34,7 +34,6 @@ public class SifterItem extends ToolItem implements Vanishable {
     public boolean canRepair(ItemStack stack, ItemStack ingredient) {
         return SurvivalItemTier.WOOD_SWORD.getRepairIngredient().test(ingredient) || super.canRepair(stack, ingredient);
     }
-    private long current_time = 0;
 
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
@@ -44,9 +43,8 @@ public class SifterItem extends ToolItem implements Vanishable {
         TODO: ITEM STACK COOLDOWNS
          */
 
-        boolean use_flag = System.currentTimeMillis() > current_time + 3000;
 
-        if (!world.isClient() && use_flag && user.isTouchingWaterOrRain()) {
+        if (!world.isClient() && user.isTouchingWaterOrRain()) {
             ServerPlayerEntity player = (ServerPlayerEntity)user;
             PlayerInventory inventory = player.getInventory();
             for (var slot : inventory.main) {
@@ -57,6 +55,8 @@ public class SifterItem extends ToolItem implements Vanishable {
                         if (block instanceof GravelBlock) {
                             slot.decrement(1);
                             DropGravelItem(world, player.getPos());
+
+                            player.getItemCooldownManager().set(this, 40);
                             break;
                         }
                     }
@@ -69,7 +69,6 @@ public class SifterItem extends ToolItem implements Vanishable {
                 stack.decrement(1);
             }
             //stack.setCooldown(20);
-            current_time = System.currentTimeMillis();
             return TypedActionResult.success(stack);
         }
         return TypedActionResult.fail(stack);

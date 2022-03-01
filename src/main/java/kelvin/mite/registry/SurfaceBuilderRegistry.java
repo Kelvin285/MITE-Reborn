@@ -18,7 +18,7 @@ public class SurfaceBuilderRegistry {
 
 		Block[] stone = {Blocks.STONE, Blocks.ANDESITE, Blocks.DIORITE, Blocks.GRANITE, Blocks.STONE};
 		Block[] sand = {Blocks.SAND, Blocks.RED_SAND, BlockRegistry.ANDESITE_SAND, BlockRegistry.DIORITE_SAND, BlockRegistry.GRANITE_SAND, BlockRegistry.LIMESTONE_SAND};
-		Block[] gravel = {Blocks.GRAVEL, BlockRegistry.ANDESITE_GRAVEL, BlockRegistry.DIORITE_GRAVEL, BlockRegistry.DIORITE_SAND, BlockRegistry.SANDSTONE_GRAVEL, BlockRegistry.RED_SANDSTONE_GRAVEL};
+		Block[] gravel = {Blocks.GRAVEL, BlockRegistry.ANDESITE_GRAVEL, BlockRegistry.DIORITE_GRAVEL, BlockRegistry.GRANITE_GRAVEL, BlockRegistry.SANDSTONE_GRAVEL, BlockRegistry.RED_SANDSTONE_GRAVEL};
 		Block[] dirt = {Blocks.DIRT, Blocks.COARSE_DIRT};
 		
 		

@@ -36,6 +36,7 @@ import net.minecraft.world.gen.feature.VillageFeature;
 import net.minecraft.world.gen.random.AtomicSimpleRandom;
 import net.minecraft.world.gen.random.ChunkRandom;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -55,11 +56,13 @@ public abstract class StructureFeatureMixin<C extends FeatureConfig>  {
 //    public boolean canGenerate(DynamicRegistryManager registryManager, ChunkGenerator chunkGenerator, BiomeSource biomeSource, StructureManager structureManager, long worldSeed, ChunkPos pos, C config, HeightLimitView world, Predicate<Biome> biomePredicate) {
 
     @Shadow
+    @Mutable
     public static StructureFeature<StructurePoolFeatureConfig> VILLAGE;
     @Shadow
     public static BiMap<String, StructureFeature<?>> STRUCTURES;
     @Shadow
     private static Map<StructureFeature<?>, GenerationStep.Feature> STRUCTURE_TO_GENERATION_STEP;
+
 
     //private static StructureFeature<StructurePoolFeatureConfig> MITE_VILLAGE = set("Village", 15, "Village", VILLAGE, new MiteVillageStructure(StructurePoolFeatureConfig.CODEC), GenerationStep.Feature.SURFACE_STRUCTURES);
 
@@ -89,6 +92,10 @@ public abstract class StructureFeatureMixin<C extends FeatureConfig>  {
         if ((StructureFeature)(Object)this instanceof VillageFeature) {
             info.setReturnValue(MiteVillageStructure.CanGenerateVillage);
         }
+    }
+
+    {
+        VILLAGE = set("Village", 15, "Village", VILLAGE, new MiteVillageStructure(StructurePoolFeatureConfig.CODEC), GenerationStep.Feature.SURFACE_STRUCTURES);
     }
 
     /*
